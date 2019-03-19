@@ -1,0 +1,153 @@
+#include <YSI\y_hooks>
+
+hook OnGameModeInit() {
+
+	print("[Streamer] Loading Dynamic Static Vehicles...");
+
+	TruckerVehicles[0] = AddStaticVehicleEx(414,-1572.34008789,129.09317017,3.69948244,225.00000000,-1,-1,300); //Mule
+	TruckerVehicles[1] = AddStaticVehicleEx(414,-1575.85583496,125.90543365,3.69948244,225.00000000,-1,-1,300); //Mule
+	TruckerVehicles[2] = AddStaticVehicleEx(414,-1578.88806152,122.54198456,3.69948244,225.00000000,-1,-1,300); //Mule
+	TruckerVehicles[3] = AddStaticVehicleEx(414,-1581.52319336,119.51720428,3.69948244,225.00000000,-1,-1,300); //Mule
+	TruckerVehicles[4] = AddStaticVehicleEx(414,-1584.36132812,116.68750000,3.69948244,225.00000000,-1,-1,300); //Mule
+	TruckerVehicles[5] = AddStaticVehicleEx(414,-1569.55114746,131.97119141,3.69948244,225.00000000,-1,-1,300); //Mule
+	TruckerVehicles[6] = AddStaticVehicleEx(456,-1587.84814453,113.03244019,3.79948235,225.00000000,-1,-1,300); //Yankee
+	TruckerVehicles[7] = AddStaticVehicleEx(456,-1591.30224609,109.38220215,3.79948235,225.00000000,-1,-1,300); //Yankee
+	TruckerVehicles[8] = AddStaticVehicleEx(456,-1595.57812500,105.83326721,3.79948235,225.00000000,-1,-1,300); //Yankee
+	TruckerVehicles[9] = AddStaticVehicleEx(456,-1599.55334473,102.00447845,3.79948235,225.00000000,-1,-1,300); //Yankee
+	TruckerVehicles[10] = AddStaticVehicleEx(456,-1603.49829102,98.16529083,3.79948235,225.00000000,-1,-1,300); //Yankee
+	TruckerVehicles[11] = AddStaticVehicleEx(456,-1606.95983887,94.76251984,3.79948235,225.00000000,-1,-1,300); //Yankee
+
+	PizzaVehicles[0] =	AddStaticVehicleEx(448,-1702.81005859,1378.07958984,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[1] =	AddStaticVehicleEx(448,-1703.49853516,1377.28295898,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[2] =	AddStaticVehicleEx(448,-1704.31005859,1376.46240234,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[3] =	AddStaticVehicleEx(448,-1705.17895508,1375.72802734,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[4] =	AddStaticVehicleEx(448,-1709.15429688,1371.57226562,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[5] =	AddStaticVehicleEx(448,-1709.98718262,1370.84716797,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[6] =	AddStaticVehicleEx(448,-1710.77893066,1370.11706543,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[7] =	AddStaticVehicleEx(448,-1711.57092285,1369.38659668,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[8] =	AddStaticVehicleEx(448,-1712.32312012,1368.69396973,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[9] =	AddStaticVehicleEx(448,-1713.02709961,1367.94238281,6.85771942,45.00000000,3,6,300); //Pizzaboy
+	PizzaVehicles[10] =	AddStaticVehicleEx(448,-1713.83740234,1367.19580078,6.85771942,45.00000000,3,6,300); //Pizzaboy
+
+	// VIP garage
+	VIPVehicles[0] = AddStaticVehicleEx(411,-4365.93212891,839.28680420,986.18029785,0.00000000,-1,-1,180); //Infernus
+	VIPVehicles[1] = AddStaticVehicleEx(429,-4370.52832031,840.57843018,986.13031006,0.00000000,-1,-1,180); //Banshee
+	VIPVehicles[2] = AddStaticVehicleEx(451,-4374.41894531,840.36810303,986.14465332,0.00000000,-1,-1,180); //Turismo
+	VIPVehicles[3] = AddStaticVehicleEx(541,-4378.48046875,840.84783936,986.08032227,0.00000000,-1,-1,180); //Bullet
+	VIPVehicles[4] = AddStaticVehicleEx(559,-4382.43701172,840.60235596,986.13439941,0.00000000,-1,-1,180); //Jester
+	VIPVehicles[5] = AddStaticVehicleEx(560,-4386.68066406,841.29382324,986.18530273,0.00000000,-1,-1,180); //Sultan
+	VIPVehicles[6] = AddStaticVehicleEx(603,-4390.54345703,841.60748291,986.38299561,0.00000000,-1,-1,180); //Phoenix
+	VIPVehicles[7] = AddStaticVehicleEx(480,-4394.61035156,841.88873291,986.23028564,0.00000000,-1,-1,180); //Comet
+	VIPVehicles[8] = AddStaticVehicleEx(506,-4399.16455078,842.31146240,986.17242432,0.00000000,-1,-1,180); //Super GT
+	VIPVehicles[9] = AddStaticVehicleEx(587,-4402.89990234,842.34979248,986.19030762,0.00000000,-1,-1,180); //Euros
+	VIPVehicles[10] = AddStaticVehicleEx(411,-4407.21337891,842.98492432,986.18029785,0.00000000,-1,-1,180); //Infernus
+	VIPVehicles[11] = AddStaticVehicleEx(429,-4410.96923828,843.07391357,986.13031006,0.00000000,-1,-1,180); //Banshee
+	VIPVehicles[12] = AddStaticVehicleEx(451,-4415.64257812,843.46972656,986.14465332,0.00000000,-1,-1,180); //Turismo
+	VIPVehicles[13] = AddStaticVehicleEx(541,-4419.40478516,843.48645020,986.08032227,0.00000000,-1,-1,180); //Bullet
+	VIPVehicles[14] = AddStaticVehicleEx(559,-4423.40332031,843.19854736,986.13439941,0.00000000,-1,-1,180); //Jester
+	VIPVehicles[15] = AddStaticVehicleEx(560,-4427.88232422,843.82849121,986.18530273,0.00000000,-1,-1,180); //Sultan
+	VIPVehicles[16] = AddStaticVehicleEx(603,-4431.95849609,844.09509277,986.38299561,0.00000000,-1,-1,180); //Phoenix
+	VIPVehicles[17] = AddStaticVehicleEx(480,-4436.15429688,844.76721191,986.23028564,0.00000000,-1,-1,180); //Comet
+	VIPVehicles[18] = AddStaticVehicleEx(506,-4441.21337891,850.94598389,986.17242432,270.00000000,-1,-1,180); //Super GT
+	VIPVehicles[19] = AddStaticVehicleEx(587,-4441.05224609,854.70550537,986.19030762,270.00000000,-1,-1,180); //Euros
+	VIPVehicles[20] = AddStaticVehicleEx(522,-4418.77490234,858.65576172,986.04071045,180.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[21] = AddStaticVehicleEx(522,-4414.77441406,858.50390625,986.04071045,180.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[22] = AddStaticVehicleEx(522,-4410.77441406,858.35253906,986.04071045,180.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[23] = AddStaticVehicleEx(522,-4406.30957031,857.78234863,986.04071045,180.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[24] = AddStaticVehicleEx(522,-4394.11425781,856.77416992,986.04071045,180.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[25] = AddStaticVehicleEx(522,-4390.35644531,856.70147705,986.04071045,180.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[26] = AddStaticVehicleEx(522,-4386.21923828,856.22369385,986.04071045,180.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[27] = AddStaticVehicleEx(522,-4382.18164062,855.81323242,986.04071045,180.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[28] = AddStaticVehicleEx(522,-4417.77832031,876.99304199,986.04071045,0.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[29] = AddStaticVehicleEx(522,-4414.06494141,876.46301270,986.04071045,0.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[30] = AddStaticVehicleEx(522,-4409.78320312,876.41296387,986.04071045,0.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[31] = AddStaticVehicleEx(522,-4405.26074219,876.33081055,986.04071045,0.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[32] = AddStaticVehicleEx(522,-4393.28417969,875.69360352,986.04071045,0.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[33] = AddStaticVehicleEx(522,-4389.04248047,875.41735840,986.04071045,0.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[34] = AddStaticVehicleEx(522,-4385.04980469,875.21435547,986.04071045,0.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[35] = AddStaticVehicleEx(522,-4381.05761719,875.00488281,986.04071045,0.00000000,-1,-1,180); //NRG-500
+	VIPVehicles[36] = AddStaticVehicleEx(411,-4407.94287109,891.34375000,986.18029785,180.00000000,-1,-1,180); //Infernus
+	VIPVehicles[37] = AddStaticVehicleEx(411,-4403.66748047,891.17761230,986.18029785,180.00000000,-1,-1,180); //Infernus
+	VIPVehicles[38] = AddStaticVehicleEx(411,-4399.91601562,891.28747559,986.18029785,180.00000000,-1,-1,180); //Infernus
+	VIPVehicles[39] = AddStaticVehicleEx(411,-4395.91601562,891.31347656,986.18029785,180.00000000,-1,-1,180); //Infernus
+	VIPVehicles[40] = AddStaticVehicleEx(451,-4391.23242188,891.03985596,986.14465332,180.00000000,-1,-1,180); //Turismo
+	VIPVehicles[41] = AddStaticVehicleEx(451,-4387.48339844,891.00421143,986.14465332,180.00000000,-1,-1,180); //Turismo
+	VIPVehicles[42] = AddStaticVehicleEx(451,-4383.49218750,890.44665527,986.14465332,180.00000000,-1,-1,180); //Turismo
+	VIPVehicles[43] = AddStaticVehicleEx(429,-4374.92187500,890.17211914,986.13031006,180.00000000,-1,-1,180); //Banshee
+	VIPVehicles[44] = AddStaticVehicleEx(429,-4370.80273438,889.91503906,986.13031006,180.00000000,-1,-1,180); //Banshee
+	VIPVehicles[45] = AddStaticVehicleEx(429,-4379.33349609,890.09112549,986.13031006,180.00000000,-1,-1,180); //Banshee
+	VIPVehicles[46] = AddStaticVehicleEx(560,-4366.63867188,889.44537354,986.18530273,180.00000000,-1,-1,180); //Sultan
+	VIPVehicles[47] = AddStaticVehicleEx(560,-4358.66015625,888.96386719,986.18530273,180.00000000,-1,-1,180); //Sultan
+	VIPVehicles[48] = AddStaticVehicleEx(560,-4354.67675781,888.44500732,986.18530273,180.00000000,-1,-1,180); //Sultan
+	VIPVehicles[49] = AddStaticVehicleEx(560,-4362.83789062,889.30908203,986.18530273,180.00000000,-1,-1,180); //Sultan
+
+	/* San Fierro Docks */
+	TruckerVehicles[12] = AddStaticVehicleEx(452,-1640.5685, 157.3364, 0.7922, 47.1720,-1,-1,300); //Speeder
+	TruckerVehicles[13] = AddStaticVehicleEx(452,-1634.9789, 162.7322, 0.7922, 47.1720,-1,-1,300); //Speeder
+	TruckerVehicles[14] = AddStaticVehicleEx(452,-1629.2697, 168.4794, 0.7922, 47.1720,-1,-1,300); //Speeder
+	TruckerVehicles[15] = AddStaticVehicleEx(452,-1623.8269, 173.4458, 0.7922, 47.1720,-1,-1,300); //Speeder
+	TruckerVehicles[16] = AddStaticVehicleEx(452,-1618.7595, 178.5750, 0.7922, 47.1720,-1,-1,300); //Speeder
+	TruckerVehicles[17] = AddStaticVehicleEx(452,-1645.4656, 152.2004, 0.7922, 47.1720,-1,-1,300); //Speeder
+	TruckerVehicles[18] = AddStaticVehicleEx(452,-1650.5898, 147.6079, 0.7922, 47.1720,-1,-1,300); //Speeder
+	
+	//Sultan
+	FamedVehicles[0] = AddStaticVehicleEx(560,2515.6797,2381.6501,3.9175,90.5219,-1,-1,180);
+	FamedVehicles[1] = AddStaticVehicleEx(560,2515.9753,2372.6431,3.9167,89.3516,-1,-1,180);
+	FamedVehicles[2] = AddStaticVehicleEx(560,2515.2947,2363.1985,3.9228,89.3915,-1,-1,180);
+	//Cheetah
+	FamedVehicles[3] = AddStaticVehicleEx(415,2515.2170,2377.3411,3.9823,90.2256,-1,-1,180);
+	FamedVehicles[4] = AddStaticVehicleEx(415,2515.2529,2368.2183,3.9826,90.2256,-1,-1,180);
+	//NRG
+	FamedVehicles[5] = AddStaticVehicleEx(522,2498.9292,2363.5708,3.7897,242.9848,-1,-1,180);
+	FamedVehicles[6] = AddStaticVehicleEx(522,2499.3206,2366.6091,3.8081,242.9848,-1,-1,180);
+	FamedVehicles[7] = AddStaticVehicleEx(522,2499.4883,2370.2681,3.8290,242.9847,-1,-1,180);
+	FamedVehicles[8] = AddStaticVehicleEx(522,2499.3398,2382.6699,3.8842,242.9847,-1,-1,180);
+	FamedVehicles[9] = AddStaticVehicleEx(522,2499.2588,2385.4790,3.7989,242.9847,-1,-1,180);
+	FamedVehicles[10] = AddStaticVehicleEx(522,2499.0728,2390.9985,3.8373,242.9846,-1,-1,180);
+	//PCJ
+	FamedVehicles[11] = AddStaticVehicleEx(461,2494.5908,2353.1921,3.7971,328.9557,-1,-1,180);
+	FamedVehicles[12] = AddStaticVehicleEx(461,2497.6455,2352.8145,3.7880,328.9523,-1,-1,180);
+	FamedVehicles[13] = AddStaticVehicleEx(461,2501.5059,2352.7971,3.7973,328.9482,-1,-1,180);
+	FamedVehicles[14] = AddStaticVehicleEx(461,2506.0073,2352.9568,3.7935,328.9489,-1,-1,180);
+	//Comets
+	FamedVehicles[15] = AddStaticVehicleEx(480,2524.4268,2381.5957,3.9851,269.3853,-1,-1,180);
+	FamedVehicles[16] = AddStaticVehicleEx(480,2524.3342,2372.9875,3.9898,269.3844,-1,-1,180);
+	FamedVehicles[17] = AddStaticVehicleEx(480,2524.2336,2363.5969,3.9947,269.3852,-1,-1,180);
+	//Bullet
+	FamedVehicles[18] = AddStaticVehicleEx(541,2524.1758,2377.0989,3.8359,269.6020,-1,-1,180);
+	FamedVehicles[19] = AddStaticVehicleEx(541,2524.1130,2368.1453,3.8404,269.6032,-1,-1,180);
+	//Jester
+	FamedVehicles[20] = AddStaticVehicleEx(559,2542.2134,2381.6531,3.8673,89.7158,-1,-1,180);
+	FamedVehicles[21] = AddStaticVehicleEx(559,2541.9707,2372.5603,3.8675,89.7158,-1,-1,180);
+	//SuperGT
+	FamedVehicles[22] = AddStaticVehicleEx(506,2541.7937,2367.7646,3.9154,89.7431,-1,-1,180);
+	FamedVehicles[23] = AddStaticVehicleEx(506,2541.8357,2377.2507,3.9155,89.7431,-1,-1,180);
+	//Banshee
+	FamedVehicles[24] = AddStaticVehicleEx(429,2542.5437,2363.3955,3.8906,90.2345,-1,-1,180);
+	//Infernus
+	FamedVehicles[25] = AddStaticVehicleEx(411,2510.7610,2397.8477,3.9380,180.5807,-1,-1,180);
+	FamedVehicles[26] = AddStaticVehicleEx(411,2519.9934,2397.9417,3.9424,180.5807,-1,-1,180);
+	//Uranus
+	FamedVehicles[27] = AddStaticVehicleEx(558,2515.1958,2398.0537,3.8412,179.9306,-1,-1,180);
+	FamedVehicles[28] = AddStaticVehicleEx(558,2524.5942,2397.4172,3.8415,179.9293,-1,-1,180);
+	//Huntley
+	FamedVehicles[31] = AddStaticVehicleEx(579,2528.9141,2397.9255,4.1505,179.4067,-1,-1,180);
+	FamedVehicles[32] = AddStaticVehicleEx(579,2537.8970,2397.8325,4.1541,179.4066,-1,-1,180);
+	//Premier
+	FamedVehicles[33] = AddStaticVehicleEx(426,2533.3384,2397.8184,3.9538,179.7989,-1,-1,180);
+	FamedVehicles[34] = AddStaticVehicleEx(426,2542.4468,2397.7859,3.9583,179.8030,-1,-1,180);
+	//Sanchez
+	FamedVehicles[35] = AddStaticVehicleEx(468,2508.5623,2352.0640,3.8801,327.8297,-1,-1,180);
+	FamedVehicles[36] = AddStaticVehicleEx(468,2512.6743,2352.0581,3.8747,327.8297,-1,-1,180);
+	FamedVehicles[37] = AddStaticVehicleEx(468,2513.9478,2351.9365,3.8822,327.8291,-1,-1,180);
+	FamedVehicles[38] = AddStaticVehicleEx(468,2516.2051,2352.1504,3.8789,327.8291,-1,-1,180);
+
+	AddStaticVehicleEx(481,-1977.7908,171.0961,27.2085,4.7313,-1,-1,2000); // BIKENEWBIESPAWN1
+	AddStaticVehicleEx(481,-1976.2799,171.7846,27.2035,22.4269,-1,-1,2000); // BIKENEWBIESPAWN1 
+	AddStaticVehicleEx(481,-1977.2303,171.5292,27.2068,5.8447,-1,-1,2000); // BIKENEWBIESPAWN1
+	AddStaticVehicleEx(481,-1979.4115,170.9358,27.2085,6.7946,-1,-1,2000); // BIKENEWBIESPAWN1
+
+	AddStaticVehicleEx(538,1700.7551,-1953.6531,14.8756,200.0,-1,-1,2000); //LS passenger
+	print("[Streamer] Dynamic Static Vehicles have been loaded.");
+	return 1;
+}
