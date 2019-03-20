@@ -39,7 +39,7 @@ stock IsAtNameChange(playerid)
 {
 	if(IsPlayerConnected(playerid))
 	{
-		if(IsPlayerInRangeOfPoint(playerid, 3.0,-2764.6250,375.4634,6.3418)) return 1;//LS
+		if(IsPlayerInRangeOfPoint(playerid, 3.0, 1154.7295, -1440.2323, 15.7969)) return 1;//LS
 	}
 	return 0;
 }

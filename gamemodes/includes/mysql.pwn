@@ -829,10 +829,8 @@ public OnQueryFinish(resultid, extraid, handleid)
 			{
 				CheckAdminWhitelist(extraid);
 				new
-					szPass[129],
 					szResult[129],
-					szBuffer[129],
-					salt[11];
+					szBuffer[129];
 
 				cache_get_field_content(i, "Username", szResult, MainPipeline, MAX_PLAYER_NAME);
 				if(strcmp(szResult, GetPlayerNameExt(extraid), true) != 0)
@@ -840,34 +838,13 @@ public OnQueryFinish(resultid, extraid, handleid)
 					//g_mysql_AccountAuthCheck(extraid);
 					return 1;
 				}
-				cache_get_field_content(i, "Key", szResult, MainPipeline, 129);
-				cache_get_field_content(i, "Salt", salt, MainPipeline, 11);
-				GetPVarString(extraid, "PassAuth", szBuffer, sizeof(szBuffer));
-				if(!isnull(salt)) strcat(szBuffer, salt);
-				WP_Hash(szPass, sizeof(szPass), szBuffer);
-				/*if(cache_get_field_content_int(i, "Online", MainPipeline)) {
-					SendClientMessage(extraid, COLOR_RED, "SERVER: This account has already logged in.");
-					SetTimerEx("KickEx", 1000, 0, "i", extraid);
-					return 1;
-				}*/
 
-				if((isnull(szPass)) || (isnull(szResult)) || (strcmp(szPass, szResult) != 0)) {
-					// Invalid Password - Try Again!
-					ShowMainMenuDialog(extraid, 3);
-					HideNoticeGUIFrame(extraid);
-					if(++gPlayerLogTries[extraid] == 2) {
-						SendClientMessage(extraid, COLOR_RED, "SERVER: Wrong password, you have been kicked out automatically.");
-						SetTimerEx("KickEx", 1000, 0, "i", extraid);
-					}
-					return 1;
-				}
+				cache_get_field_content(i, "Key", szResult, MainPipeline, 129);
+				GetPVarString(extraid, "PassAuth", szBuffer, sizeof(szBuffer));
+				bcrypt_check(szBuffer, szResult, "OnPasswordConfirm", "d", extraid);
 				if(PassComplexCheck && CheckPasswordComplexity(szBuffer) != 1) ShowLoginDialogs(extraid, 0);
 				break;
 			}
-			GetPVarString(extraid, "PassAuth", PlayerInfo[extraid][pLastPass], 65);
-			DeletePVar(extraid, "PassAuth");
-			HideNoticeGUIFrame(extraid);
-			g_mysql_LoadAccount(extraid);
 			return 1;
 		}
 		case REGISTER_THREAD:
@@ -1357,6 +1334,30 @@ public OnQueryError(errorid, error[], callback[], query[], connectionHandle) {
 
 // g_mysql_ReturnEscaped(string unEscapedString)
 // Description: Takes a unescaped string and returns an escaped one.
+
+forward OnPasswordConfirm(playerid);
+public OnPasswordConfirm(playerid)
+{
+	new bool:match = bcrypt_is_equal();
+	if(!match)
+	{
+		// Invalid Password - Try Again!
+		ShowMainMenuDialog(playerid, 3);
+		HideNoticeGUIFrame(playerid);
+		if(++gPlayerLogTries[playerid] == 2) {
+			SendClientMessage(playerid, COLOR_RED, "SERVER: Wrong password, you have been kicked out automatically.");
+			SetTimerEx("KickEx", 1000, 0, "i", playerid);
+		}
+		return 1;
+	}
+	else
+	{
+		DeletePVar(playerid, "PassAuth");
+		HideNoticeGUIFrame(playerid);
+		g_mysql_LoadAccount(playerid);
+	}
+	return 1;
+}
 stock g_mysql_ReturnEscaped(unEscapedString[], connectionHandle)
 {
 	new EscapedString[256];
@@ -1371,7 +1372,7 @@ stock g_mysql_AccountLoginCheck(playerid)
 
 	new string[128];
 
-	format(string, sizeof(string), "SELECT `Username`, `Key`, `Salt`, `Online` FROM `accounts` WHERE `Username` = '%s'", GetPlayerNameExt(playerid));
+	format(string, sizeof(string), "SELECT `Username`, `Key`, `Online` FROM `accounts` WHERE `Username` = '%s'", GetPlayerNameExt(playerid));
 	mysql_function_query(MainPipeline, string, true, "OnQueryFinish", "iii", LOGIN_THREAD, playerid, g_arrQueryHandle{playerid});
 	return 1;
 }
@@ -1424,16 +1425,17 @@ stock g_mysql_AccountOnlineReset()
 // Description: Creates a new account in the database.
 stock g_mysql_CreateAccount(playerid, accountPassword[])
 {
-	new string[300];
-	new passbuffer[129];
-	new salt[11];
-	randomString(salt);
-	format(string, sizeof(string), "%s%s", accountPassword, salt);
-	WP_Hash(passbuffer, sizeof(passbuffer), string);
-
-	format(string, sizeof(string), "INSERT INTO `accounts` (`RegiDate`, `LastLogin`, `Username`, `Key`, `Salt`) VALUES (NOW(), NOW(), '%s', '%s', '%s')", GetPlayerNameExt(playerid), passbuffer, salt);
-	mysql_function_query(MainPipeline, string, false, "OnQueryFinish", "iii", REGISTER_THREAD, playerid, g_arrQueryHandle{playerid});
+	bcrypt_hash(accountPassword, 12, "OnPasswordHashed", "d", playerid);
 	return 1;
+}
+
+forward OnPasswordHashed(playerid);
+public OnPasswordHashed(playerid)
+{
+	new hash[BCRYPT_HASH_LENGTH], string[256];
+	bcrypt_get_hash(hash);
+	format(string, sizeof(string), "INSERT INTO `accounts` (`RegiDate`, `LastLogin`, `Username`, `Key`) VALUES (NOW(), NOW(), '%s', '%s')", GetPlayerNameExt(playerid), hash);
+	mysql_function_query(MainPipeline, string, false, "OnQueryFinish", "iii", REGISTER_THREAD, playerid, g_arrQueryHandle{playerid});
 }
 
 stock g_mysql_LoadPVehicles(playerid)
@@ -4001,6 +4003,8 @@ public OnChangeUserPassword(index)
 		GetPVarString(index, "OnChangeUserPassword", name, 24);
 
 		if(mysql_affected_rows(MainPipeline)) {
+			format(string, sizeof(string), "AdmCmd: %s's password was changed by %s.", name, GetPlayerNameEx(index));
+			Log("logs/password.log", string);
 			format(string, sizeof(string), "You have successfully changed %s's password.", name);
 			SendClientMessageEx(index, COLOR_WHITE, string);
 		}

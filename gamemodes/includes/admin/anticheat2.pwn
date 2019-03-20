@@ -1549,7 +1549,7 @@ AC_IsPlayerSurfing(playerid) {
 	}
 	return 1;
 }
-
+/*
 AC_KeySpamCheck(playerid) {
 	if(GetPVarType(playerid, "PCMute")) {
 		SendClientMessageEx(playerid, COLOR_WHITE, "[SYSTEM]: You are currently blocked from using interaction keys.");
@@ -1563,7 +1563,7 @@ AC_KeySpamCheck(playerid) {
 	}
 	return 1;
 }
-
+*/
 AC_PlayerHealthArmor(playerid) {
 
 	if(GetPVarInt(playerid, "Injured") == 1) return 0;

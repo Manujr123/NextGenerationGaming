@@ -2516,3 +2516,27 @@ stock PlayerBusy(target) {
 	return 1;
 	else return 0;
 }
+
+forward OnPasswordChanged(playerid);
+public OnPasswordChanged(playerid)
+{
+	new hash[BCRYPT_HASH_LENGTH], szQuery[256];
+	bcrypt_get_hash(hash);
+	format(szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Key` = '%s' WHERE `id` = '%i'", hash, PlayerInfo[playerid][pId]);
+	mysql_function_query(MainPipeline, szQuery, false, "OnPlayerChangePass", "i", playerid);
+
+	if(strcmp(PlayerInfo[playerid][pBirthDate], "0000-00-00", true) == 0 && PlayerInfo[playerid][pTut] != 0) ShowLoginDialogs(playerid, 1);
+	else if(pMOTD[0] && GetPVarInt(playerid, "ViewedPMOTD") != 1) ShowLoginDialogs(playerid, 4);
+	else if(PlayerInfo[playerid][pReceivedCredits] != 0) ShowLoginDialogs(playerid, 5);
+	return 1;
+}
+
+forward OnAdminPasswordChanged(playerid, targetname[]);
+public OnAdminPasswordChanged(playerid, targetname[])
+{
+	new hash[BCRYPT_HASH_LENGTH], szQuery[256];
+	bcrypt_get_hash(hash);
+	format(szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Key` = '%s' WHERE `Username` = '%e'", hash, targetname);
+	mysql_function_query(MainPipeline, szQuery, false, "OnChangeUserPassword", "i", playerid);
+	return 1;
+}

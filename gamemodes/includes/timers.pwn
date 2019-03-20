@@ -991,19 +991,6 @@ task hungerGames[1000]()
 task PlayerHeartBeat[1000]() {
 	foreach(new i: Player)
 	{
-		new Float:velocity[3];
-		if(!IsPlayerInAnyVehicle(i))
-		{
-			GetPlayerVelocity(i, velocity[0], velocity[1], velocity[2]);
-			printf("%f %f %f", velocity[0], velocity[1], velocity[2]);
-		}
-		else
-		{
-			new vehicle = GetPlayerVehicleID(i);
-			GetVehicleVelocity(vehicle, velocity[0], velocity[1], velocity[2]);
-			printf("%f %f %f", velocity[0], velocity[1], velocity[2]);
-		}
-
 		// alerttimer - Merged by Jingles
 		if(AlertTime[i] != 0) AlertTime[i]--;
 

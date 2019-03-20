@@ -113,13 +113,14 @@ DrivingTestFinish(playerid)
 	return 1;
 }
 
+/*
 DrivingSchoolSpeedMeter(playerid, Float:speed)
 {
 	new 
 		pTestMarker = GetPVarInt(playerid, "pTestMarker"),
 		maxspeed = 0; 
 
-	/*if(pTestMarker < 20 || pTestMarker >= 29)
+	if(pTestMarker < 20 || pTestMarker >= 29)
 	{
 		if(speed > 50)
 		{
@@ -133,7 +134,7 @@ DrivingSchoolSpeedMeter(playerid, Float:speed)
 		SetPlayerCheckpoint(playerid, 814.0655,-600.5410,16.0355, 4.0);
 		SendClientMessageEx(playerid, COLOR_GREY, "You have exceeded the freeway speed limit of 100MPH, you have failed the test.");
 		SetPVarInt(playerid, "pDTest", 2);
-	}*/
+	}
 
 	switch(pTestMarker) {
 		case 0 .. 7: maxspeed = 50;
@@ -149,7 +150,7 @@ DrivingSchoolSpeedMeter(playerid, Float:speed)
 	}
 	return 1;
 }
-
+*/
 hook OnGameModeInit()
 {
 	//CreateDynamicPickup(1239, 1, 1173.0698,1348.4688,10.9219);

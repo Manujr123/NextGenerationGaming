@@ -104,6 +104,7 @@
 #include <attachments>
 #include <Pawn.RakNet>
 #include <compat>
+#include <bcrypt>
 //#include <profiler>
 
 #if defined SOCKET_ENABLED

@@ -456,26 +456,11 @@ CMD:changeuserpassword(playerid, params[])
         return 1;
     }
 
-    new string[128], accountName[20], password[64], query[512];
-    if(sscanf(params, "s[20]s[64]", accountName, password)) return SendClientMessageEx(playerid, COLOR_WHITE, "USAGE: /changeuserpassword [player name] [new password]");
-
-    new passbuffer[129], salt[11];
-	randomString(salt);
-	format(string, sizeof(string), "%s%s", password, salt);
-    WP_Hash(passbuffer, sizeof(passbuffer), string);
-
+    new string[128], accountName[24], password[64];
+    if(sscanf(params, "s[24]s[64]", accountName, password)) return SendClientMessageEx(playerid, COLOR_WHITE, "USAGE: /changeuserpassword [player name] [new password]");
 	format(string, sizeof(string), "Attempting to change %s's password...", accountName);
     SendClientMessageEx(playerid, COLOR_YELLOW, string);
-
-	format(string, sizeof(string), "AdmCmd: %s's password was changed by %s.", accountName, GetPlayerNameEx(playerid));
-    Log("logs/password.log", string);
-
-	new tmpName[24];
-	mysql_escape_string(accountName, tmpName, MainPipeline);
-
-    format(query,sizeof(query),"UPDATE `accounts` SET `Key`='%s', `Salt`='%s' WHERE `Username`='%s' AND `AdminLevel` < 2", passbuffer, salt, tmpName);
-	mysql_function_query(MainPipeline, query, false, "OnChangeUserPassword", "i", playerid);
-	SetPVarString(playerid, "OnChangeUserPassword", tmpName);
+	bcrypt_hash(password, 12, "OnAdminPasswordChanged", "ds[24]", playerid, accountName);
 	return 1;
 }
 
