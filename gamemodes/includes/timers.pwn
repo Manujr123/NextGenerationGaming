@@ -536,12 +536,14 @@ task SyncTime[60000]()
 				    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][2] += 10;
 				    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][3] += 10;
 				    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][4] += 5;
+					
+					foreach(new x: Player) if(PlayerInfo[x][pMember] == TurfWars[i][twOwnerId]) SendClientMessageEx(x, COLOR_LIGHTBLUE, "Your family has recieved drugs for owning a drug turf.");
 				}
 			}
 			if(TurfWars[i][twOwnerId] != INVALID_GROUP_ID && TurfWars[i][twSpecial] == 3)
 			{
 				arrGroupData[TurfWars[i][twOwnerId]][g_iBudget] += TurfWars[i][twCashReward];
-			    foreach(new x: Player) if(PlayerInfo[x][pMember] == TurfWars[i][twOwnerId]) SendClientMessageEx(x, COLOR_LIGHTBLUE, "Your family has recieved $%s for owning a cash turf.", number_format(TurfWars[i][twCashReward]));
+			    foreach(new x: Player) if(PlayerInfo[x][pMember] == TurfWars[i][twOwnerId]) SendClientMessageEx(x, COLOR_LIGHTBLUE, "Your family has recieved $%s for owning an extortion turf.", number_format(TurfWars[i][twCashReward]));
 			}
 		}
 		//CallRemoteFunction("ActivateRandomQuestion", "");//Olympics
