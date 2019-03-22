@@ -1045,7 +1045,7 @@ public OnQueryFinish(resultid, extraid, handleid)
 		{
 		    if(rows > 0)
 			{
-				SendClientMessage(extraid, COLOR_RED, "Your IP is banned! You can appeal this at http://www.ng-gaming.net/forums");
+				SendClientMessage(extraid, COLOR_RED, "Your IP is banned! You can appeal this at http://www.ng-gaming.com/forums");
 				SetTimerEx("KickEx", 1000, 0, "i", extraid);
 			}
 			else

@@ -68,7 +68,7 @@ stock PlayerFixRadio(playerid)
 forward RevisionListHTTP(index, response_code, data[]);
 public RevisionListHTTP(index, response_code, data[])
 {
-	ShowPlayerDialogEx(index, DIALOG_REVISION, DIALOG_STYLE_LIST, "Current Version: "SERVER_GM_TEXT" -- View full changes at http://dev.ng-gaming.net", data, "Close", "");
+	ShowPlayerDialogEx(index, DIALOG_REVISION, DIALOG_STYLE_LIST, "Current Version: "SERVER_GM_TEXT" -- View full changes at http://dev.ng-gaming.com", data, "Close", "");
 	return 1;
 }
 
@@ -332,10 +332,10 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					foreach(new i: Player)
 					{
 						if(GetPlayerVehicleID(i) != 0 && GetPlayerVehicleID(i) == GetPlayerVehicleID(playerid)) {
-							PlayAudioStreamForPlayerEx(i, "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1");
+							PlayAudioStreamForPlayerEx(i, "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1");
 						}
 					}	
-					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1");
+					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1");
 					format(szMiscArray, sizeof(szMiscArray), "* %s changes the radio station.", GetPlayerNameEx(playerid), szMiscArray);
 					ProxDetector(10.0, playerid, szMiscArray, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				}
@@ -345,14 +345,14 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					{
 						if(IsPlayerInDynamicArea(i, GetPVarInt(playerid, "pBoomBoxArea")))
 						{
-							PlayAudioStreamForPlayerEx(i, "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
+							PlayAudioStreamForPlayerEx(i, "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
 						}
 					}	
-					SetPVarString(playerid, "pBoomBoxStation", "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1");
+					SetPVarString(playerid, "pBoomBoxStation", "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1");
 				}
 				else
 				{
-					PlayAudioStreamForPlayerEx(playerid, "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1");
+					PlayAudioStreamForPlayerEx(playerid, "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1");
 					SetPVarInt(playerid, "MusicIRadio", 1);
 				}
 			}
@@ -394,10 +394,10 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					foreach(new i: Player)
 					{
 						if(GetPlayerVehicleID(i) != 0 && GetPlayerVehicleID(i) == GetPlayerVehicleID(playerid)) {
-							PlayAudioStreamForPlayerEx(i, "http://nick.ng-gaming.net:8000/listen.pls");
+							PlayAudioStreamForPlayerEx(i, "http://nick.ng-gaming.com:8000/listen.pls");
 						}
 					}	
-					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "http://nick.ng-gaming.net:8000/listen.pls");
+					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "http://nick.ng-gaming.com:8000/listen.pls");
 					format(szMiscArray, sizeof(szMiscArray), "* %s changes the radio station.", GetPlayerNameEx(playerid), szMiscArray);
 					ProxDetector(10.0, playerid, szMiscArray, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				}
@@ -407,14 +407,14 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					{
 						if(IsPlayerInDynamicArea(i, GetPVarInt(playerid, "pBoomBoxArea")))
 						{
-							PlayAudioStreamForPlayerEx(i, "http://nick.ng-gaming.net:8000/listen.pls", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
+							PlayAudioStreamForPlayerEx(i, "http://nick.ng-gaming.com:8000/listen.pls", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
 						}
 					}	
-					SetPVarString(playerid, "pBoomBoxStation", "http://nick.ng-gaming.net:8000/listen.pls");
+					SetPVarString(playerid, "pBoomBoxStation", "http://nick.ng-gaming.com:8000/listen.pls");
 				}
 				else
 				{
-					PlayAudioStreamForPlayerEx(playerid, "http://nick.ng-gaming.net:8000/listen.pls");
+					PlayAudioStreamForPlayerEx(playerid, "http://nick.ng-gaming.com:8000/listen.pls");
 					SetPVarInt(playerid, "MusicIRadio", 1);
 				}
 			}

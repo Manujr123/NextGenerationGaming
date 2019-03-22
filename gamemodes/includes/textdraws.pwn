@@ -961,7 +961,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 1) (Line 5)
-	TutTxtdraw[9] = TextDrawCreate(175.000000, 203.000000, "be sure to visit us and sign up on our forums at ~y~www.ng-gaming.net~w~ - we");
+	TutTxtdraw[9] = TextDrawCreate(175.000000, 203.000000, "be sure to visit us and sign up on our forums at ~y~www.ng-gaming.com~w~ - we");
 	TextDrawBackgroundColor(TutTxtdraw[9], 255);
 	TextDrawFont(TutTxtdraw[9], 2);
 	TextDrawLetterSize(TutTxtdraw[9], 0.159999, 0.899999);
@@ -991,7 +991,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 1) (Line 8)
-	TutTxtdraw[12] = TextDrawCreate(175.000000, 255.000000, "check it all out at ~y~shop.ng-gaming.net~w~, it helps keep this server up and");
+	TutTxtdraw[12] = TextDrawCreate(175.000000, 255.000000, "check it all out at ~y~shop.ng-gaming.com~w~, it helps keep this server up and");
 	TextDrawBackgroundColor(TutTxtdraw[12], 255);
 	TextDrawFont(TutTxtdraw[12], 2);
 	TextDrawLetterSize(TutTxtdraw[12], 0.159999, 0.899999);
@@ -1163,7 +1163,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 10) (Line 4)
-	TutTxtdraw[29] = TextDrawCreate(175.000000, 171.000000, "forums at ~y~www.ng-gaming.net~w~.");
+	TutTxtdraw[29] = TextDrawCreate(175.000000, 171.000000, "forums at ~y~www.ng-gaming.com~w~.");
 	TextDrawBackgroundColor(TutTxtdraw[29], 255);
 	TextDrawFont(TutTxtdraw[29], 2);
 	TextDrawLetterSize(TutTxtdraw[29], 0.159998, 0.899999);
@@ -1254,7 +1254,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 11) (Line 4)
-	TutTxtdraw[38] = TextDrawCreate(175.000000, 171.000000, "apply on our forums at ~y~www.ng-gaming.net~w~.");
+	TutTxtdraw[38] = TextDrawCreate(175.000000, 171.000000, "apply on our forums at ~y~www.ng-gaming.com~w~.");
 	TextDrawBackgroundColor(TutTxtdraw[38], 255);
 	TextDrawFont(TutTxtdraw[38], 2);
 	TextDrawLetterSize(TutTxtdraw[38], 0.159997, 0.899999);
@@ -1315,7 +1315,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 12) (Line 4)
-	TutTxtdraw[44] = TextDrawCreate(175.000000, 171.000000, "this faction, apply on our forums at ~y~www.ng-gaming.net~w~.");
+	TutTxtdraw[44] = TextDrawCreate(175.000000, 171.000000, "this faction, apply on our forums at ~y~www.ng-gaming.com~w~.");
 	TextDrawBackgroundColor(TutTxtdraw[44], 255);
 	TextDrawFont(TutTxtdraw[44], 2);
 	TextDrawLetterSize(TutTxtdraw[44], 0.159997, 0.899999);
@@ -1376,7 +1376,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 13) (Line 4)
-	TutTxtdraw[50] = TextDrawCreate(175.000000, 171.000000, "this faction, apply on our forums at ~y~www.ng-gaming.net~w~.");
+	TutTxtdraw[50] = TextDrawCreate(175.000000, 171.000000, "this faction, apply on our forums at ~y~www.ng-gaming.com~w~.");
 	TextDrawBackgroundColor(TutTxtdraw[50], 255);
 	TextDrawFont(TutTxtdraw[50], 2);
 	TextDrawLetterSize(TutTxtdraw[50], 0.159997, 0.899999);
@@ -1437,7 +1437,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 14) (Line 4)
-	TutTxtdraw[56] = TextDrawCreate(175.000000, 171.000000, "at ~y~www.ng-gaming.net~w~.");
+	TutTxtdraw[56] = TextDrawCreate(175.000000, 171.000000, "at ~y~www.ng-gaming.com~w~.");
 	TextDrawBackgroundColor(TutTxtdraw[56], 255);
 	TextDrawFont(TutTxtdraw[56], 2);
 	TextDrawLetterSize(TutTxtdraw[56], 0.159997, 0.899999);
@@ -1763,7 +1763,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 20) (Line 1)
-	TutTxtdraw[88] = TextDrawCreate(175.000000, 141.000000, "We operate a 24/7 E-Store at ~y~shop.ng-gaming.net~w~, you can purchase Vehicles,");
+	TutTxtdraw[88] = TextDrawCreate(175.000000, 141.000000, "We operate a 24/7 E-Store at ~y~shop.ng-gaming.com~w~, you can purchase Vehicles,");
 	TextDrawBackgroundColor(TutTxtdraw[88], 255);
 	TextDrawFont(TutTxtdraw[88], 2);
 	TextDrawLetterSize(TutTxtdraw[88], 0.159998, 0.899999);
@@ -2007,7 +2007,7 @@ public LoadTextDraws() {
 	textdrawscount++;
 
 	// Tutorial (Frame 23) (Line 4)
-	TutTxtdraw[112] = TextDrawCreate(175.000000, 174.000000, "check out ~y~www.ng-gaming.net~w~.");
+	TutTxtdraw[112] = TextDrawCreate(175.000000, 174.000000, "check out ~y~www.ng-gaming.com~w~.");
 	TextDrawBackgroundColor(TutTxtdraw[112], 255);
 	TextDrawFont(TutTxtdraw[112], 2);
 	TextDrawLetterSize(TutTxtdraw[112], 0.159998, 0.899999);

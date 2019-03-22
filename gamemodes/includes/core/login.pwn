@@ -150,7 +150,7 @@ stock SafeLogin(playerid, type)
 			}
 			else
 			{
-				Dialog_Show(playerid, -1, DIALOG_STYLE_MSGBOX, "ERROR: You were kicked!", "You're unable to create an account on this server!\n\nThis server is for the Beta Team only.\n\nIf you are a beta tester go to http://cp.ng-gaming.net and create an account.", "Close", "");
+				Dialog_Show(playerid, -1, DIALOG_STYLE_MSGBOX, "ERROR: You were kicked!", "You're unable to create an account on this server!\n\nThis server is for the Beta Team only.\n\nIf you are a beta tester go to http://cp.ng-gaming.com and create an account.", "Close", "");
 				SetTimerEx("KickEx", 3000, 0, "i", playerid);
 			}
 		}

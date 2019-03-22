@@ -51,7 +51,7 @@ public OnPlayerLoad(playerid)
 	{
 		format(string, sizeof(string), "WARNING: %s (IP:%s) tried to login whilst banned by the old system.", GetPlayerNameEx( playerid ), PlayerInfo[playerid][pIP] );
 		ABroadCast(COLOR_YELLOW, string, 2);
-		SendClientMessage(playerid, COLOR_RED, "Your account is banned! You can appeal this at http://www.ng-gaming.net/forums");
+		SendClientMessage(playerid, COLOR_RED, "Your account is banned! You can appeal this at http://www.ng-gaming.com/forums");
 		SendClientMessage(playerid, COLOR_RED, "Your ban date will be set and when it's time it will automatically been banned. ");
 		SetTimerEx("KickEx", 1000, 0, "i", playerid);
 		return 1;
@@ -62,7 +62,7 @@ public OnPlayerLoad(playerid)
 
 	if(PlayerInfo[playerid][pDisabled] == 2)
 	{
-		ShowPlayerDialogEx(playerid, DIALOG_DISABLED, DIALOG_STYLE_MSGBOX, "Account Disabled - Visit http://www.ng-gaming.net/forums", "Your account has been disabled as it has been inactive for more than six months.\nPlease visit the forums and post an Administrative Request to begin the process to reactivate your account.", "Okay", "");
+		ShowPlayerDialogEx(playerid, DIALOG_DISABLED, DIALOG_STYLE_MSGBOX, "Account Disabled - Visit http://www.ng-gaming.com/forums", "Your account has been disabled as it has been inactive for more than six months.\nPlease visit the forums and post an Administrative Request to begin the process to reactivate your account.", "Okay", "");
 		SetTimerEx("KickEx", 5000, 0, "i", playerid);
 		return 1;
 	}
@@ -578,7 +578,7 @@ public OnPlayerLoad(playerid)
 	    }
 	    else if(Businesses[PlayerInfo[playerid][pBusiness]][bMonths] - 259200 < gettime())
 	    {
-	        SendClientMessageEx(playerid, COLOR_RED, "Your business expires in less than three days - renew today at shop.ng-gaming.net! Type /businessdate for more information.");
+	        SendClientMessageEx(playerid, COLOR_RED, "Your business expires in less than three days - renew today at shop.ng-gaming.com! Type /businessdate for more information.");
 	    }
 	}
 	if(PlayerInfo[playerid][pJob2] >= 1 && (PlayerInfo[playerid][pDonateRank] < 1 && PlayerInfo[playerid][pFamed] < 1))
@@ -927,7 +927,7 @@ public OnPlayerLoad(playerid)
     }
 	if(1 <= PlayerInfo[playerid][pDonateRank] <= 3  && PlayerInfo[playerid][pVIPExpire] > 0 && (PlayerInfo[playerid][pVIPExpire] - 259200 < gettime()))
     {
-		SendClientMessageEx(playerid, COLOR_RED, "Your VIP expires in less than three days - renew today at shop.ng-gaming.net! Type /vipdate for more information.");
+		SendClientMessageEx(playerid, COLOR_RED, "Your VIP expires in less than three days - renew today at shop.ng-gaming.com! Type /vipdate for more information.");
     }
 	if(PlayerInfo[playerid][pRVehWarns] != 0 && PlayerInfo[playerid][pLastRVehWarn] + 2592000 < gettime()) {
 		SendClientMessageEx(playerid, COLOR_WHITE, "Your restricted vehicle warnings have expired!");

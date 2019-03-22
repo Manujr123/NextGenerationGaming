@@ -123,7 +123,7 @@ hook OnPlayerEnterCheckpoint(playerid)
 		{
 			DeletePVar(playerid, PVAR_REGISTERING);
 			PlayerInfo[playerid][pTut] = 2;
-			PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.net/dom/ngg_tutend.mp3");
+			PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.com/dom/ngg_tutend.mp3");
 			CreateExplosionForPlayer(playerid, -66.5676, -1890.1495, 1490.7732, 13, 1.0);
 			ClearChatbox(playerid);
 			SetPVarInt(playerid, "pTut", 4);
@@ -476,7 +476,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
 Tutorial_Start(playerid) {
 	IsSpawned[playerid] = 1;
-	PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.net/dom/hopereturns.mp3");
+	PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.com/dom/hopereturns.mp3");
 	ClearChatbox(playerid);
 	for(new i; i < sizeof(TutTextDraw); ++i) TextDrawShowForPlayer(playerid, TutTextDraw[i]);
 	SetPVarInt(playerid, "TUT_CNT", TUTORIAL_STEPS_TIME);
@@ -558,7 +558,7 @@ Tutorial_Stage(playerid) {
 			strcat(szMiscArray, "{FF0000}Killing on Sight (KOS){FFFFFF}: Killing a player without roleplay interaction beforehand.\n\n");
 			strcat(szMiscArray, "{FF0000}Metagaming{FFFFFF}: Using out of character information in-character.\n(Ex. character names that haven't been told to you yet.)\n\n");
 			strcat(szMiscArray, "{FF0000}Powergaming{FFFFFF}: Performing an action which your character is incapable of performing.\n(Ex. Having god-like abilities or forcing roleplay upon others.)");
-			strcat(szMiscArray, "A full list of server offences with their detailed explanation is available at ng-gaming.net\nHere you will also find a full list of In-Character laws.");
+			strcat(szMiscArray, "A full list of server offences with their detailed explanation is available at ng-gaming.com\nHere you will also find a full list of In-Character laws.");
 			strcat(szMiscArray, "\n\n\n_______________________________________________________________________________________________________________________________________________________");
 			ShowPlayerDialogEx(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "NG:RP - Server Offenses", szMiscArray, szCount, "");
 		}
@@ -780,7 +780,7 @@ Tutorial_InitTextDraws()
 	TextDrawSetShadow(TutTextDraw[18], 1);
 	TextDrawSetSelectable(TutTextDraw[18], 0);
 
-	TutTextDraw[20] = TextDrawCreate(280.000000, 440.000000, "www.ng-gaming.net");
+	TutTextDraw[20] = TextDrawCreate(280.000000, 440.000000, "www.ng-gaming.com");
 	TextDrawBackgroundColor(TutTextDraw[20], 255);
 	TextDrawFont(TutTextDraw[20], 2);
 	TextDrawLetterSize(TutTextDraw[20], 0.159999, 0.699998);
@@ -807,7 +807,7 @@ Tutorial_InitTextDraws()
 	TextDrawSetProportional(TutTextDraw[22], 0);
 	TextDrawSetSelectable(TutTextDraw[22], 0);
 
-	TutTextDraw[23] = TextDrawCreate(280.000000, 439.000000, "www.ng-gaming.net");
+	TutTextDraw[23] = TextDrawCreate(280.000000, 439.000000, "www.ng-gaming.com");
 	TextDrawBackgroundColor(TutTextDraw[23], 255);
 	TextDrawFont(TutTextDraw[23], 2);
 	TextDrawLetterSize(TutTextDraw[23], 0.159999, 0.699998);
@@ -846,7 +846,7 @@ Register_Questions(playerid)
 Register_Character(playerid)
 {
 	IsSpawned[playerid] = 1;
-	PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.net/dom/fanfare.mp3", 0.0, 0.0, 0.0, 10.0, 0);
+	PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.com/dom/fanfare.mp3", 0.0, 0.0, 0.0, 10.0, 0);
 	ClearChatbox(playerid);
 	SetPlayerPos(playerid, 10.2872, 15.2056, 1620.9647);
 	TogglePlayerControllable(playerid, false);
@@ -1119,7 +1119,7 @@ public Register_Plane(playerid)
 		}
 		case 2:	{
 			StopAudioStreamForPlayer(playerid);
-			PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.net/dom/plane_part1.mp3", 0.0, 0.0, 0.0, 10.0, 0);
+			PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.com/dom/plane_part1.mp3", 0.0, 0.0, 0.0, 10.0, 0);
 			CreateExplosion(0.6985, 27.5042+10.0, 1199.5938-10.0, 2, 0.1);
 			ClearAnimationsEx(playerid);
 			ClearChatbox(playerid);
@@ -1134,7 +1134,7 @@ public Register_Plane(playerid)
 			// cam_CamShakeTimer[playerid] = SetTimerEx("CamShaker", 100, true, "i", playerid);
 		}
 		case 3: {
-			PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.net/dom/plane_part2.mp3");
+			PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.com/dom/plane_part2.mp3");
 		    TogglePlayerControllable(playerid, 1);
 			SetCameraBehindPlayer(playerid);
 			SetPlayerFacingAngle(playerid, 0.0);
@@ -1215,7 +1215,7 @@ forward Register_Finalize(playerid);
 public Register_Finalize(playerid) {
 	ResetCameraShake(playerid);
 	StopAudioStreamForPlayer(playerid);
-	PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.net/dom/login.mp3");
+	PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.com/dom/login.mp3");
 	ClearChatbox(playerid);
 	SetPlayerVirtualWorld(playerid, 0);
 	Tutorial_Objectives(playerid);
@@ -1245,7 +1245,7 @@ public Tutorial_Objectives(playerid) {
 	{
 		case 4:
 		{
-			PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.net/dom/inception.mp3", 0.0, 0.0, 0.0, 10.0, 0);
+			PlayAudioStreamForPlayer(playerid, "http://sampweb.ng-gaming.com/dom/inception.mp3", 0.0, 0.0, 0.0, 10.0, 0);
 			ClearChatbox(playerid);
 			SendClientMessage(playerid, COLOR_YELLOW, "___________ - {FFFFFF}Objective {FFFF00}- ___________");
 			SendClientMessage(playerid, COLOR_GRAD1, "Objective 1: Buy a car.");

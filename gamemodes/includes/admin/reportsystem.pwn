@@ -322,7 +322,7 @@ CMD:rmute(playerid, params[])
 				ABroadCast(COLOR_LIGHTRED,string,2);
 				format(string, sizeof(string), "You have been blocked from submitting /reports by %s.", GetPlayerNameEx(playerid));
 				SendClientMessageEx(giveplayerid, COLOR_GRAD2, string);
-				SendClientMessageEx(giveplayerid, COLOR_GRAD2, "You will not be able to submit reports until you are unblocked. To appeal this action contact hr@ng-gaming.net.");
+				SendClientMessageEx(giveplayerid, COLOR_GRAD2, "You will not be able to submit reports until you are unblocked. To appeal this action contact hr@ng-gaming.com.");
 				format(string, sizeof(string), "AdmCmd: %s(%d) was blocked from /report by %s", GetPlayerNameEx(giveplayerid), GetPlayerSQLId(giveplayerid), GetPlayerNameEx(playerid));
 				Log("logs/mute.log", string);
 			}
@@ -1037,7 +1037,7 @@ CMD:nao(playerid, params[])
 		Log("logs/report.log", string);
 		format(string, sizeof(string), "%s has reviewed your report, however there is not an Admin presently online with sufficient authority to handle your request.", GetPlayerNameEx(playerid));
 		SendClientMessageEx(Reports[reportid][ReportFrom], COLOR_WHITE, string);
-		SendClientMessageEx(Reports[reportid][ReportFrom], COLOR_WHITE, "You can post a request on the forums for additional assistance (www.ng-gaming.net/forums). Our apologies for the inconvenience. ");
+		SendClientMessageEx(Reports[reportid][ReportFrom], COLOR_WHITE, "You can post a request on the forums for additional assistance (www.ng-gaming.com/forums). Our apologies for the inconvenience. ");
         DeletePVar(Reports[reportid][ReportFrom], "HasReport");
 		DeletePVar(Reports[reportid][ReportFrom], "_rAutoM");
 		DeletePVar(Reports[reportid][ReportFrom], "_rRepID");	
@@ -1084,7 +1084,7 @@ CMD:post(playerid, params[])
 		Log("logs/report.log", string);
 		format(string, sizeof(string), "%s has reviewed your report and determined this report should be handled on the forums (i.e. complaint or request.)", GetPlayerNameEx(playerid));
 		SendClientMessageEx(Reports[reportid][ReportFrom], COLOR_WHITE, string);
-		SendClientMessageEx(Reports[reportid][ReportFrom], COLOR_WHITE, "Please only report for items that are actively occuring in game. (www.ng-gaming.net/forums)");
+		SendClientMessageEx(Reports[reportid][ReportFrom], COLOR_WHITE, "Please only report for items that are actively occuring in game. (www.ng-gaming.com/forums)");
         DeletePVar(Reports[reportid][ReportFrom], "HasReport");
 		DeletePVar(Reports[reportid][ReportFrom], "_rAutoM");
 		DeletePVar(Reports[reportid][ReportFrom], "_rRepID");		Reports[reportid][ReportFrom] = INVALID_PLAYER_ID;

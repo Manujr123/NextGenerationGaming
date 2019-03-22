@@ -1213,7 +1213,7 @@ CMD:spawnatvip(playerid, params[])
 	if(PlayerInfo[playerid][pDonateRank] != 2) return SendClientMessageEx(playerid, COLOR_GREY, "You are not a Silver VIP+!");
 	if(PlayerInfo[playerid][pVIPSpawn] > 0) return SendClientMessageEx(playerid, COLOR_GREY, "You already bought a spawn at the Gold VIP+ room, you will be able to use it after your next death.");
 	if(!GetPVarType(playerid, "PinConfirmed")) return PinLogin(playerid);
-	if(PlayerInfo[playerid][pCredits] < 10) return SendClientMessageEx(playerid, COLOR_GREY, "You need 10 credits to buy a spawn at the Gold VIP+ room. Visit shop.ng-gaming.net to purchase credits.");
+	if(PlayerInfo[playerid][pCredits] < 10) return SendClientMessageEx(playerid, COLOR_GREY, "You need 10 credits to buy a spawn at the Gold VIP+ room. Visit shop.ng-gaming.com to purchase credits.");
 	new string[128];
 	SetPVarInt(playerid, "MiscShop", 9);
 	format(string, sizeof(string), "Spawn at Gold VIP+ room\nYour Credits: %s\nCost: {FFD700}%s{A9C4E4}\nCredits Left: %s", number_format(PlayerInfo[playerid][pCredits]), number_format(ShopItems[30][sItemPrice]), number_format(PlayerInfo[playerid][pCredits]-ShopItems[30][sItemPrice]));

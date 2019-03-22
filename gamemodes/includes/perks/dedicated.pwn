@@ -393,7 +393,7 @@ CMD:dpwarn(playerid, params[])
 
 			format(string, sizeof(string), "You have been warned from the Dedicated chat by %s, reason: %s", GetPlayerNameEx(playerid), reason);
 			SendClientMessageEx(giveplayerid, COLOR_WHITE, string);
-			SendClientMessageEx(giveplayerid, COLOR_WHITE, "This action lasts for two hours. To appeal, please visit our forums: www.ng-gaming.net/forums");
+			SendClientMessageEx(giveplayerid, COLOR_WHITE, "This action lasts for two hours. To appeal, please visit our forums: www.ng-gaming.com/forums");
 
 			PlayerInfo[giveplayerid][pDedicatedWarn] = 120;
 		}	
@@ -502,7 +502,7 @@ CMD:dpmute(playerid, params[])
 		 				return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot use this command on this person!");
 
 					PlayerInfo[targetid][pDedicatedMuted] = 1;
-					format(string, sizeof(string), "You were muted from the Dedicated chat by %s, reason: %s. You may appeal this mute at www.ng-gaming.net/forums", GetPlayerNameEx(playerid), reason);
+					format(string, sizeof(string), "You were muted from the Dedicated chat by %s, reason: %s. You may appeal this mute at www.ng-gaming.com/forums", GetPlayerNameEx(playerid), reason);
 					SendClientMessageEx(targetid, COLOR_GRAD2, string);
 					format(string, sizeof(string), "AdmCmd: %s has muted %s from the Dedicated chat, reason: %s.", GetPlayerNameEx(playerid), GetPlayerNameEx(targetid), reason);
 					ABroadCast(COLOR_LIGHTRED, string, 4);

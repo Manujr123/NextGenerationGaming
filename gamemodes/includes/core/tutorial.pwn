@@ -255,10 +255,10 @@ ShowTutorialDialog(playerid, stage)
 				strcat(szMiscArray, "as you would in real life. Along the way your character learns new information and allows them to develop.\n\n");
 				strcat(szMiscArray, "As a community, we've been around since 2010 and have grown significantly since then.\n\n");
 				strcat(szMiscArray, "{FF0000}NG:RP Related Services{FFFFFF}:\n");
-				strcat(szMiscArray, "\t{F69500}Website{FFFFFF}: ng-gaming.net - Sign up on our forums and interact with the community!\n");
-				strcat(szMiscArray, "\t{F69500}User Control Panel{FFFFFF}: cp.ng-gaming.net - Control your account and take measures to ensure your account's security!\n");
-				strcat(szMiscArray, "\t{F69500}Shop{FFFFFF}: shop.ng-gaming.net - Purchase credits from the shop and purchase items in game!\n");
-				strcat(szMiscArray, "\t{F69500}TeamSpeak{FFFFFF}: ts.ng-gaming.net - Connect and speak to different members of the community!\n");
+				strcat(szMiscArray, "\t{F69500}Website{FFFFFF}: ng-gaming.com - Sign up on our forums and interact with the community!\n");
+				strcat(szMiscArray, "\t{F69500}User Control Panel{FFFFFF}: cp.ng-gaming.com - Control your account and take measures to ensure your account's security!\n");
+				strcat(szMiscArray, "\t{F69500}Shop{FFFFFF}: shop.ng-gaming.com - Purchase credits from the shop and purchase items in game!\n");
+				strcat(szMiscArray, "\t{F69500}TeamSpeak{FFFFFF}: ts.ng-gaming.com - Connect and speak to different members of the community!\n");
 				strcat(szMiscArray, "\t{F69500}Image Sharing{FFFFFF}: ngg.up - Share your favourite images with your friends, with the press of a button.\n\n");
 				strcat(szMiscArray, "Please make sure you read this tutorial as you will be asked questions at the end.");
 				strcat(szMiscArray, "\n\n\n{FFFFFF}_______________________________________________________________________________________________________________________________________________________");
@@ -330,7 +330,7 @@ ShowTutorialDialog(playerid, stage)
 			strcat(szMiscArray, "\t{FF0000}Transportation{FFFFFF}: They taxi around individuals who service them in exchange for a small fee.\n");
 			strcat(szMiscArray, "\t{FF0000}Contract Agency{FFFFFF}: They perform illegal contract hits on those who have them.\n");
 			strcat(szMiscArray, "\t{FF0000}Criminal{FFFFFF}: A group of criminals who do illegal things.\n\n");
-			strcat(szMiscArray, "Some groups allow you to apply to join them once you meet certain requirements! Check out all the groups at ng-gaming.net.");
+			strcat(szMiscArray, "Some groups allow you to apply to join them once you meet certain requirements! Check out all the groups at ng-gaming.com.");
 			strcat(szMiscArray, "\n\n\n{FFFFFF}_______________________________________________________________________________________________________________________________________________________");
 			ShowPlayerDialogEx(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "NG:RP Tutorial - Groups", szMiscArray, countstring, "");
 		}

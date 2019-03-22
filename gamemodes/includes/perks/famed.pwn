@@ -185,7 +185,7 @@ CMD:fmute(playerid, params[])
 		 				return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot use this command on this person!");
 
 					PlayerInfo[targetid][pFMuted] = 1;
-					format(string, sizeof(string), "You were muted from the famed channel by %s, reason: %s. You may appeal this mute at www.ng-gaming.net/forums", GetPlayerNameEx(playerid), reason);
+					format(string, sizeof(string), "You were muted from the famed channel by %s, reason: %s. You may appeal this mute at www.ng-gaming.com/forums", GetPlayerNameEx(playerid), reason);
 					SendClientMessageEx(targetid, COLOR_GRAD2, string);
 					format(string, sizeof(string), "AdmCmd: %s has muted %s from the Famed Channel, reason: %s.", GetPlayerNameEx(playerid), GetPlayerNameEx(targetid), reason);
 					ABroadCast(COLOR_LIGHTRED, string, 2);

@@ -564,7 +564,7 @@ CMD:givemeorder(playerid, params[])
 		if(sscanf(params, "ui", giveplayerid, orderid)) return SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /adjustoid [player] [new orderid]");
 		SendClientMessageEx(playerid, COLOR_WHITE, "Processing..");
   		PlayerInfo[giveplayerid][pOrder] = orderid;
-		format(string, sizeof(string), "shop.ng-gaming.net/idcheck.php?id=%d", orderid);
+		format(string, sizeof(string), "shop.ng-gaming.com/idcheck.php?id=%d", orderid);
 		HTTP(giveplayerid, HTTP_GET, string, "", "HttpCallback_ShopIDCheck");
 		format(string, sizeof(string), "%s has edited %s's Order ID to %d", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid), orderid);
 		Log("logs/shoporders.log", string);
@@ -692,7 +692,7 @@ CMD:shoporder(playerid, params[])
 		SendClientMessageEx(playerid,COLOR_GREY, string);
 		return 1;
 	}
-	ShowPlayerDialogEx(playerid, DIALOG_SHOPORDER, DIALOG_STYLE_INPUT, "Shop Order", "This is for shop orders from http://shop.ng-gaming.net\n\nIf you do not have a shop order then please cancel this dialog box now.\n\nWarning: Abuse of this feature may result to an indefinite block from this command.\n\nPlease enter your shop order ID (if you do not know it put 1):", "Submit", "Cancel" );
+	ShowPlayerDialogEx(playerid, DIALOG_SHOPORDER, DIALOG_STYLE_INPUT, "Shop Order", "This is for shop orders from http://shop.ng-gaming.com\n\nIf you do not have a shop order then please cancel this dialog box now.\n\nWarning: Abuse of this feature may result to an indefinite block from this command.\n\nPlease enter your shop order ID (if you do not know it put 1):", "Submit", "Cancel" );
 	return 1;
 }
 

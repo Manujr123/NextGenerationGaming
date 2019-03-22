@@ -7,7 +7,7 @@ ALTER TABLE `accounts` ADD `PollKeyA` VARCHAR(128) NOT NULL AFTER `GuardsGiven`,
 	Next Generation Gaming Development Team
 
 	Project Name: Dynamic Polling System
-	Author: Westen (westen@ng-gaming.net)
+	Author: Westen (westen@ng-gaming.com)
 
 	Documentation: https://docs.google.com/document/d/1emwrE9iCG4ZomJZ5s_BskzHcSBQXlJ7nnRIkR8ChpXs/
 */

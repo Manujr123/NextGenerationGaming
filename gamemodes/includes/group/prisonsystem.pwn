@@ -242,7 +242,7 @@ DocLockdown(playerid)
 		}
 		format( szWarning, sizeof(szWarning), "ALERT: The Easter Basin Correctional Facility is now on Lockdown for an emergency (( %s ))", GetPlayerNameEx(playerid));
 		SendGroupMessage(GROUP_TYPE_LEA, COLOR_RED, szWarning);
-		//PlayAudioStreamForPlayer(i, "http://sampweb.ng-gaming.net/brendan/siren.mp3", -1083.90002441,4289.70019531,7.59999990, 500, 1);
+		//PlayAudioStreamForPlayer(i, "http://sampweb.ng-gaming.com/brendan/siren.mp3", -1083.90002441,4289.70019531,7.59999990, 500, 1);
 	}
 	else 
 	{
