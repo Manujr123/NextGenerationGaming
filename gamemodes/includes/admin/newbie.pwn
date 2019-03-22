@@ -5,7 +5,7 @@ CMD:newb(playerid, params[]) {
 	szMiscArray[0] = 0;
 
 	if(PlayerInfo[playerid][pNMute] == 1) return SendClientMessageEx(playerid, COLOR_GREY, "You are muted from the newbie chat channel.");
-	if(PlayerInfo[playerid][pToggledChats][0]) return SendClientMessageEx(playerid, COLOR_GREY, "You have the channel toggled, /tognewbie to re-enable!");
+	if(PlayerInfo[playerid][pToggledChats][0]) return SendClientMessageEx(playerid, COLOR_GREY, "You have the channel toggled, /tog newbie to re-enable!");
 	if(PlayerInfo[playerid][pTut] == 0) return SendClientMessageEx(playerid, COLOR_GREY, "You can't do that at this time.");
 	if(nonewbie) return SendClientMessageEx(playerid, COLOR_GRAD2, "The newbie chat channel has been disabled by an administrator!");
 
@@ -88,7 +88,7 @@ SendNewbQuestionToQueue(iPlayerID, szQuestion[]) {
 
 	SetPVarString(iPlayerID, "HasNewbQues", szQuestion);
 
-	format(szMiscArray, sizeof(szMiscArray), "Newb (ID:%d) %s Q: %s", iPlayerID, GetPlayerNameEx(iPlayerID), szQuestion);
+	format(szMiscArray, sizeof(szMiscArray), "Newb: %s (ID:%d) Q: %s", GetPlayerNameEx(iPlayerID), iPlayerID, szQuestion);
 
 	foreach(new i : Player) {
 		if((PlayerInfo[i][pAdmin] >= 1 || PlayerInfo[i][pHelper] > 0))
@@ -97,7 +97,6 @@ SendNewbQuestionToQueue(iPlayerID, szQuestion[]) {
 	}
 
 	SendClientMessageEx(iPlayerID, COLOR_WHITE, "Your question was submitted");
-	SendDiscordMessage(8, szMiscArray);
 
 	return 1;
 }
@@ -111,33 +110,6 @@ ClearNewbVars(iPlayerID) {
 	return 1;
 }
 
-DiscordAnswerNewbie(DiscordName[], iNewbieID, szAnswer[], fPos)
-{
-	szMiscArray[0] = 0;
-
-	if(!GetPVarType(iNewbieID, "HasNewbQues")) return SendDiscordMessage(8, "That player does not have an active question!");
-
-	GetPVarString(iNewbieID, "HasNewbQues", szMiscArray, 128);
-
-	strdel(szAnswer, 0, fPos+1);
-
-	format(szMiscArray, sizeof(szMiscArray), "Q: (%s): %s", GetPlayerNameEx(iNewbieID), szMiscArray);
-	SendGlobalNewbMsg(szMiscArray);
-	SendDiscordMessage(8, szMiscArray);
-	Log("logs/newbiechat.log", szMiscArray);
-
-	szMiscArray[0] = 0;
-
-	format(szMiscArray, sizeof(szMiscArray), "A: ([D] %s): %s", DiscordName, szAnswer);
-	SendGlobalNewbMsg(szMiscArray);
-	SendDiscordMessage(8, szMiscArray);
-	Log("logs/newbiechat.log", szMiscArray);
-
-	SendClientMessageEx(iNewbieID, COLOR_NEWBIE, "Your question has been answered! If you have more questions or for additional assistance use [/requesthelp]");
-	ClearNewbVars(iNewbieID);
-	return 1;
-}
-
 AnswerNewbie(iPlayerID, iNewbieID, szAnswer[]) {
 
 	szMiscArray[0] = 0;
@@ -148,14 +120,12 @@ AnswerNewbie(iPlayerID, iNewbieID, szAnswer[]) {
 
 	format(szMiscArray, sizeof(szMiscArray), "Q: (%s): %s", GetPlayerNameEx(iNewbieID), szMiscArray);
 	SendGlobalNewbMsg(szMiscArray);
-	SendDiscordMessage(8, szMiscArray);
 	Log("logs/newbiechat.log", szMiscArray);
 
 	szMiscArray[0] = 0;
 
 	format(szMiscArray, sizeof(szMiscArray), "A: (%s): %s", GetPlayerNameEx(iPlayerID), szAnswer);
 	SendGlobalNewbMsg(szMiscArray);
-	SendDiscordMessage(8, szMiscArray);
 	Log("logs/newbiechat.log", szMiscArray);
 
 	if(PlayerInfo[iPlayerID][pHelper] == 1 && PlayerInfo[iPlayerID][pAdmin] < 1) {

@@ -183,10 +183,9 @@ stock OOCOff(color,string[])
 	foreach(new i: Player)
 	{
 		if(!gOoc[i]) {
-			SendClientMessageEx(i, color, string);	
+			SendClientMessageEx(i, color, string);
 		}
 	}	
-	SendDiscordMessage(5, string);
 }
 
 stock RadioBroadCast(playerid, string[])

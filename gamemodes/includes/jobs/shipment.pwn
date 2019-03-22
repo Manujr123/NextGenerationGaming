@@ -372,9 +372,39 @@ public LoadTruck(playerid)
 
 stock DisplayOrders(playerid)
 {
-	if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 456 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 414 || IsABoat(GetPlayerVehicleID(playerid)))
+	new szDialog[2048];
+	for (new i, j; i < MAX_BUSINESSES; i++)
 	{
-		ShowPlayerDialogEx(playerid,DIALOG_LOADTRUCKOLD,DIALOG_STYLE_LIST,"What do you want to transport?","{00F70C}Legal goods {FFFFFF}(no risk but also no bonuses)\n{FF0606}Illegal goods {FFFFFF}(risk of getting caught but a bonus)","Select","Cancel");
+	    if (Businesses[i][bOrderState] == 1)
+	    {
+	        if(Businesses[i][bType] > 0)
+	        {
+		    	format(szDialog, sizeof(szDialog), "%s%s\t%s\n", szDialog, Businesses[i][bName], GetInventoryType(i));
+				ListItemTrackId[playerid][j++] = i;
+			}
+		}
+	}
+
+	if (!szDialog[0] || IsABoat(GetPlayerVehicleID(playerid)))
+	{
+
+		/*ShowPlayerDialogEx(playerid, DIALOG_NOTHING, DIALOG_STYLE_MSGBOX, "Error", "No jobs available right now. Try again later.", "OK", "");
+		TogglePlayerControllable(playerid, 1);
+		DeletePVar(playerid, "IsFrozen"); */
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 456 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 414 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 413 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 440 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 482 || IsABoat(GetPlayerVehicleID(playerid)))
+		{
+			ShowPlayerDialogEx(playerid,DIALOG_LOADTRUCKOLD,DIALOG_STYLE_LIST,"What do you want to transport?","{00F70C}Legal goods {FFFFFF}(no risk but also no bonuses)\n{FF0606}Illegal goods {FFFFFF}(risk of getting caught but a bonus)","Select","Cancel");
+		}
+		else
+		{
+			ShowPlayerDialogEx(playerid, DIALOG_NOTHING, DIALOG_STYLE_MSGBOX, "Error", "No jobs available for this type of truck right now. Try again later.", "OK", "");
+			TogglePlayerControllable(playerid, 1);
+			DeletePVar(playerid, "IsFrozen");
+		}
+	}
+	else
+	{
+	    ShowPlayerDialogEx(playerid, DIALOG_LOADTRUCK, DIALOG_STYLE_LIST, "Available Orders", szDialog, "Take", "Close");
 	}
 	return 1;
 }
@@ -551,7 +581,11 @@ CMD:hijackcargo(playerid, params[])
 				} 
 				else 
 				{
-					SendClientMessageEx(playerid, COLOR_LIGHTBLUE,"* You are now attempting to hijack the boat, please wait....");
+					if(PlayerInfo[playerid][pTruckSkill] >= 200)
+					{
+						SendClientMessageEx(playerid, COLOR_LIGHTBLUE,"* You are now attempting to hijack the boat, please wait....");
+					}
+					else return SendClientMessageEx(playerid, COLOR_WHITE, "Water shipments are restricted to Level 4+ Shipment Contracter.");
 				}
 
 				TogglePlayerControllable(playerid, 0);
@@ -567,8 +601,6 @@ CMD:hijackcargo(playerid, params[])
 	else return SendClientMessageEx(playerid, COLOR_GREY, "You are not a Shipment Contractor!");
 	return 1;
 }
-
-
 
 CMD:loadshipment(playerid, params[])
 {
@@ -597,6 +629,20 @@ CMD:loadshipment(playerid, params[])
 				{
 				    return SendClientMessageEx(playerid, COLOR_GRAD2, "That vehicle is already loaded.");
 				}
+				if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 440 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 413) // Level Three Vehicle Check
+				{
+					if(PlayerInfo[playerid][pTruckSkill] < 100) 
+					{
+						return SendClientMessageEx(playerid, COLOR_GRAD2, "Only level 3 Shipment Contractors may use this vehicle.");
+					}
+				}
+				if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 482) // Level Five Vehicle Check
+				{
+					if(PlayerInfo[playerid][pTruckSkill] < 400)  
+					{
+						return SendClientMessageEx(playerid, COLOR_GRAD2, "Only level 5 Shipment Contractors may use this vehicle.");
+					}
+				}
 	            if(!IsABoat(vehicleid))
 	            {
 		            SetPlayerCheckpoint(playerid,-1572.767822, 81.137527, 3.554687, 4);
@@ -605,9 +651,13 @@ CMD:loadshipment(playerid, params[])
 				}
 				else
 				{
-					SetPlayerCheckpoint(playerid,-1675.0538,184.0603,-0.4623, 4);
-					GameTextForPlayer(playerid, "~w~Waypoint set ~r~San Fierro Docks", 5000, 1);
-					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, "* Pick up some goods to transport with your Boat at San Fierro Docks (see checkpoint on radar).");
+					if(PlayerInfo[playerid][pTruckSkill] >= 200)
+					{
+						SetPlayerCheckpoint(playerid,2098.6543,-104.3568,-0.4820, 4);
+						GameTextForPlayer(playerid, "~w~Waypoint set ~r~Palamino Docks", 5000, 1);
+						SendClientMessageEx(playerid, COLOR_LIGHTBLUE, "* Pick up some goods to transport with your Boat at Palamino Docks (see checkpoint on radar).");
+					}
+					else return SendClientMessageEx(playerid, COLOR_WHITE, "Water shipments are restricted to Level 4+ Shipment Contracter.");
 				}
 				gPlayerCheckpointStatus[playerid] = CHECKPOINT_LOADTRUCK;
 	        }

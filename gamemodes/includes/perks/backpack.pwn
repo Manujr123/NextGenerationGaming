@@ -953,37 +953,31 @@ CMD:bremove(playerid, params[])
 			new iDrugID = GetDrugID(item);
 			if(iDrugID != -1) {
 
-                new iGroupID = PlayerInfo[playerid][pMember];
-
 				format(string, sizeof(string), "* You have taken away %s's %s from their backpack.", GetPlayerNameEx(giveplayerid), Drugs[iDrugID]);
 				SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-				format(string, sizeof(string), "* %s %s has taken away your %s from your backpack.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid), Drugs[iDrugID]);
+				format(string, sizeof(string), "* Officer %s has taken away your %s from your backpack.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid), Drugs[iDrugID]);
 				SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-				format(string, sizeof(string), "* %s %s has taken away %s's %s from their backpack.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid), Drugs[iDrugID]);
+				format(string, sizeof(string), "* Officer %s has taken away %s's %s from their backpack.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid), Drugs[iDrugID]);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				PlayerInfo[giveplayerid][pBDrugs][iDrugID] = 0;
 			}
 			else if(strcmp(item,"meals",true) == 0)
 			{
-                new iGroupID = PlayerInfo[playerid][pMember];
-
 				format(string, sizeof(string), "* You have taken away %s's meals from their backpack.", GetPlayerNameEx(giveplayerid));
 				SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-				format(string, sizeof(string), "* %s %s has taken away your meals from your backpack.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+				format(string, sizeof(string), "* Officer %s has taken away your meals from your backpack.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 				SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-				format(string, sizeof(string), "* %s %s has taken away %s's meals from their backpack.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+				format(string, sizeof(string), "* Officer %s has taken away %s's meals from their backpack.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				PlayerInfo[giveplayerid][pBItems][0] = 0;
 			}
 			else if(strcmp(item,"guns",true) == 0)
 			{
-                new iGroupID = PlayerInfo[playerid][pMember];
-
 				format(string, sizeof(string), "* You have taken away %s's weapons from their backpack.", GetPlayerNameEx(giveplayerid));
 				SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-				format(string, sizeof(string), "* %s %s has taken away your weapons from your backpack.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+				format(string, sizeof(string), "* Officer %s has taken away your weapons from your backpack.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 				SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-				format(string, sizeof(string), "* %s %s has taken away %s's weapons from their backpack.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+				format(string, sizeof(string), "* Officer %s has taken away %s's weapons from their backpack.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				for(new i = 6; i < 11; i++)
 				{
@@ -1202,6 +1196,7 @@ CMD:bopen(playerid, params[])
 {
 	if(PlayerInfo[playerid][pBackpack] > 0)
 	{
+		if(dr_iPlayerTimeStamp[playerid] > gettime() - 60) return SendClientMessageEx(playerid, COLOR_GRAD1, "You have been injured in the last minute");
 		if(!IsBackpackAvailable(playerid)) {
 			SendClientMessageEx(playerid, COLOR_GREY, "You cannot use your backpack at this moment.");
 			return 1;

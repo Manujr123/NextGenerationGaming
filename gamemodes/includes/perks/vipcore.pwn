@@ -164,9 +164,29 @@ CMD:vipnum(playerid, params[])
 	return 1;
 }
 
+CMD:buddyinvites(playerid, params[])
+{
+	new string[128];
+	if(PlayerInfo[playerid][pAdmin] >= 1337 || PlayerInfo[playerid][pAdmin] > 1 && PlayerInfo[playerid][pShopTech] > 2) {
+		if(BuddyInvite == true) {
+			BuddyInvite = false;
+			format(string, sizeof(string), "{AA3333}AdmWarning{FFFF00}: %s has disabled the /buddyinvite command.", GetPlayerNameEx(playerid));
+			ABroadCast(COLOR_YELLOW, string, 2);
+		} else {
+			BuddyInvite = true;
+			format(string, sizeof(string), "{AA3333}AdmWarning{FFFF00}: %s has enabled the /buddyinvite command.", GetPlayerNameEx(playerid));
+			ABroadCast(COLOR_YELLOW, string, 2);
+		}
+	} else {
+		SendClientMessageEx(playerid, COLOR_GRAD2, "You don't have permission to use this command.");
+	}
+	return 1;
+}
+
 CMD:buddyinvite(playerid, params[])
 {
 	if(PlayerInfo[playerid][pDonateRank] < 2) return SendClientMessageEx(playerid, COLOR_GREY, "You need to be Silver VIP+ to use this function!");
+	if(BuddyInvite == false) return SendClientMessageEx(playerid, COLOR_GREY, "Buddy invites has been disabled by an adminstrator.");
 	new giveplayerid;
 	if(sscanf(params, "u", giveplayerid)) return SendClientMessageEx(playerid, COLOR_WHITE, "USAGE: /buddyinvite [player]");
 	if(!IsPlayerConnected(giveplayerid)) return SendClientMessageEx(playerid, COLOR_GRAD2, "That person is not connected!");
@@ -212,9 +232,9 @@ CMD:buddyinvite(playerid, params[])
 	{
 		PlayerInfo[playerid][pVIPInviteDay] = gettime();
 	}
-	format(string, sizeof(string), "UPDATE `accounts` SET `VIPInviteDay` = %d, `BuddyInvites` = %d WHERE `id` = '%d'",
+	mysql_format(MainPipeline, string, sizeof(string), "UPDATE `accounts` SET `VIPInviteDay` = %d, `BuddyInvites` = %d WHERE `id` = '%d'",
 	PlayerInfo[playerid][pVIPInviteDay], PlayerInfo[playerid][pBuddyInvites], GetPlayerSQLId(playerid));
-	mysql_function_query(MainPipeline, string, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+	mysql_tquery(MainPipeline, string, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 	return 1;
 }
 
@@ -303,7 +323,7 @@ CMD:travel(playerid, params[])
 			if(isnull(params))
 			{
 				SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /travel [location]");
-				SendClientMessageEx(playerid, COLOR_GRAD1, "Locations: LS, SF, RC, LSVIP, SFVIP, LVVIP, FC, BAYSIDE");
+				SendClientMessageEx(playerid, COLOR_GRAD1, "Locations: LS, SF, RC, LSVIP, SFVIP, LVVIP, APVIP, FC, BAYSIDE, FLINT");
 				return 1;
 			}
 
@@ -354,7 +374,6 @@ CMD:travel(playerid, params[])
 				if (GetPlayerState(playerid) == 2)
 				{
 					new tmpcar = GetPlayerVehicleID(playerid);
-                    
 					SetVehiclePos(tmpcar, 1253.70, 343.73, 19.41);
 					if(GetPVarInt(playerid, "tpDeliverVehTimer") > 0)
 						SetPVarInt(playerid, "tpJustEntered", 1);
@@ -398,10 +417,33 @@ CMD:travel(playerid, params[])
 				if (GetPlayerState(playerid) == 2)
 				{
 					new tmpcar = GetPlayerVehicleID(playerid);
-					SetVehiclePos(tmpcar, -1979.8, 543.4, 34.5);
+					SetVehiclePos(tmpcar, -2441.009521, 522.708923, 29.785852);
 					if(GetPVarInt(playerid, "tpDeliverVehTimer") > 0)
 						SetPVarInt(playerid, "tpJustEntered", 1);
 					SetPlayerFacingAngle(playerid, 181.54);
+					fVehSpeed[playerid] = 0.0;
+					SendClientMessageEx(playerid, COLOR_YELLOW, "VIP: You have traveled to the VIP Lounge with your vehicle.");
+					SetPlayerInterior(playerid,0);
+					PlayerInfo[playerid][pInt] = 0;
+					SetPlayerVirtualWorld(playerid, 0);
+					PlayerInfo[playerid][pVW] = 0;
+
+				}
+				else
+				{
+					SendClientMessageEx(playerid, COLOR_GRAD1, "   You are not in a vehicle!");
+				}
+			}
+			if(strcmp(params,"apvip",true) == 0)
+			{
+				if (GetPlayerState(playerid) == 2)
+				{
+					new tmpcar = GetPlayerVehicleID(playerid);
+					SetVehiclePos(tmpcar, -2106.056396, -2403.133056, 31.089097);
+					SetVehicleZAngle(tmpcar, 232.05); // Sets the direction in which the vehicle faces
+					if(GetPVarInt(playerid, "tpDeliverVehTimer") > 0)
+						SetPVarInt(playerid, "tpJustEntered", 1);
+					SetPlayerFacingAngle(playerid, 232.05);
 					fVehSpeed[playerid] = 0.0;
 					SendClientMessageEx(playerid, COLOR_YELLOW, "VIP: You have traveled to the VIP Lounge with your vehicle.");
 					SetPlayerInterior(playerid,0);
@@ -480,6 +522,29 @@ CMD:travel(playerid, params[])
 					SendClientMessageEx(playerid, COLOR_GRAD1, "   You are not in a vehicle!");
 				}
 			}
+			if(strcmp(params,"flint",true) == 0)
+			{
+				if (GetPlayerState(playerid) == 2)
+				{
+					new tmpcar = GetPlayerVehicleID(playerid);
+					SetVehiclePos(tmpcar, -79.608451, -1192.061157, 1.463104);
+					SetVehicleZAngle(tmpcar, 73.97);
+					if(GetPVarInt(playerid, "tpDeliverVehTimer") > 0)
+						SetPVarInt(playerid, "tpJustEntered", 1);
+					SetPlayerFacingAngle(playerid, 73.97);
+					fVehSpeed[playerid] = 0.0;
+					SendClientMessageEx(playerid, COLOR_YELLOW, "VIP: You have traveled to Flint County with your vehicle.");
+					SetPlayerInterior(playerid,0);
+					PlayerInfo[playerid][pInt] = 0;
+					SetPlayerVirtualWorld(playerid, 0);
+					PlayerInfo[playerid][pVW] = 0;
+
+				}
+				else
+				{
+					SendClientMessageEx(playerid, COLOR_GRAD1, "   You are not in a vehicle!");
+				}
+			}			
 		}
 	}
 	return 1;
@@ -518,7 +583,7 @@ CMD:v(playerid, params[]) {
 			SendClientMessageEx(playerid, COLOR_GREY, szMessage);
 		}
 		else if(PlayerInfo[playerid][pToggledChats][9]) {
-		    SendClientMessageEx(playerid, COLOR_GREY, "You have VIP chat toggled - /togvip to enable it.");
+		    SendClientMessageEx(playerid, COLOR_GREY, "You have VIP chat toggled - /tog vip to enable it.");
 		}
 		else if(PlayerInfo[playerid][pVMuted] > 0) {
 			SendClientMessageEx(playerid, COLOR_GREY, "You are muted from the VIP chat channel.");
@@ -1148,7 +1213,7 @@ CMD:spawnatvip(playerid, params[])
 	if(PlayerInfo[playerid][pDonateRank] != 2) return SendClientMessageEx(playerid, COLOR_GREY, "You are not a Silver VIP+!");
 	if(PlayerInfo[playerid][pVIPSpawn] > 0) return SendClientMessageEx(playerid, COLOR_GREY, "You already bought a spawn at the Gold VIP+ room, you will be able to use it after your next death.");
 	if(!GetPVarType(playerid, "PinConfirmed")) return PinLogin(playerid);
-	if(PlayerInfo[playerid][pCredits] < 10) return SendClientMessageEx(playerid, COLOR_GREY, "You need 10 credits to buy a spawn at the Gold VIP+ room. Visit shop.ng-gaming.com to purchase credits.");
+	if(PlayerInfo[playerid][pCredits] < 10) return SendClientMessageEx(playerid, COLOR_GREY, "You need 10 credits to buy a spawn at the Gold VIP+ room. Visit shop.ng-gaming.net to purchase credits.");
 	new string[128];
 	SetPVarInt(playerid, "MiscShop", 9);
 	format(string, sizeof(string), "Spawn at Gold VIP+ room\nYour Credits: %s\nCost: {FFD700}%s{A9C4E4}\nCredits Left: %s", number_format(PlayerInfo[playerid][pCredits]), number_format(ShopItems[30][sItemPrice]), number_format(PlayerInfo[playerid][pCredits]-ShopItems[30][sItemPrice]));
@@ -1176,8 +1241,8 @@ CMD:ovmute(playerid, params[])
 	mysql_escape_string(params, tmpName);
 	SetPVarString(playerid, "OnSetVMute", tmpName);
 
-	format(query,sizeof(query),"UPDATE `accounts` SET `VIPMuted` = 1 WHERE `Username`= '%s' AND `AdminLevel` < 4", tmpName);
-	mysql_function_query(MainPipeline, query, false, "OnSetVMute", "ii", playerid, 1);
+	mysql_format(MainPipeline, query,sizeof(query),"UPDATE `accounts` SET `VIPMuted` = 1 WHERE `Username`= '%s' AND `AdminLevel` < 4", tmpName);
+	mysql_tquery(MainPipeline, query, "OnSetVMute", "ii", playerid, 1);
 
 	format(query, sizeof(query), "Attempting to vip mute %s's account.", tmpName);
 	SendClientMessageEx(playerid, COLOR_YELLOW, query);
@@ -1195,8 +1260,8 @@ CMD:ovunmute(playerid, params[])
 	mysql_escape_string(params, tmpName);
 	SetPVarString(playerid, "OnSetVMute", tmpName);
 
-	format(query,sizeof(query),"UPDATE `accounts` SET `VIPMuted` = 0 WHERE `Username`= '%s' AND `AdminLevel` < 4", tmpName);
-	mysql_function_query(MainPipeline, query, false, "OnSetVMute", "ii", playerid, 2);
+	mysql_format(MainPipeline, query,sizeof(query),"UPDATE `accounts` SET `VIPMuted` = 0 WHERE `Username`= '%s' AND `AdminLevel` < 4", tmpName);
+	mysql_tquery(MainPipeline, query, "OnSetVMute", "ii", playerid, 2);
 
 	format(query, sizeof(query), "Attempting to vip unmute %s's account.", tmpName);
 	SendClientMessageEx(playerid, COLOR_YELLOW, query);
@@ -1279,7 +1344,7 @@ CMD:vipmods(playerid, params[])
 {
 	if(PlayerInfo[playerid][pShopTech] < 3) return SendClientMessageEx(playerid, COLOR_GRAD1, "You're not authorized to use this command!");
 	SendClientMessageEx(playerid, -1, "VIP Moderators Online:");
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(PlayerInfo[i][pVIPMod])
 		{

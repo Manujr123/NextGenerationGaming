@@ -55,8 +55,7 @@ public SetPlayerFree(playerid,declare,reason[])
 		{
 			if(IsACop(i))
 			{
-                new iGroupID = PlayerInfo[playerid][pMember];
-				format(string, sizeof(string), "HQ: All units, %s %s has completed their assignment.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(declare));
+				format(string, sizeof(string), "HQ: All units, officer %s has completed their assignment.", GetPlayerNameEx(declare));
 				SendClientMessageEx(i, COLOR_DBLUE, string);
 				format(string, sizeof(string), "HQ: %s has been processed, %s.", GetPlayerNameEx(playerid), reason);
 				SendClientMessageEx(i, COLOR_DBLUE, string);
@@ -400,7 +399,7 @@ public HidePlayerBeaconForCops(playerid)
 
 
 CMD:placekit(playerid, params[]) {
-	if(IsACop(playerid) || IsAMedic(playerid) || IsAGovernment(playerid) || IsATowman(playerid))
+	if(IsACop(playerid) || IsAMedic(playerid) || IsAReporter(playerid) || IsAGovernment(playerid) || IsATowman(playerid))
 	{
 		if(IsPlayerInAnyVehicle(playerid)) return SendClientMessageEx(playerid, COLOR_WHITE, "You can't do this while being inside the vehicle!");
 		if(GetPVarInt(playerid, "EMSAttempt") != 0) return SendClientMessageEx(playerid, COLOR_GRAD2, "You can't use this command!");
@@ -509,7 +508,7 @@ CMD:givekit(playerid, params[])
 }
 
 CMD:usekit(playerid, params[]) {
-	if(IsACop(playerid) || IsAMedic(playerid) || IsAGovernment(playerid) || IsATowman(playerid))
+	if(IsACop(playerid) || IsAMedic(playerid) || IsAReporter(playerid) || IsAGovernment(playerid) || IsATowman(playerid))
 	{
 		if(GetPVarType(playerid, "IsInArena")) return SendClientMessageEx(playerid, COLOR_WHITE, "You can't do this while being in an arena!");
 		if(IsPlayerInAnyVehicle(playerid)) { SendClientMessageEx(playerid, COLOR_WHITE, "You can't do this while being inside the vehicle!"); return 1; }
@@ -533,7 +532,7 @@ CMD:usekit(playerid, params[]) {
             	SendClientMessageEx(playerid, COLOR_WHITE, "You have used the Med Kit from the Vehicle Trunk.");
             	ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				SetHealth(playerid, 100);
-				SetArmour(playerid, 100);
+				SetArmour(playerid, 150);
             	VehInfo[vehicleid][vCarVestKit] -= 1;
 				return 1;
 		    }
@@ -777,7 +776,7 @@ CMD:backup(playerid, params[])
             ShowBackupActiveForPlayer(playerid);
 			Backup[playerid] = 1;
 
-			foreach(new i : Player)
+			foreach(Player, i)
 			{
 				if(PlayerInfo[playerid][pMember] == PlayerInfo[i][pMember])
 				{
@@ -802,7 +801,7 @@ CMD:backup(playerid, params[])
             ShowBackupActiveForPlayer(playerid);
 			Backup[playerid] = 2;
 
-			foreach(new i : Player)
+			foreach(Player, i)
 			{
 				if(PlayerInfo[playerid][pMember] == PlayerInfo[i][pMember])
 				{
@@ -855,7 +854,7 @@ CMD:backupall(playerid, params[])
 			format(string, sizeof(string), "* %s is requesting backup at %s. {AA3333}Respond Code 3A [Lights and Sirens].", GetPlayerNameEx(playerid), zone);
             ShowBackupActiveForPlayer(playerid);
 			Backup[playerid] = 3;
-			foreach(new i : Player)
+			foreach(Player, i)
 			{
 				if(IsACop(i) && arrGroupData[PlayerInfo[playerid][pMember]][g_iAllegiance] == arrGroupData[PlayerInfo[i][pMember]][g_iAllegiance])
 				{
@@ -902,7 +901,7 @@ CMD:backupint(playerid, params[])
 			format(string, sizeof(string), "* %s is requesting international backup at %s. {AA3333}Respond Code 3A [Lights and Sirens].", GetPlayerNameEx(playerid), zone);
             ShowBackupActiveForPlayer(playerid);
 			Backup[playerid] = 4;
-			foreach(new i : Player)
+			foreach(Player, i)
 			{
 				if(IsACop(i))
 				{
@@ -975,7 +974,7 @@ CMD:vticket(playerid, params[])
 		if(PlayerInfo[playerid][pTicketTime] != 0) return SendClientMessageEx(playerid, COLOR_GRAD2, "You must wait within a minute in order to use this command again!");
 		if(amount > 50000) return SendClientMessageEx(playerid, COLOR_GREY, "The maximum vehicle ticket amount is $50,000.");
 		if(amount < 1) return SendClientMessageEx(playerid, COLOR_GREY, "You can't ticket any vehicle below $1.");
-		new Float: x, Float: y, Float: z, veh = -1;
+		new string[128], Float: x, Float: y, Float: z, veh = -1;
 		GetVehiclePos(vehid, x, y, z);
 		if(IsPlayerInRangeOfPoint(playerid, 5.0, x, y, z)) {
 			foreach(new i: Player) {
@@ -983,6 +982,8 @@ CMD:vticket(playerid, params[])
 					PlayerVehicleInfo[i][veh][pvTicket] += amount;
 					PlayerInfo[playerid][pTicketTime] = 60;
 					SendClientMessageEx(playerid, COLOR_WHITE, "You have issued a $%s ticket on %s's %s.", number_format(amount), GetPlayerNameEx(i), GetVehicleName(PlayerVehicleInfo[i][veh][pvId]));
+					format(string, sizeof(string), "[VTICKET] Officer %s has ticketed %s's %s (%d) for $%s.", GetPlayerNameEx(playerid), GetPlayerNameEx(i), GetVehicleName(PlayerVehicleInfo[i][veh][pvId]), PlayerVehicleInfo[i][veh][pvSlotId], number_format(amount));
+					GroupLog(PlayerInfo[playerid][pMember], string);
 					break;
 				}
 			}
@@ -992,6 +993,8 @@ CMD:vticket(playerid, params[])
 					CrateVehicle[veh][cvTickets] += amount;
 					PlayerInfo[playerid][pTicketTime] = 60;
 					SendClientMessageEx(playerid, COLOR_WHITE, "You have issued a $%s ticket on the %s.", number_format(amount), VehicleName[CrateVehicle[veh][cvModel] - 400]);
+					format(string, sizeof(string), "[VTICKET] Officer %s has ticketed %s's %s (%d) for $%s.", GetPlayerNameEx(playerid), arrGroupData[CrateVehicle[veh][cvGroupID]][g_szGroupName], VehicleName[CrateVehicle[veh][cvModel] - 400], CrateVehicle[veh][cvId], number_format(amount));
+					GroupLog(PlayerInfo[playerid][pMember], string);
 					SaveCrateVehicle(veh);
 				} else veh = -1;
 			}
@@ -1001,7 +1004,7 @@ CMD:vticket(playerid, params[])
 		}
 		else SendClientMessageEx(playerid, COLOR_GRAD2, "You need to be near such vehicle!");
 	}
-	else SendClientMessageEx(playerid, COLOR_GRAD2, "You need to be near such vehicle!");
+	else SendClientMessageEx(playerid, COLOR_GRAD2, "You are not authorized to use this command.");
     return 1;
 }
 
@@ -1259,8 +1262,11 @@ CMD:take(playerid, params[])
 			return 1;
 		}
 		if(PlayerInfo[playerid][pAdmin] < 2 && (PlayerInfo[giveplayerid][pJailTime] && strfind(PlayerInfo[giveplayerid][pPrisonReason], "[OOC]", true) != -1)) return SendClientMessageEx(playerid, COLOR_GREY, "You cannot take items from a OOC Prisoner.");
-		if (playerid == giveplayerid) return SendClientMessageEx(playerid, COLOR_GREY, "You cannot take things from yourself!");
-		if(PlayerInfo[giveplayerid][pAdmin] >= 2 && !PlayerInfo[giveplayerid][pTogReports]) return SendClientMessageEx(playerid, COLOR_GREY, "You cannot take things from admins!");
+		if (playerid == giveplayerid)
+		{
+			SendClientMessageEx(playerid, COLOR_GREY, "You cannot take things from yourself!");
+			return 1;
+		}
 		else if(strcmp(choice,"opiumseeds",true) == 0)
 		{
 			if(IsPlayerConnected(giveplayerid))
@@ -1269,13 +1275,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pOpiumSeeds] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any opium seeds.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
 					format(string, sizeof(string), "* You have taken away %s's opiumseeds.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your opiumseeds.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your opiumseeds.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's opiumseeds.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's opiumseeds.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pOpiumSeeds] = 0;
 				}
@@ -1299,15 +1303,11 @@ CMD:take(playerid, params[])
 				if (ProxDetectorS(8.0, playerid, giveplayerid))
 				{
 					if(PlayerInfo[giveplayerid][pWSeeds] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any pot seeds.");
-					
-                    new iGroupID = PlayerInfo[playerid][pMember];
-                    
-                    format(string, sizeof(string), "* You have taken away %s's Cannabisseeds.", GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* You have taken away %s's Cannabisseeds.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your Cannabisseeds.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your Cannabisseeds.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's Cannabisseeds.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's Cannabisseeds.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pWSeeds] = 0;
 				}
@@ -1332,14 +1332,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pCrates] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any drug crates.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's Drug Crates.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your Drug Crates.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your Drug Crates.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's Drug Crates.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's Drug Crates.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pCrates] = 0;
 				}
@@ -1364,14 +1361,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pSyringes] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any syringes.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's syringes.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your syringes.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your syringes.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's syringes.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's syringes.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pSyringes] = 0;
 				}
@@ -1396,14 +1390,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pRawOpium] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any raw opium.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's raw opium.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your raw opium.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your raw opium.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's raw opium.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's raw opium.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pRawOpium] = 0;
 				}
@@ -1428,14 +1419,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pDrugs][2] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any meth.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's Meth.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your Meth.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your Meth.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's Meth.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's Meth.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pDrugs][2] = 0;
 				}
@@ -1460,14 +1448,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pDrugs][3] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any ecstasy.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's Ecstasy.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your Ecstasy.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your Ecstasy.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's Ecstasy.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's Ecstasy.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pDrugs][3] = 0;
 				}
@@ -1492,14 +1477,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pDrugs][4] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any heroin.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's Heroin.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your Heroin.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your Heroin.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's Heroin.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's Heroin.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pDrugs][4] = 0;
 				}
@@ -1524,14 +1506,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pRadio] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have a radio.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's radio.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your radio.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your radio.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's radio.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's radio.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pRadio] = 0;
 					PlayerInfo[giveplayerid][pRadioFreq] = 0;
@@ -1555,14 +1534,11 @@ CMD:take(playerid, params[])
 			{
 				if (ProxDetectorS(8.0, playerid, giveplayerid))
 				{
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's weapons.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your weapons.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your weapons.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's weapons.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's weapons.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					ResetPlayerWeaponsEx(giveplayerid);
 				}
@@ -1587,14 +1563,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pDrugs][0] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any pot.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's Cannabis.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your Cannabis.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your Cannabis.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's Cannabis.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's Cannabis.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pDrugs][0] = 0;
 				}
@@ -1618,14 +1591,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pDrugs][1] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any crack.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's crack.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away your crack.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s has taken away your crack.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's crack.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's crack.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pDrugs][1] = 0;
 				}
@@ -1650,14 +1620,11 @@ CMD:take(playerid, params[])
 				{
 					if(PlayerInfo[giveplayerid][pMats] == 0) return SendClientMessage(playerid, COLOR_GRAD2, "That player does not have any materials.");
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You have taken away %s's materials.", GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s as taken away your materials.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s as taken away your materials.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has taken away %s's materials.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
-					GroupLog(PlayerInfo[playerid][pMember], string);
+					format(string, sizeof(string), "* Officer %s has taken away %s's materials.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					PlayerInfo[giveplayerid][pMats] = 0;
 				}
@@ -2275,13 +2242,11 @@ CMD:ticket(playerid, params[])
 				{
 					if(giveplayerid == playerid) return 1;
 
-                    new iGroupID = PlayerInfo[playerid][pMember];
-
 					format(string, sizeof(string), "* You gave %s a ticket costing $%d, reason: %s", GetPlayerNameEx(giveplayerid), moneys, reason);
 					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s has given you a ticket costing $%d, reason: %s", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), moneys, reason);
+					format(string, sizeof(string), "* Officer %s has given you a ticket costing $%d, reason: %s", GetPlayerNameEx(playerid), moneys, reason);
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-					format(string, sizeof(string), "* %s %s writes up a ticket and gives it to %s.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+					format(string, sizeof(string), "* Officer %s writes up a ticket and gives it to %s.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 					ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, "* Type /accept ticket, to accept it.");
 					TicketOffer[giveplayerid] = playerid;

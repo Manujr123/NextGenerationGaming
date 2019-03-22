@@ -124,7 +124,7 @@ ListInteriors(playerid, iType)
 				Interior (13)\n\
 				Interior (14)\n\
 				Interior (15)\n\
-				Interior (16)\n\
+				Iterior (16)\n\
 				Interior (17)\n\
 				Interior (18)\n\
 				Interior (19)\n\

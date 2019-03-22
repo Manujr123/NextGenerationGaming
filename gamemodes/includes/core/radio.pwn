@@ -68,7 +68,7 @@ stock PlayerFixRadio(playerid)
 forward RevisionListHTTP(index, response_code, data[]);
 public RevisionListHTTP(index, response_code, data[])
 {
-	ShowPlayerDialogEx(index, DIALOG_REVISION, DIALOG_STYLE_LIST, "Current Version: "SERVER_GM_TEXT" -- View full changes at http://dev.ng-gaming.com", data, "Close", "");
+	ShowPlayerDialogEx(index, DIALOG_REVISION, DIALOG_STYLE_LIST, "Current Version: "SERVER_GM_TEXT" -- View full changes at http://dev.ng-gaming.net", data, "Close", "");
 	return 1;
 }
 
@@ -235,7 +235,7 @@ public StationSelectHTTP(index, response_code, data[])
 stock ShowSetStation(playerid, title[] = "Radio Menu")
 {
 	new string[256];
-	format(string, sizeof(string), "Favorite Station\nGenres\nTop 50 Stations\nSearch\nK-LSR\nNick's Radio\nCustom Audio URL\n%sTurn radio off", ((!isnull(PlayerInfo[playerid][pFavStation])) ? ("Favorite Station Settings\n") : ("")));
+	format(string, sizeof(string), "Favorite Station\nGenres\nTop 50 Stations\nSearch\nK-LSR\nRadio New Robada\nNick's Radio\nCustom Audio URL\n%sTurn radio off", ((!isnull(PlayerInfo[playerid][pFavStation])) ? ("Favorite Station Settings\n") : ("")));
 	return ShowPlayerDialogEx(playerid, SETSTATION, DIALOG_STYLE_LIST, title, string, "Select", "Close");
 }
 
@@ -300,7 +300,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				if(!GetPVarType(playerid, "pHTTPWait"))
 				{
 					SetPVarInt(playerid, "pHTTPWait", 1);
-					format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&listgenres=1", SAMP_WEB, CP_WEB_TOKEN);
+					format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?listgenres=1", SAMP_WEB);
 					HTTP(playerid, HTTP_GET, szMiscArray, "", "GenreHTTP");
 				}
 				else
@@ -313,7 +313,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				if(!GetPVarType(playerid, "pHTTPWait"))
 				{
 					SetPVarInt(playerid, "pHTTPWait", 1);
-					format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&top50=1", SAMP_WEB, CP_WEB_TOKEN);
+					format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?top50=1", SAMP_WEB);
 					HTTP(playerid, HTTP_GET, szMiscArray, "", "Top50HTTP");
 				}
 				else
@@ -332,10 +332,10 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					foreach(new i: Player)
 					{
 						if(GetPlayerVehicleID(i) != 0 && GetPlayerVehicleID(i) == GetPlayerVehicleID(playerid)) {
-							PlayAudioStreamForPlayerEx(i, "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1");
+							PlayAudioStreamForPlayerEx(i, "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1");
 						}
 					}	
-					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1");
+					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1");
 					format(szMiscArray, sizeof(szMiscArray), "* %s changes the radio station.", GetPlayerNameEx(playerid), szMiscArray);
 					ProxDetector(10.0, playerid, szMiscArray, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				}
@@ -345,14 +345,14 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					{
 						if(IsPlayerInDynamicArea(i, GetPVarInt(playerid, "pBoomBoxArea")))
 						{
-							PlayAudioStreamForPlayerEx(i, "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
+							PlayAudioStreamForPlayerEx(i, "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
 						}
 					}	
-					SetPVarString(playerid, "pBoomBoxStation", "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1");
+					SetPVarString(playerid, "pBoomBoxStation", "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1");
 				}
 				else
 				{
-					PlayAudioStreamForPlayerEx(playerid, "http://shoutcast.ng-gaming.com:8000/listen.pls?sid=1");
+					PlayAudioStreamForPlayerEx(playerid, "http://shoutcast.ng-gaming.net:8000/listen.pls?sid=1");
 					SetPVarInt(playerid, "MusicIRadio", 1);
 				}
 			}
@@ -363,10 +363,10 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					foreach(new i: Player)
 					{
 						if(GetPlayerVehicleID(i) != 0 && GetPlayerVehicleID(i) == GetPlayerVehicleID(playerid)) {
-							PlayAudioStreamForPlayerEx(i, "http://nick.ng-gaming.com:8000/listen.pls");
+							PlayAudioStreamForPlayerEx(i, "https://radio.newrobada.com/radio/8000/autodj.mp3");
 						}
 					}	
-					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "http://nick.ng-gaming.com:8000/listen.pls");
+					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "https://radio.newrobada.com/radio/8000/autodj.mp3");
 					format(szMiscArray, sizeof(szMiscArray), "* %s changes the radio station.", GetPlayerNameEx(playerid), szMiscArray);
 					ProxDetector(10.0, playerid, szMiscArray, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				}
@@ -376,26 +376,57 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					{
 						if(IsPlayerInDynamicArea(i, GetPVarInt(playerid, "pBoomBoxArea")))
 						{
-							PlayAudioStreamForPlayerEx(i, "http://nick.ng-gaming.com:8000/listen.pls", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
+							PlayAudioStreamForPlayerEx(i, "https://radio.newrobada.com/radio/8000/autodj.mp3", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
 						}
 					}	
-					SetPVarString(playerid, "pBoomBoxStation", "http://nick.ng-gaming.com:8000/listen.pls");
+					SetPVarString(playerid, "pBoomBoxStation", "https://radio.newrobada.com/radio/8000/autodj.mp3");
 				}
 				else
 				{
-					PlayAudioStreamForPlayerEx(playerid, "http://nick.ng-gaming.com:8000/listen.pls");
+					PlayAudioStreamForPlayerEx(playerid, "https://radio.newrobada.com/radio/8000/autodj.mp3");
 					SetPVarInt(playerid, "MusicIRadio", 1);
 				}
 			}
 			else if(listitem == 6)
 			{
+				if(IsPlayerInAnyVehicle(playerid))
+				{
+					foreach(new i: Player)
+					{
+						if(GetPlayerVehicleID(i) != 0 && GetPlayerVehicleID(i) == GetPlayerVehicleID(playerid)) {
+							PlayAudioStreamForPlayerEx(i, "http://nick.ng-gaming.net:8000/listen.pls");
+						}
+					}	
+					format(stationidv[GetPlayerVehicleID(playerid)], 64, "%s", "http://nick.ng-gaming.net:8000/listen.pls");
+					format(szMiscArray, sizeof(szMiscArray), "* %s changes the radio station.", GetPlayerNameEx(playerid), szMiscArray);
+					ProxDetector(10.0, playerid, szMiscArray, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
+				}
+				else if(GetPVarType(playerid, "pBoomBox"))
+				{
+					foreach(new i: Player)
+					{
+						if(IsPlayerInDynamicArea(i, GetPVarInt(playerid, "pBoomBoxArea")))
+						{
+							PlayAudioStreamForPlayerEx(i, "http://nick.ng-gaming.net:8000/listen.pls", GetPVarFloat(playerid, "pBoomBoxX"), GetPVarFloat(playerid, "pBoomBoxY"), GetPVarFloat(playerid, "pBoomBoxZ"), 30.0, 1);
+						}
+					}	
+					SetPVarString(playerid, "pBoomBoxStation", "http://nick.ng-gaming.net:8000/listen.pls");
+				}
+				else
+				{
+					PlayAudioStreamForPlayerEx(playerid, "http://nick.ng-gaming.net:8000/listen.pls");
+					SetPVarInt(playerid, "MusicIRadio", 1);
+				}
+			}
+			else if(listitem == 7)
+			{
 				ShowPlayerDialogEx(playerid, CUSTOM_URLCHOICE, DIALOG_STYLE_INPUT, "Custom URL", "Please insert a valid audio url stream.", "Enter", "Back");
 			}
-			else if(!isnull(PlayerInfo[playerid][pFavStation]) && listitem == 7)
+			else if(!isnull(PlayerInfo[playerid][pFavStation]) && listitem == 8)
 			{
 				ShowPlayerDialogEx(playerid, STATIONFAVSETTING, DIALOG_STYLE_LIST, "Favorite Station Settings", "Modify Station\nRemove Station", "Select", "Back");
 			}
-			else if((isnull(PlayerInfo[playerid][pFavStation]) && listitem == 7) || (!isnull(PlayerInfo[playerid][pFavStation]) && listitem == 8))
+			else if((isnull(PlayerInfo[playerid][pFavStation]) && listitem == 8) || (!isnull(PlayerInfo[playerid][pFavStation]) && listitem == 9))
 			{
 				if(!IsPlayerInAnyVehicle(playerid))
 				{
@@ -481,7 +512,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&genre=%d", SAMP_WEB, CP_WEB_TOKEN, (listitem+1));
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?genre=%d", SAMP_WEB, (listitem+1));
 				SetPVarInt(playerid, "pSelectGenre", (listitem+1));
 				SetPVarInt(playerid, "pHTTPWait", 1);
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "StationListHTTP");
@@ -503,7 +534,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&genre=%d&station=%d", SAMP_WEB, CP_WEB_TOKEN,  GetPVarInt(playerid, "pSelectGenre"), (listitem+1));
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?genre=%d&station=%d", SAMP_WEB, GetPVarInt(playerid, "pSelectGenre"), (listitem+1));
 				SetPVarInt(playerid, "pHTTPWait", 1);
 				SetPVarInt(playerid, "pSelectStation", (listitem+1));
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "StationInfoHTTP");
@@ -518,7 +549,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
 				SetPVarInt(playerid, "pHTTPWait", 1);
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&listgenres=1", SAMP_WEB, CP_WEB_TOKEN);
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?listgenres=1", SAMP_WEB);
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "GenreHTTP");
 			}
 			else
@@ -537,7 +568,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&top50=1&station=%d", SAMP_WEB, CP_WEB_TOKEN, (listitem+1));
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?top50=1&station=%d", SAMP_WEB, (listitem+1));
 				SetPVarInt(playerid, "pHTTPWait", 1);
 				SetPVarInt(playerid, "pSelectStation", (listitem+1));
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "Top50InfoHTTP");
@@ -554,7 +585,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&genre=%d&station=%d&listen=1", SAMP_WEB, CP_WEB_TOKEN, GetPVarInt(playerid, "pSelectGenre"), GetPVarInt(playerid, "pSelectStation"));
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?genre=%d&station=%d&listen=1", SAMP_WEB, GetPVarInt(playerid, "pSelectGenre"), GetPVarInt(playerid, "pSelectStation"));
 				SetPVarInt(playerid, "pHTTPWait", 1);
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "StationSelectHTTP");
 			}
@@ -567,7 +598,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&genre=%d", SAMP_WEB, CP_WEB_TOKEN, GetPVarInt(playerid, "pSelectGenre"));
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?genre=%d", SAMP_WEB, GetPVarInt(playerid, "pSelectGenre"));
 				SetPVarInt(playerid, "pHTTPWait", 1);
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "StationListHTTP");
 				DeletePVar(playerid, "pSelectStation");
@@ -586,7 +617,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			{
 				DeletePVar(playerid, "pSelectStation");
 				SetPVarInt(playerid, "pHTTPWait", 1);
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&top50=1", SAMP_WEB, CP_WEB_TOKEN);
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?top50=1", SAMP_WEB);
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "Top50HTTP");
 			}
 			else
@@ -598,7 +629,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&top50=1&station=%d&listen=1", SAMP_WEB, CP_WEB_TOKEN, GetPVarInt(playerid, "pSelectStation"));
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?top50=1&station=%d&listen=1", SAMP_WEB, GetPVarInt(playerid, "pSelectStation"));
 				SetPVarInt(playerid, "pHTTPWait", 1);
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "StationSelectHTTP");
 			}
@@ -620,7 +651,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			{
 				if(!GetPVarType(playerid, "pHTTPWait"))
 				{
-					format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&search=%s", SAMP_WEB, CP_WEB_TOKEN, inputtext);
+					format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?search=%s", SAMP_WEB, inputtext);
 					SetPVarString(playerid, "pSearchStation", inputtext);
 					SetPVarInt(playerid, "pHTTPWait", 1);
 					ShowNoticeGUIFrame(playerid, 6);
@@ -644,7 +675,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
 				GetPVarString(playerid, "pSearchStation", szMiscArray, sizeof(szMiscArray));
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&search=%s&station=%d", SAMP_WEB, CP_WEB_TOKEN, szMiscArray, (listitem+1));
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?search=%s&station=%d", SAMP_WEB, szMiscArray, (listitem+1));
 				SetPVarInt(playerid, "pHTTPWait", 1);
 				ShowNoticeGUIFrame(playerid, 6);
 				SetPVarInt(playerid, "pSelectStation", (listitem+1));
@@ -667,7 +698,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
 				GetPVarString(playerid, "pSearchStation", szMiscArray, sizeof(szMiscArray));
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&search=%s&station=%d&listen=1", SAMP_WEB, CP_WEB_TOKEN, szMiscArray, GetPVarInt(playerid, "pSelectStation"));
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?search=%s&station=%d&listen=1", SAMP_WEB, szMiscArray, GetPVarInt(playerid, "pSelectStation"));
 				SetPVarInt(playerid, "pHTTPWait", 1);
 				ShowNoticeGUIFrame(playerid, 6);
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "StationSelectHTTP");
@@ -682,7 +713,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			if(!GetPVarType(playerid, "pHTTPWait"))
 			{
 				GetPVarString(playerid, "pSearchStation", szMiscArray, sizeof(szMiscArray));
-				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?t=%s&search=%s", SAMP_WEB, CP_WEB_TOKEN, szMiscArray);
+				format(szMiscArray, sizeof(szMiscArray), "%s/radio/radio.php?search=%s", SAMP_WEB, szMiscArray);
 				ShowNoticeGUIFrame(playerid, 6);
 				HTTP(playerid, HTTP_GET, szMiscArray, "", "StationSearchHTTP");
 				DeletePVar(playerid, "pSelectStation");

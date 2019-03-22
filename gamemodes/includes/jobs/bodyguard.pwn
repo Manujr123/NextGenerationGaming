@@ -60,8 +60,8 @@ CMD:frisk(playerid, params[])
 		{
 			if (ProxDetectorS(8.0, playerid, giveplayerid))
 			{
-				if(giveplayerid == playerid) return SendClientMessageEx(playerid, COLOR_GREY, "You cannot frisk yourself!"); 
-				if(PlayerInfo[giveplayerid][pAdmin] >= 2 && !PlayerInfo[giveplayerid][pTogReports]) return SendClientMessageEx(playerid, COLOR_GREY, "You can't frisk administrators.");
+				if(giveplayerid == playerid) { SendClientMessageEx(playerid, COLOR_GREY, "You cannot frisk yourself!"); return 1; }
+				if(PlayerInfo[giveplayerid][pAdmin] >= 2 && !PlayerInfo[giveplayerid][pTogReports]) return 1;
 
 				PlayerFriskPlayer(playerid, giveplayerid); // It did a frisk ... why request?
 			}
@@ -162,11 +162,6 @@ CMD:guard(playerid, params[])
 	if(GetPVarType(playerid, "IsInArena"))
 	{
 		SendClientMessageEx(playerid, COLOR_WHITE, "You can't do this while being in an arena!");
-		return 1;
-	}
-	if(PlayerInfo[playerid][pMats] < 150) 
-	{
-		SendClientMessageEx(playerid, COLOR_WHITE, "You do not have enough materials to craft a vest! (150 required)");
 		return 1;
 	}
 	new string[128], giveplayerid, money;

@@ -50,11 +50,13 @@ Format_PlayerName(playerid) {
 	
 	szMiscArray[0] = 0;
 	
-	new iPos;
+	new iPos, name[MAX_PLAYER_NAME];
 
 	GetPlayerName(playerid, szMiscArray, MAX_PLAYER_NAME);
 	for(new i; i < MAX_PLAYER_NAME; i++) szMiscArray[i] = tolower(szMiscArray[i]);
 	szMiscArray[0] = toupper(szMiscArray[0]);
+	format(name, sizeof(name), "Formatting_%d", playerid);
+	SetPlayerName(playerid, name);
 	while((iPos = strfind(szMiscArray, "_", false, iPos)) != -1) iPos++, szMiscArray[iPos] = toupper(szMiscArray[iPos]);
 	SetPlayerName(playerid, szMiscArray);
 	printf("[PlayerName] Formatted %s to the correct RP-format standards.", szMiscArray);
@@ -329,8 +331,8 @@ public killPlayer(playerid)
 	new query[128];
 	if(GetPVarInt(playerid, "commitSuicide") == 1) 
 	{
-		format(query, sizeof(query), "INSERT INTO `kills` (`id`, `killerid`, `killedid`, `date`, `weapon`) VALUES (NULL, %d, %d, NOW(), '/kill')", GetPlayerSQLId(playerid), GetPlayerSQLId(playerid));
-		mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+		mysql_format(MainPipeline, query, sizeof(query), "INSERT INTO `kills` (`id`, `killerid`, `killedid`, `date`, `weapon`) VALUES (NULL, %d, %d, NOW(), '/kill')", GetPlayerSQLId(playerid), GetPlayerSQLId(playerid));
+		mysql_tquery(MainPipeline, query, "OnQueryFinish", "i", SENDDATA_THREAD);
 		SetPVarInt(playerid, "commitSuicide", 0);
 		SetHealth(playerid, 0);
 	}
@@ -370,7 +372,7 @@ public ControlCam(playerid)
 forward IdiotSound(playerid);
 public IdiotSound(playerid)
 {
-    PlayAudioStreamForPlayerEx(playerid, "http://www.ng-gaming.com/users/farva/you-are-an-idiot.mp3");
+    PlayAudioStreamForPlayerEx(playerid, "http://www.ng-gaming.net/users/farva/you-are-an-idiot.mp3");
     ShowPlayerDialogEx(playerid,DIALOG_NOTHING,DIALOG_STYLE_MSGBOX,"BUSTED!","A 15 percent CLEO tax has been assessed to your account along with a 3 hour prison - future use could result in a ban","Exit","");
 }
 
@@ -517,9 +519,7 @@ public SetVehicleEngine(vehicleid, playerid)
 					GivePlayerCash(GetChased[playerid], floatround(takemoney * 0.9));
 					GivePlayerCash(playerid, -takemoney);
 					format(string,sizeof(string),"Hitman %s has fulfilled the contract on %s and collected $%d.",GetPlayerNameEx(GetChased[playerid]),GetPlayerNameEx(playerid),takemoney);
-					foreach(new i: Player) if(IsAHitmanLeader(i)) SendClientMessage(i, COLOR_YELLOW, string);
-					format(string, sizeof string, "You have completed the hit on %s and collected $%s", GetPlayerNameEx(playerid), number_format(takemoney));
-					SendClientMessage(GetChased[playerid], COLOR_YELLOW, string);
+					foreach(new i: Player) if(IsAHitman(i)) SendClientMessage(i, COLOR_YELLOW, string);
 					format(string,sizeof(string),"You have been critically injured by a hitman and lost $%d!",takemoney);
 					ResetPlayerWeaponsEx(playerid);
 					// SpawnPlayer(playerid);
@@ -927,7 +927,7 @@ public HelpTimer(playerid)
   		SetPVarInt(playerid, "HelpTime", GetPVarInt(playerid, "HelpTime")-1);
     	if(GetPVarInt(playerid, "HelpTime") == 0)
      	{
-      		SendClientMessageEx(playerid, COLOR_GREY, "Your help request has expired. Its recommended you seek help on the forums (www.ng-gaming.com/forums)");
+      		SendClientMessageEx(playerid, COLOR_GREY, "Your help request has expired. Its recommended you seek help on the forums (www.ng-gaming.net/forums)");
         	DeletePVar(playerid, "COMMUNITY_ADVISOR_REQUEST");
          	return 1;
         }
@@ -2212,7 +2212,6 @@ stock UpdateWheelTarget()
 	else gWheelTransAlternate = 1;
 }
 
-
 stock Random(min, max)
 {
     new a = random(max - min) + min;
@@ -2517,13 +2516,25 @@ stock PlayerBusy(target) {
 	else return 0;
 }
 
+stock TakePlayerMoney(playerid, amount) {
+	if(GetPlayerCash(playerid) > amount) {
+		GivePlayerCash(playerid, -amount);
+		return 1;
+	}
+	if(PlayerInfo[playerid][pAccount] > amount) {
+		PlayerInfo[playerid][pAccount] -= amount;
+		return 1;
+	}
+	return 0;
+}
+
 forward OnPasswordChanged(playerid);
 public OnPasswordChanged(playerid)
 {
 	new hash[BCRYPT_HASH_LENGTH], szQuery[256];
 	bcrypt_get_hash(hash);
 	format(szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Key` = '%s' WHERE `id` = '%i'", hash, PlayerInfo[playerid][pId]);
-	mysql_function_query(MainPipeline, szQuery, false, "OnPlayerChangePass", "i", playerid);
+	mysql_tquery(MainPipeline, szQuery, "OnPlayerChangePass", "i", playerid);
 
 	if(strcmp(PlayerInfo[playerid][pBirthDate], "0000-00-00", true) == 0 && PlayerInfo[playerid][pTut] != 0) ShowLoginDialogs(playerid, 1);
 	else if(pMOTD[0] && GetPVarInt(playerid, "ViewedPMOTD") != 1) ShowLoginDialogs(playerid, 4);
@@ -2537,6 +2548,6 @@ public OnAdminPasswordChanged(playerid, targetname[])
 	new hash[BCRYPT_HASH_LENGTH], szQuery[256];
 	bcrypt_get_hash(hash);
 	format(szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Key` = '%s' WHERE `Username` = '%e'", hash, targetname);
-	mysql_function_query(MainPipeline, szQuery, false, "OnChangeUserPassword", "i", playerid);
+	mysql_tquery(MainPipeline, szQuery, "OnChangeUserPassword", "i", playerid);
 	return 1;
 }

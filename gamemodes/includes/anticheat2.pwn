@@ -332,7 +332,6 @@ new ac_iSilentAimWarnings[MAX_PLAYERS],
 	ac_TotalShots[MAX_PLAYERS],
 	ac_HitsIssued[MAX_PLAYERS],
 	bool:ac_IsDead[MAX_PLAYERS],
-	bool:ac_ACToggle[AC_MAX],
 	bool:ac_BeingResynced[MAX_PLAYERS],
 	iShotVariance = 5;
 
@@ -404,15 +403,7 @@ hook OnGameModeInit() {
 	
 	/* Default On: */
 	ac_ACToggle[AC_NINJAJACK] = true;
-	ac_ACToggle[AC_AIMBOT] = true;
-	ac_ACToggle[AC_SILENTAIM] = true;
-	ac_ACToggle[AC_PROAIM] = true;
-	ac_ACToggle[AC_RANGEHACKS] = true;
-	ac_ACToggle[AC_SPEEDHACKS] = true;
-	ac_ACToggle[AC_VEHICLEHACKS] = true;
-	ac_ACToggle[AC_AIRBREAKING] = true;
-	ac_ACToggle[AC_AIMBOT] = true;
-	ac_ACToggle[AC_DESYNC] = true;
+	ac_ACToggle[AC_DIALOGSPOOFING] = true;
 
 	AC_InitWeaponData();
 }
@@ -471,215 +462,6 @@ CMD:setnametagdistance(playerid, params[]) {
 	return 1;	
 }
 */
-
-hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ) {
-
-	szMiscArray[0] = 0;
-
-	if(IsPlayerPaused(playerid) && ac_iGhostHackWarnings[playerid] > 5) AC_Process(playerid, AC_GHOSTHACKS, weaponid);
-	if(!IsCorrectCameraMode(playerid)) AC_Process(playerid, AC_DESYNC, GetPlayerCameraMode(playerid));
-
-	if(hittype == BULLET_HIT_TYPE_PLAYER && (BadFloat(fX) || BadFloat(fY) || BadFloat(fZ)))	{
-		format(szMiscArray, sizeof(szMiscArray), "{AA3333}AdmWarning{FFFF00}: %s is possibly using a crasher .", GetPlayerNameEx(playerid));
-	//	Kick(playerid); // CRASHER DETECTED
-	    return 0;
-	}
-
-	if(hittype == BULLET_HIT_TYPE_PLAYER) {
-
-		if(!IsPlayerStreamedIn(playerid, hitid) || !IsPlayerStreamedIn(hitid, playerid)) return 0;
-	}
-	if(weaponid == 24 || weaponid == 25 || weaponid == 26/* || weaponid == 31*/) {
-		++PlayerShots[playerid];
-	}
-	if(weaponid == 34) {
-
-		++PlayerSniperShots[playerid];	
-	}
-	
-	#if defined AC_DEBUG
-	if(hittype == BULLET_HIT_TYPE_PLAYER) {
-		AC_SendDebugMessage(playerid, "OnPlayerWeaponShot(%s shot %s with %s at %f, %f, %f) ", GetPlayerNameEx(playerid),  GetPlayerNameEx(hitid), AC_GetWeaponName(weaponid), fX, fY, fZ);
-	}
-	else if(hittype) {
-		AC_SendDebugMessage(playerid, "OnPlayerWeaponShot(%s shot %s %d with %s at %f, %f, %f", GetPlayerNameEx(playerid),  GetPlayerNameEx(hitid), AC_GetWeaponName(weaponid), fX, fY, fZ);
-	}
-	else {
-		AC_SendDebugMessage(playerid, "OnPlayerWeaponShot(%s shot with %s at %f, %f, %f)", GetPlayerNameEx(playerid), AC_GetWeaponName(weaponid), fX, fY, fZ);
-	}
-	#endif
-	
-
-	arrLastBulletData[playerid][acl_Valid] = false;
-	arrLastBulletData[playerid][acl_Hits] = false;
-
-	// C-Bug
-	if(ac_iCBugFreeze[playerid] && GetTickCount() - ac_iCBugFreeze[playerid] < 900) {
-		return 0;
-	}
-	ac_iCBugFreeze[playerid] = 0;
-
-	// Desync
-	new damagedid = INVALID_PLAYER_ID;
-	if(hittype == BULLET_HIT_TYPE_PLAYER && hitid != INVALID_PLAYER_ID) {
-		
-		if(!IsPlayerConnected(hitid)) {
-			AC_AddRejectedHit(playerid, hitid, HIT_DISCONNECTED, weaponid, hittype);
-			return 0;
-		}
-		damagedid = hitid;
-	}
-
-	// Invalid hit type
-	if(hittype < 0 || hittype > 4) {
-		AC_AddRejectedHit(playerid, damagedid, HIT_INVALID_HITTYPE, weaponid, hittype);
-		return 0;
-	}
-
-	// Hitting when player isn't spawned.
-	if(!IsPlayerSpawned(playerid)) {
-		AC_AddRejectedHit(playerid, damagedid, HIT_NOT_SPAWNED, weaponid, hittype);
-		return 0;
-	}
-
-	// Just in case
-	if(!IsBulletWeapon(weaponid)) {
-		AC_AddRejectedHit(playerid, damagedid, HIT_INVALID_WEAPON, weaponid, hittype);
-		return 0;
-	}
-
-	new Float:fOriginX, Float:fOriginY, Float:fOriginZ, Float:fHitPosX, Float:fHitPosY, Float:fHitPosZ,
-		Float:x, Float:y, Float:z;
-
-	GetPlayerPos(playerid, x, y, z);
-	GetPlayerLastShotVectors(playerid, fOriginX, fOriginY, fOriginZ, fHitPosX, fHitPosY, fHitPosZ);
-
-	new Float:fDistance = VectorSize(fOriginX - fHitPosX, fOriginY - fHitPosY, fOriginZ - fHitPosZ),
-		Float:origin_dist = VectorSize(fOriginX - x, fOriginY - y, fOriginZ - z);
-
-	if(origin_dist > 15.0) {
-		
-		new iVehCheck = IsPlayerInAnyVehicle(hitid) || GetPlayerSurfingVehicleID(playerid);
-		if((!iVehCheck && GetPlayerSurfingVehicleID(playerid) == INVALID_VEHICLE_ID) || origin_dist > 50.0) {
-			AC_AddRejectedHit(playerid, damagedid, HIT_TOO_FAR_FROM_ORIGIN, weaponid, _:origin_dist);
-			return 0;
-		}
-	}
-
-	// Bullet range check.
-	if(hittype != BULLET_HIT_TYPE_NONE) {
-		if(fDistance > ac_WeaponRange[weaponid] + 10.0) {
-			if(hittype == BULLET_HIT_TYPE_PLAYER) {
-				AC_AddRejectedHit(playerid, damagedid, HIT_OUT_OF_RANGE, weaponid, _:fDistance, _:ac_WeaponRange[weaponid]);
-			}
-			return 0;
-		}
-		if(hittype == BULLET_HIT_TYPE_PLAYER) {
-			if(IsPlayerInAnyVehicle(playerid) && GetPlayerVehicleID(playerid) == GetPlayerVehicleID(hitid)) {
-				AC_AddRejectedHit(playerid, damagedid, HIT_SAME_VEHICLE, weaponid);
-				return 0;
-			}
-
-			new Float:fHitDist = GetPlayerDistanceFromPoint(hitid, fHitPosX, fHitPosY, fHitPosZ),
-				iVehCheck = IsPlayerInAnyVehicle(hitid);
-
-			if ((!iVehCheck && fHitDist > 20.0) || fHitDist > 50.0) {
-				AC_AddRejectedHit(playerid, damagedid, HIT_TOO_FAR_FROM_SHOT, weaponid, _:fHitDist);
-				return 0;
-			}
-		}
-	}
-
-	new iTick = GetTickCount();
-	if(iTick == 0) iTick = 1;
-
-	new idx = (ac_LastBulletIdx[playerid] + 1) % sizeof(ac_LastBulletTicks[]);
-
-	// JIT plugin fix
-	if (idx < 0) {
-		idx += sizeof(ac_LastBulletTicks[]);
-	}
-	
-	ac_LastBulletIdx[playerid] = idx;
-	ac_LastBulletTicks[playerid][idx] = iTick;
-	ac_LastBulletWeapons[playerid][idx] = weaponid;
-	ac_TotalShots[playerid]++;
-
-	/* LOG FUNCTIONS */
-	arrLastBulletData[playerid][acl_Tick] = GetTickCount();
-	arrLastBulletData[playerid][acl_Weapon] = weaponid;
-	arrLastBulletData[playerid][acl_HitType] = hittype;
-	arrLastBulletData[playerid][acl_HitId] = hitid;
-	arrLastBulletData[playerid][acl_fPos][0] = fX;
-	arrLastBulletData[playerid][acl_fPos][1] = fY;
-	arrLastBulletData[playerid][acl_fPos][2] = fZ;
-	if(hitid != INVALID_PLAYER_ID) {
-		arrLastBulletData[playerid][acl_fTargetPos][0] = fHitPosX;
-		arrLastBulletData[playerid][acl_fTargetPos][1] = fHitPosY;
-		arrLastBulletData[playerid][acl_fTargetPos][2] = fHitPosZ;
-	}
-	arrLastBulletData[playerid][acl_fOrigin][0] = fOriginX;
-	arrLastBulletData[playerid][acl_fOrigin][1] = fOriginY;
-	arrLastBulletData[playerid][acl_fOrigin][2] = fOriginZ;
-	arrLastBulletData[playerid][acl_fHitPos][0] = fHitPosX;
-	arrLastBulletData[playerid][acl_fHitPos][1] = fHitPosY;
-	arrLastBulletData[playerid][acl_fHitPos][2] = fHitPosZ;
-	arrLastBulletData[playerid][acl_fDistance] = fDistance;
-	arrLastBulletData[playerid][acl_Hits] = 0;
-
-	/*
-		AimBot check 2 and:
-		Pro Aim Check by Pottus
-		Reference: http://forum.sa-mp.com/showpost.php?p=3038425
-	*/
-	if(hittype == BULLET_HIT_TYPE_PLAYER) {
-
-		if(!playerTabbed[hitid]) {
-			/*
-			Too many false positives.
-			if(GetPlayerSpeed(hitid) > 3) {
-				arrAntiCheat[playerid][ac_iShots][1]++;
-				if(arrAntiCheat[playerid][ac_iShots][1] > ac_MaxWeaponContShots[weaponid] + 15) AC_Process(playerid, AC_AIMBOT, weaponid);
-			}
-			*/
-			if(ac_ACToggle[3]) {
-
-				if(ProAimCheck(playerid, hitid)) {
-
-					arrAntiCheat[playerid][ac_iFlags][3]++;
-					if(arrAntiCheat[playerid][ac_iFlags][3] > 3) AC_Flag(playerid, AC_PROAIM, weaponid, arrAntiCheat[playerid][ac_iFlags][3]);
-				}
-			}
-		}
-		else arrAntiCheat[playerid][ac_iShots][1] = 0;
-	}	
-
-	// AimBot Player Scheme
-	arrWeaponDataAC[playerid][ac_iBulletsFired][weaponid]++;
-	if(hittype == BULLET_HIT_TYPE_PLAYER && ac_MaxWeaponContShots[weaponid] && !IsPlayerPaused(hitid)) {
-
-		if(!playerTabbed[hitid]) {
-
-	    	new fSpeed = GetPlayerSpeed(hitid);
-
-		    if(fSpeed > 5) { // subject to discussion
-	    	
-				arrWeaponDataAC[playerid][ac_iBulletsHit][weaponid]++;
-				//if(!(++arrAntiCheat[playerid][ac_iShots][0] % ac_MaxWeaponContShots[weaponid])) AC_Process(playerid, AC_AIMBOT, weaponid);
-
-				new iRelevantMiss = arrWeaponDataAC[playerid][ac_iBulletsFired][weaponid] - arrWeaponDataAC[playerid][ac_iBulletsHit][weaponid] - arrWeaponDataAC[playerid][ac_iFakeMiss][weaponid],
-					Float:fRatio;
-
-				iRelevantMiss++; // Can't divide by 0.
-				fRatio = arrWeaponDataAC[playerid][ac_iBulletsHit][weaponid] / iRelevantMiss;
-				if(arrWeaponDataAC[playerid][ac_iBulletsFired][weaponid] > 50 && fRatio > 3) AC_Flag(playerid, AC_AIMBOT, weaponid, fRatio);
-			}
-			else arrWeaponDataAC[playerid][ac_iFakeMiss][weaponid]++;
-		}
-	}
-	else arrAntiCheat[playerid][ac_iShots][0] = 0; // reset it when missed :)
-	return 1;
-}
 
 
 hook OnPlayerConnect(playerid) {
@@ -942,6 +724,245 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	return 0;
 }
 
+
+public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ) {
+
+	szMiscArray[0] = 0;
+
+	if(IsPlayerPaused(playerid) && ac_iGhostHackWarnings[playerid] > 5) AC_Process(playerid, AC_GHOSTHACKS, weaponid);
+	if(!IsCorrectCameraMode(playerid)) AC_Process(playerid, AC_DESYNC, GetPlayerCameraMode(playerid));
+
+	new vehmodel = GetVehicleModel(GetPlayerVehicleID(playerid));
+	if(hittype == BULLET_HIT_TYPE_PLAYER && (BadFloat(fX) || BadFloat(fY) || BadFloat(fZ)))	{
+		Kick(playerid); // CRASHER DETECTED
+	    return 0;
+	}
+	if(weaponid == WEAPON_SILENCED && pTazer{playerid} == 1) {
+		new iShots = GetPVarInt(playerid, "TazerShots");
+
+		if(iShots > 0) {
+			SetPVarInt(playerid, "TazerShots", iShots - 1);
+		}
+		
+		if(iShots < 1) {
+			TazerTimeout[playerid] = 12;
+			SetTimerEx("TazerTimer",1000,false,"d",playerid);
+			SendClientMessageEx(playerid, COLOR_WHITE, "Your tazer is recharging!");
+			
+			RemovePlayerWeapon(playerid, 23);
+			GivePlayerValidWeapon(playerid, pTazerReplace{playerid});
+			format(szMiscArray, sizeof(szMiscArray), "* %s holsters their tazer.", GetPlayerNameEx(playerid));
+			ProxDetector(4.0, playerid, szMiscArray, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
+			pTazer{playerid} = 0;
+		}
+	}
+	if(GetPVarInt(playerid, "EventToken") == 0 && !GetPVarType(playerid, "IsInArena") && (vehmodel != 425 && vehmodel != 432 && vehmodel != 447 && vehmodel != 464 && vehmodel != 476 && vehmodel != 520) && GetWeaponSlot(weaponid) != -1) {
+		if(PlayerInfo[playerid][pGuns][GetWeaponSlot(weaponid)] != weaponid) return 1;
+	}
+
+	if(hittype == BULLET_HIT_TYPE_PLAYER) {
+
+		if(!IsPlayerStreamedIn(playerid, hitid) || !IsPlayerStreamedIn(hitid, playerid)) return 0;
+	}
+	if(weaponid == 24 || weaponid == 25 || weaponid == 26/* || weaponid == 31*/) {
+		++PlayerShots[playerid];
+	}
+	if(weaponid == 34) {
+
+		++PlayerSniperShots[playerid];	
+	}
+/*	if(GetPVarInt(playerid, "FireStart") == 1) {
+		if(fX != 0 && fY != 0 && hittype != BULLET_HIT_TYPE_PLAYER && hittype != BULLET_HIT_TYPE_VEHICLE) {
+
+			if(gettime() > GetPVarInt(playerid, "fCooldown")) CreateStructureFire(fX, fY, fZ, GetPlayerVirtualWorld(playerid));
+		}
+	}
+*/
+	
+	
+	#if defined AC_DEBUG
+	if(hittype == BULLET_HIT_TYPE_PLAYER) {
+		AC_SendDebugMessage(playerid, "OnPlayerWeaponShot(%s shot %s with %s at %f, %f, %f) ", GetPlayerNameEx(playerid),  GetPlayerNameEx(hitid), AC_GetWeaponName(weaponid), fX, fY, fZ);
+	}
+	else if(hittype) {
+		AC_SendDebugMessage(playerid, "OnPlayerWeaponShot(%s shot %s %d with %s at %f, %f, %f", GetPlayerNameEx(playerid),  GetPlayerNameEx(hitid), AC_GetWeaponName(weaponid), fX, fY, fZ);
+	}
+	else {
+		AC_SendDebugMessage(playerid, "OnPlayerWeaponShot(%s shot with %s at %f, %f, %f)", GetPlayerNameEx(playerid), AC_GetWeaponName(weaponid), fX, fY, fZ);
+	}
+	#endif
+	
+
+	arrLastBulletData[playerid][acl_Valid] = false;
+	arrLastBulletData[playerid][acl_Hits] = false;
+
+	// C-Bug
+	if(ac_iCBugFreeze[playerid] && GetTickCount() - ac_iCBugFreeze[playerid] < 900) {
+		return 0;
+	}
+	ac_iCBugFreeze[playerid] = 0;
+
+	// Desync
+	new damagedid = INVALID_PLAYER_ID;
+	if(hittype == BULLET_HIT_TYPE_PLAYER && hitid != INVALID_PLAYER_ID) {
+		
+		if(!IsPlayerConnected(hitid)) {
+			AC_AddRejectedHit(playerid, hitid, HIT_DISCONNECTED, weaponid, hittype);
+			return 0;
+		}
+		damagedid = hitid;
+	}
+
+	// Invalid hit type
+	if(hittype < 0 || hittype > 4) {
+		AC_AddRejectedHit(playerid, damagedid, HIT_INVALID_HITTYPE, weaponid, hittype);
+		return 0;
+	}
+
+	// Hitting when player isn't spawned.
+	if(!IsPlayerSpawned(playerid)) {
+		AC_AddRejectedHit(playerid, damagedid, HIT_NOT_SPAWNED, weaponid, hittype);
+		return 0;
+	}
+
+	// Just in case
+	if(!IsBulletWeapon(weaponid)) {
+		AC_AddRejectedHit(playerid, damagedid, HIT_INVALID_WEAPON, weaponid, hittype);
+		return 0;
+	}
+
+	new Float:fOriginX, Float:fOriginY, Float:fOriginZ, Float:fHitPosX, Float:fHitPosY, Float:fHitPosZ,
+		Float:x, Float:y, Float:z;
+
+	GetPlayerPos(playerid, x, y, z);
+	GetPlayerLastShotVectors(playerid, fOriginX, fOriginY, fOriginZ, fHitPosX, fHitPosY, fHitPosZ);
+
+	new Float:fDistance = VectorSize(fOriginX - fHitPosX, fOriginY - fHitPosY, fOriginZ - fHitPosZ),
+		Float:origin_dist = VectorSize(fOriginX - x, fOriginY - y, fOriginZ - z);
+
+	if(origin_dist > 15.0) {
+		
+		new iVehCheck = IsPlayerInAnyVehicle(hitid) || GetPlayerSurfingVehicleID(playerid);
+		if((!iVehCheck && GetPlayerSurfingVehicleID(playerid) == INVALID_VEHICLE_ID) || origin_dist > 50.0) {
+			AC_AddRejectedHit(playerid, damagedid, HIT_TOO_FAR_FROM_ORIGIN, weaponid, _:origin_dist);
+			return 0;
+		}
+	}
+
+	// Bullet range check.
+	if(hittype != BULLET_HIT_TYPE_NONE) {
+		if(fDistance > ac_WeaponRange[weaponid] + 10.0) {
+			if(hittype == BULLET_HIT_TYPE_PLAYER) {
+				AC_AddRejectedHit(playerid, damagedid, HIT_OUT_OF_RANGE, weaponid, _:fDistance, _:ac_WeaponRange[weaponid]);
+			}
+			return 0;
+		}
+		if(hittype == BULLET_HIT_TYPE_PLAYER) {
+			if(IsPlayerInAnyVehicle(playerid) && GetPlayerVehicleID(playerid) == GetPlayerVehicleID(hitid)) {
+				AC_AddRejectedHit(playerid, damagedid, HIT_SAME_VEHICLE, weaponid);
+				return 0;
+			}
+
+			new Float:fHitDist = GetPlayerDistanceFromPoint(hitid, fHitPosX, fHitPosY, fHitPosZ),
+				iVehCheck = IsPlayerInAnyVehicle(hitid);
+
+			if ((!iVehCheck && fHitDist > 20.0) || fHitDist > 50.0) {
+				AC_AddRejectedHit(playerid, damagedid, HIT_TOO_FAR_FROM_SHOT, weaponid, _:fHitDist);
+				return 0;
+			}
+		}
+	}
+
+	new iTick = GetTickCount();
+	if(iTick == 0) iTick = 1;
+
+	new idx = (ac_LastBulletIdx[playerid] + 1) % sizeof(ac_LastBulletTicks[]);
+
+	// JIT plugin fix
+	if (idx < 0) {
+		idx += sizeof(ac_LastBulletTicks[]);
+	}
+	
+	ac_LastBulletIdx[playerid] = idx;
+	ac_LastBulletTicks[playerid][idx] = iTick;
+	ac_LastBulletWeapons[playerid][idx] = weaponid;
+	ac_TotalShots[playerid]++;
+
+	/* LOG FUNCTIONS */
+	arrLastBulletData[playerid][acl_Tick] = GetTickCount();
+	arrLastBulletData[playerid][acl_Weapon] = weaponid;
+	arrLastBulletData[playerid][acl_HitType] = hittype;
+	arrLastBulletData[playerid][acl_HitId] = hitid;
+	arrLastBulletData[playerid][acl_fPos][0] = fX;
+	arrLastBulletData[playerid][acl_fPos][1] = fY;
+	arrLastBulletData[playerid][acl_fPos][2] = fZ;
+	if(hitid != INVALID_PLAYER_ID) {
+		arrLastBulletData[playerid][acl_fTargetPos][0] = fHitPosX;
+		arrLastBulletData[playerid][acl_fTargetPos][1] = fHitPosY;
+		arrLastBulletData[playerid][acl_fTargetPos][2] = fHitPosZ;
+	}
+	arrLastBulletData[playerid][acl_fOrigin][0] = fOriginX;
+	arrLastBulletData[playerid][acl_fOrigin][1] = fOriginY;
+	arrLastBulletData[playerid][acl_fOrigin][2] = fOriginZ;
+	arrLastBulletData[playerid][acl_fHitPos][0] = fHitPosX;
+	arrLastBulletData[playerid][acl_fHitPos][1] = fHitPosY;
+	arrLastBulletData[playerid][acl_fHitPos][2] = fHitPosZ;
+	arrLastBulletData[playerid][acl_fDistance] = fDistance;
+	arrLastBulletData[playerid][acl_Hits] = 0;
+
+	/*
+		AimBot check 2 and:
+		Pro Aim Check by Pottus
+		Reference: http://forum.sa-mp.com/showpost.php?p=3038425
+	*/
+	if(hittype == BULLET_HIT_TYPE_PLAYER) {
+
+		if(!playerTabbed[hitid]) {
+			/*
+			Too many false positives.
+			if(GetPlayerSpeed(hitid) > 3) {
+				arrAntiCheat[playerid][ac_iShots][1]++;
+				if(arrAntiCheat[playerid][ac_iShots][1] > ac_MaxWeaponContShots[weaponid] + 15) AC_Process(playerid, AC_AIMBOT, weaponid);
+			}
+			*/
+			if(ac_ACToggle[3]) {
+
+				if(ProAimCheck(playerid, hitid)) {
+
+					arrAntiCheat[playerid][ac_iFlags][3]++;
+					if(arrAntiCheat[playerid][ac_iFlags][3] > 3) AC_Flag(playerid, AC_PROAIM, weaponid, arrAntiCheat[playerid][ac_iFlags][3]);
+				}
+			}
+		}
+		else arrAntiCheat[playerid][ac_iShots][1] = 0;
+	}	
+
+	// AimBot Player Scheme
+	arrWeaponDataAC[playerid][ac_iBulletsFired][weaponid]++;
+	if(hittype == BULLET_HIT_TYPE_PLAYER && ac_MaxWeaponContShots[weaponid] && !IsPlayerPaused(hitid)) {
+
+		if(!playerTabbed[hitid]) {
+
+	    	new fSpeed = GetPlayerSpeed(hitid);
+
+		    if(fSpeed > 5) { // subject to discussion
+	    	
+				arrWeaponDataAC[playerid][ac_iBulletsHit][weaponid]++;
+				//if(!(++arrAntiCheat[playerid][ac_iShots][0] % ac_MaxWeaponContShots[weaponid])) AC_Process(playerid, AC_AIMBOT, weaponid);
+
+				new iRelevantMiss = arrWeaponDataAC[playerid][ac_iBulletsFired][weaponid] - arrWeaponDataAC[playerid][ac_iBulletsHit][weaponid] - arrWeaponDataAC[playerid][ac_iFakeMiss][weaponid],
+					Float:fRatio;
+
+				iRelevantMiss++; // Can't divide by 0.
+				fRatio = arrWeaponDataAC[playerid][ac_iBulletsHit][weaponid] / iRelevantMiss;
+				if(arrWeaponDataAC[playerid][ac_iBulletsFired][weaponid] > 50 && fRatio > 3) AC_Flag(playerid, AC_AIMBOT, weaponid, fRatio);
+			}
+			else arrWeaponDataAC[playerid][ac_iFakeMiss][weaponid]++;
+		}
+	}
+	else arrAntiCheat[playerid][ac_iShots][0] = 0; // reset it when missed :)
+	return 1;
+}
 
 ProAimCheck(playerid, hitid) {
 
@@ -1382,7 +1403,7 @@ AC_Process(playerid, processid, iExtraID = INVALID_PLAYER_ID, iExtraID2 = -1, iE
 
 				format(szQuery, sizeof(szQuery), "INSERT INTO `ac` (`DBID`, `timestamp`, `type`, `flags`, `extraid`, `totalfired`, `hits`, `rmisses`, `tmisses`, `ratio`) VALUES (%d, NOW(), %d, %d, %d, %d, %d, %d, %d, %.1f)",
 					PlayerInfo[playerid][pId], processid, arrAntiCheat[playerid][ac_iFlags][processid], iExtraID, arrWeaponDataAC[playerid][ac_iBulletsFired][iExtraID], arrWeaponDataAC[playerid][ac_iBulletsHit][iExtraID], iRelevantMiss, iTotalMiss, fRatio);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_tquery(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
 				return 1;
 
 			}
@@ -1424,12 +1445,12 @@ AC_Process(playerid, processid, iExtraID = INVALID_PLAYER_ID, iExtraID2 = -1, iE
 
 					format(szQuery, sizeof(szQuery), "INSERT INTO `ac` (`DBID`, `timestamp`, `type`, `flags`, `extraid`, `totalfired`, `hits`, `rmisses`, `tmisses`, `ratio`) VALUES (%d, NOW(), %d, %d, %d, %d, %d, %d, %d, %.1f)",
 						PlayerInfo[playerid][pId], processid, arrAntiCheat[playerid][ac_iFlags][processid], iExtraID, arrWeaponDataAC[playerid][ac_iBulletsFired][iExtraID], arrWeaponDataAC[playerid][ac_iBulletsHit][iExtraID], iRelevantMiss, iTotalMiss, fRatio);
-					mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+					mysql_tquery(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
 				}
 				*/
 
-				/*SendClientMessageEx(playerid, COLOR_LIGHTRED, "[SYSTEM]: You were kicked for being desynced.");
-				SetTimerEx("KickEx", 1000, 0, "i", playerid); */
+				SendClientMessageEx(playerid, COLOR_LIGHTRED, "[SYSTEM]: You were kicked for being desynced.");
+				SetTimerEx("KickEx", 1000, 0, "i", playerid);
 
 				format(szMiscArray, sizeof(szMiscArray), "{AA3333}[SYSTEM]: {FFFF00}%s is using Silent Aim (detector %d) on %s with a %s (warnings: %d).", GetPlayerNameExt(playerid), iExtraID3, GetPlayerNameExt(iExtraID2), AC_GetWeaponName(iExtraID), arrAntiCheat[playerid][ac_iFlags][processid]);
 			}
@@ -1446,15 +1467,14 @@ AC_Process(playerid, processid, iExtraID = INVALID_PLAYER_ID, iExtraID2 = -1, iE
 
 				format(szQuery, sizeof(szQuery), "INSERT INTO `ac` (`DBID`, `timestamp`, `type`, `flags`, `extraid`, `totalfired`, `hits`, `rmisses`, `tmisses`, `ratio`) VALUES (%d, NOW(), %d, %d, %d, %d, %d, %d, %d, %.1f)",
 					PlayerInfo[playerid][pId], processid, arrAntiCheat[playerid][ac_iFlags][processid], iExtraID, arrWeaponDataAC[playerid][ac_iBulletsFired][iExtraID], arrWeaponDataAC[playerid][ac_iBulletsHit][iExtraID], iRelevantMiss, iTotalMiss, fRatio);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_tquery(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
 
-				/*
+
 				if(arrAntiCheat[playerid][ac_iFlags][processid] > 15) {
 					
 					SendClientMessageEx(playerid, COLOR_LIGHTRED, "[SYSTEM]: You were kicked for being desynced.");
 					SetTimerEx("KickEx", 1000, 0, "i", playerid);
 				}
-				*/
 				return 1;
 			}
 			case AC_RANGEHACKS: {
@@ -1470,7 +1490,7 @@ AC_Process(playerid, processid, iExtraID = INVALID_PLAYER_ID, iExtraID2 = -1, iE
 
 				format(szQuery, sizeof(szQuery), "INSERT INTO `ac` (`DBID`, `timestamp`, `type`, `flags`, `extraid`, `totalfired`, `hits`, `rmisses`, `tmisses`, `ratio`) VALUES (%d, NOW(), %d, %d, %d, %d, %d, %d, %d, %.1f)",
 					PlayerInfo[playerid][pId], processid, arrAntiCheat[playerid][ac_iFlags][processid], iExtraID, arrWeaponDataAC[playerid][ac_iBulletsFired][iExtraID], arrWeaponDataAC[playerid][ac_iBulletsHit][iExtraID], iRelevantMiss, iTotalMiss, fRatio);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_tquery(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
 				return 1;
 			}
 			case AC_SPEEDHACKS: format(szMiscArray, sizeof(szMiscArray), "{AA3333}[SYSTEM]: {FFFF00}%s is using speed hacks (B2, B5)", GetPlayerNameEx(playerid));
@@ -1530,7 +1550,7 @@ AC_Process(playerid, processid, iExtraID = INVALID_PLAYER_ID, iExtraID2 = -1, iE
 		ABroadCast(COLOR_LIGHTRED, szMiscArray, 2);
 		format(szQuery, sizeof(szQuery), "INSERT INTO `ac` (`DBID`, `timestamp`, `type`, `flags`, `extraid`, `totalfired`, `hits`, `rmisses`, `tmisses`, `ratio`) VALUES (%d, NOW(), %d, %d, %d, %d, %d, %d, %d, %.1f)",
 			PlayerInfo[playerid][pId], processid, arrAntiCheat[playerid][ac_iFlags][processid], iExtraID, -1, -1, -1, -1, 0.0);
-		mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+		mysql_tquery(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
 	}
 	return 1;
 }
@@ -1548,7 +1568,7 @@ AC_IsPlayerSurfing(playerid) {
 	}
 	return 1;
 }
-/*
+
 AC_KeySpamCheck(playerid) {
 	if(GetPVarType(playerid, "PCMute")) {
 		SendClientMessageEx(playerid, COLOR_WHITE, "[SYSTEM]: You are currently blocked from using interaction keys.");
@@ -1562,7 +1582,7 @@ AC_KeySpamCheck(playerid) {
 	}
 	return 1;
 }
-*/
+
 AC_PlayerHealthArmor(playerid) {
 
 	if(GetPVarInt(playerid, "Injured") == 1) return 0;
@@ -1621,7 +1641,7 @@ IsCorrectCameraMode(playerid) {
 	return 0;
 }
 
-CMD:anticheat(playerid, params[]) {
+CMD:system(playerid, params[]) {
 
 	if(!IsAdminLevel(playerid, ADMIN_SENIOR)) return 1;
 	format(szMiscArray, sizeof(szMiscArray), "Detecting\tStatus\n\
@@ -1975,7 +1995,7 @@ stock AC_BayesianNetwork(playerid, iTargetID) {
 		iSpeed[1],
 		fDistanceToTarget,
 		fDeltaAimAccuracy);
-	mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+	mysql_tquery(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
 	return 1;
 }
 
@@ -2104,7 +2124,7 @@ stock AC_Probability(playerid, iTargetID) {
 		iSpeed[1],
 		fDistanceToTarget,
 		fDeltaAimAccuracy);
-	mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+	mysql_tquery(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
 	return 1;
 }
 
@@ -2178,7 +2198,7 @@ CMD:settraining(playerid, params[]) {
 CMD:acresults(playerid, params[]) {
 
 	if(!IsAdminLevel(playerid, ADMIN_SENIOR, 1)) return 1;
-	mysql_function_query(MainPipeline, "SELECT * FROM `aimbot` WHERE `accuracy` = '3'", true, "OnACQueryResult", "i", 3);
+	mysql_tquery(MainPipeline, "SELECT * FROM `aimbot` WHERE `accuracy` = '3'", true, "OnACQueryResult", "i", 3);
 	return 1;
 }
 
@@ -2208,7 +2228,7 @@ public OnACQueryResult(i) {
 	if(i < 0) return SendClientMessageToAll(-1, "done");
 	else {
 		format(szMiscArray, sizeof(szMiscArray), "SELECT * FROM `aimbot` WHERE `accuracy` = '%d'", i);
-		mysql_function_query(MainPipeline, szMiscArray, true, "OnACQueryResult", "i", i);
+		mysql_tquery(MainPipeline, szMiscArray, true, "OnACQueryResult", "i", i);
 	}
 	return 1;
 }
@@ -2222,7 +2242,7 @@ public OnACQueryResult2(i, iRows) {
 		(%0.1f, %d, %d, %d, %d, %d, %d, %d)",
 
 		floatdiv(iFrequency, iRows) * 100, iACCountTracker[0], i, iACCountTracker[1], iACCountTracker[2], iACCountTracker[3], iACCountTracker[4], iACCountTracker[5]);
-	mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+	mysql_tquery(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
 	ACTrackCount++;
 }
 
@@ -2233,7 +2253,7 @@ stock ACSQLQuery(i, iRows) {
 			AND `aimingdirection` = '%d' AND `playerspeed` = '%d' AND `targetspeed` = '%d' AND `distance` = '%d' AND `deltaaim` = '%d'",
 			i, iACCountTracker[0], iACCountTracker[1], iACCountTracker[2], iACCountTracker[3], iACCountTracker[4], iACCountTracker[5]);
 
-	mysql_function_query(MainPipeline, szMiscArray, true, "OnACQueryResult2", "ii", i, iRows);
+	mysql_tquery(MainPipeline, szMiscArray, true, "OnACQueryResult2", "ii", i, iRows);
 }
 */
 

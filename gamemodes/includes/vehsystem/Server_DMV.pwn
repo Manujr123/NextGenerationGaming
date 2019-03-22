@@ -42,8 +42,8 @@
 new DMVPointArea;
 
 hook OnGameModeInit() {
-	CreateDynamic3DTextLabel("To pay your tickets or\nrelease your cars, press Y.",COLOR_YELLOW,-2032.333740, -115.713630, 1035.171875+0.6,4.0);
-	DMVPointArea = CreateDynamicSphere(-2032.333740, -115.713630, 1035.171875, 3.0);
+	CreateDynamic3DTextLabel("To pay your tickets or\nrelease your cars, press Y.",COLOR_YELLOW,833.60, 3.23, 1004.17+0.6,4.0);
+	DMVPointArea = CreateDynamicSphere(833.60, 3.23, 1004.17, 3.0);
 
 	return 1;
 }
@@ -53,7 +53,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	if(newkeys & KEY_YES) {
 
 		if(IsPlayerInDynamicArea(playerid, DMVPointArea)) ShowDMVMenu(playerid);
-		else if(IsPlayerInRangeOfPoint(playerid, 2.0, -2032.333740, -115.713630, 1035.171875)) ShowDMVMenu(playerid);
+		else if(IsPlayerInRangeOfPoint(playerid, 2.0, 833.60, 3.23, 1004.17)) ShowDMVMenu(playerid);
 	}
 	return 1;
 }

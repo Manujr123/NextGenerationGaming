@@ -79,7 +79,7 @@ ListDetainees(playerid)
 		iCount = 0,
 		temp[4];
 
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(GetPVarInt(i, "ArrestPoint") == GetArrestPointID(playerid) + 1)
 		{
@@ -599,7 +599,7 @@ SetPlayerIntoJailBoxing(iTargetID)
 
 		if(arrJailBoxingData[index][iParticipants] == 2)
 		{
-			foreach(new i : Player)
+			foreach(Player, i)
 			{
 				if(GetPVarInt(i, "_InJailBoxing") == index + 1 && i != iTargetID)
 				{
@@ -631,7 +631,7 @@ public StartJailBoxing(iArenaID)
 	new string[60 + MAX_PLAYER_NAME];
 	new iRangePoint;
 
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(GetPVarType(i, "_InJailBoxing") && GetPVarInt(i, "_InJailBoxing") - 1 == iArenaID)
 		iRangePoint = i;
@@ -1132,7 +1132,7 @@ CMD:listprisoners(playerid, params[])
 		szString[20],
 		id;
 	if(sscanf(params, "d", id)) return SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /listprisoners [arrestpoint id]");
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if((GetPVarInt(i, "ArrestPoint") == id + 1) && PlayerInfo[i][pJailTime] > 0)
 		{
@@ -1157,7 +1157,7 @@ ListInmates(playerid)
 {
 	new szInmates[2000], IsoString[24], BailString[50], TimeString[50];
 
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(PlayerInfo[i][pJailTime] > 0 && strfind(PlayerInfo[i][pPrisonReason], "[IC]", true) != -1)
 		{
@@ -1207,7 +1207,7 @@ CMD:deliverinmates(playerid, params[])
 {
 	if(!IsADocGuard(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "You must be a DOC Guard to use this command.");
 	if(!IsPlayerInRangeOfPoint(playerid, 4, -2053.6279,-198.0207,15.0703)) return SendClientMessageEx(playerid, COLOR_GREY, "You must be at the doc delivery point");
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(IsPlayerInVehicle(i, GetPlayerVehicleID(playerid)) && GetPlayerVehicleSeat(i) != 0)
 		{
@@ -1742,7 +1742,7 @@ CMD:prisonhelp(playerid, params[])
 
 CMD:beanbag(playerid, params[])
 {
-    if(!IsADocGuard(playerid) && !IsACop(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "You must be a DOC Guard / Law enforcement to use this command.");
+    if(!IsADocGuard(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "You must be a DOC Guard to use this command.");
 
     if(GetPlayerWeapon(playerid) == 25)
     {
@@ -2583,7 +2583,7 @@ ReleasePlayerFromPrison(playerid)
 			PlayerInfo[playerid][pInt] = 0;
 			SetPlayerVirtualWorld(playerid, 0);
 			PlayerInfo[playerid][pVW] = 0;
-			SetPlayerPos(playerid, -1528.5812,489.6914,7.1797);
+			SetPlayerPos(playerid, 1544.5059,-1675.5673,13.5585);
 		}
 	}
 

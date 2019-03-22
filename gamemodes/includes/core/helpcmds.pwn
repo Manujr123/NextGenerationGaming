@@ -307,7 +307,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 stock LoadHelp()
 {
 	printf("[LoadHelp] Loading data from database...");
-	mysql_function_query(MainPipeline, "SELECT * FROM `help` ORDER BY `Type` ASC, `Subtype` ASC, `Name` ASC", true, "OnLoadHelp", "");
+	mysql_tquery(MainPipeline, "SELECT * FROM `help` ORDER BY `Type` ASC, `Subtype` ASC, `Name` ASC", "OnLoadHelp", "");
 }
 
 stock RehashHelp()
@@ -330,19 +330,19 @@ stock RehashHelp()
 forward OnLoadHelp();
 public OnLoadHelp()
 {
-	new i, rows, fields;
+	new i, rows;
 	szMiscArray[0] = 0;
-	cache_get_data(rows, fields, MainPipeline);
+	cache_get_row_count(rows);
 
 	while(i < rows)
 	{
-		Help[i][HelpID] = cache_get_field_content_int(i, "id", MainPipeline);
-		cache_get_field_content(i, "Name", Help[i][HelpName], MainPipeline, 128);
-		cache_get_field_content(i, "Parameters", Help[i][HelpParam], MainPipeline, 128);
-		cache_get_field_content(i, "Description", Help[i][HelpDesc], MainPipeline, 128);
-		Help[i][HelpType] = cache_get_field_content_int(i, "Type", MainPipeline);
-		Help[i][HelpSubtype] = cache_get_field_content_int(i, "Subtype", MainPipeline);
-		Help[i][HelpLevel] = cache_get_field_content_int(i, "Level", MainPipeline);
+		cache_get_value_name_int(i, "id", Help[i][HelpID]);
+		cache_get_value_name(i, "Name", Help[i][HelpName], 128);
+		cache_get_value_name(i, "Parameters", Help[i][HelpParam], 128);
+		cache_get_value_name(i, "Description", Help[i][HelpDesc], 128);
+		cache_get_value_name_int(i, "Type", Help[i][HelpType]);
+		cache_get_value_name_int(i, "Subtype", Help[i][HelpSubtype]);
+		cache_get_value_name_int(i, "Level", Help[i][HelpLevel]);
 		i++;
 	}
 	if(i > 0) printf("[LoadHelp] %d help entries rehashed/loaded.", i);
@@ -1495,7 +1495,7 @@ CMD:ohelp(playerid, params[])
 	new string[512];
 	if(PlayerInfo[playerid][pLevel] <= 3)
 	{
-		SendClientMessageEx(playerid, TEAM_AZTECAS_COLOR,"*** HELP *** /report /requesthelp (/newb)ie /tognewbie");
+		SendClientMessageEx(playerid, TEAM_AZTECAS_COLOR,"*** HELP *** /report /requesthelp (/newb)ie /tog newbie");
 	}
 	SendClientMessageEx(playerid, COLOR_WHITE,"*** ACCOUNT *** /(net)stats /inventory /quickstats /myguns /buylevel /upgrade /changepass /killcheckpoint /resetupgrades(100k)");
 	SendClientMessageEx(playerid, COLOR_WHITE,"*** CHAT *** /w(hisper) /o(oc) /s(hout) /l(ow) /b /ad(vertisement)s /f(amily) /togooc /tognews /togfam /cancelcall");
@@ -1648,7 +1648,7 @@ CMD:ohelp(playerid, params[])
 		if (0 <= PlayerInfo[playerid][pLeader] < MAX_GROUPS)
 		{
 			SendClientMessageEx(playerid, COLOR_WHITE, "*** GROUP LEADER *** /invite /uninvite /ouninvite /setdiv /giverank /online /setbadge /setdivname /dvadjust");
-			if(arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_LEA || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_MEDIC || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_JUDICIAL || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_TAXI)
+			if(arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_LEA || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_MEDIC || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_JUDICIAL || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_TAXI || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_GOV || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_NEWS || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_TOWING)
 			{
 			    SendClientMessageEx(playerid, COLOR_LIGHTBLUE, "*** GROUP LEADER *** /viewbudget /grepocars /gvbuyback /gdonate /ordercrates /dvtrackcar /gwithdraw /dvstorage");
 			}

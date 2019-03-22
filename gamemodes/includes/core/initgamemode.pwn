@@ -36,7 +36,6 @@ InitiateGamemode()
 	CarList2 = LoadModelSelectionMenu("CarList.txt");
 	CarList3 = LoadModelSelectionMenu("RestrictedCarList.txt");
 	SkinList = LoadModelSelectionMenu("SkinList.txt");
-	RegiSkins = LoadModelSelectionMenu("RegiSkins.txt");
 	
 	/*---[Miscs]---*/
 	NGGShop = CreateDynamicPolygon(shop_vertices);
@@ -52,7 +51,6 @@ InitiateGamemode()
 	LoadElevatorStuff();
 	ClearCalls();
 	LoadHelp();
-	SpawnDealers();
 	Misc_Load();
 	InitPokerTables();
 	ResetElevatorQueue();

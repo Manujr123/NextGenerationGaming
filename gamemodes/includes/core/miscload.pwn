@@ -177,7 +177,6 @@ stock Misc_Save() {
 	ini_SetFloat(iFileHandle, szFileStr, "FIFGambleY", FIFGamble[1]);
 	ini_SetFloat(iFileHandle, szFileStr, "FIFGambleZ", FIFGamble[2]);
 	ini_SetInteger(iFileHandle, szFileStr, "FIFGThurs", FIFGThurs);
-	ini_SetInteger(iFileHandle, szFileStr, "sanewsvault", sanewsvault);
 	if(iRewardPlay) {
 		ini_SetInteger(iFileHandle, szFileStr, "RewardPlay", true);
 	}
@@ -239,7 +238,6 @@ stock Misc_Load() {
 		else if(ini_GetValue(szFileStr, "FIFGambleY", szResult, sizeof(szResult)))											FIFGamble[1] = floatstr(szResult);
 		else if(ini_GetValue(szFileStr, "FIFGambleZ", szResult, sizeof(szResult)))											FIFGamble[2] = floatstr(szResult);
 		else if(ini_GetValue(szFileStr, "FIFGThurs", szResult, sizeof(szResult)))											FIFGThurs = strval(szResult);
-		else if(ini_GetValue(szFileStr, "sanewsvault", szResult, sizeof(szResult)))											sanewsvault = strval(szResult);
 	}
 	if(iRewardBox) {
 		iRewardObj = CreateDynamicObject(19055, fObjectPos[0], fObjectPos[1], fObjectPos[2], 0.0, 0.0, 0.0, .streamdistance = 100.0);

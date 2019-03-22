@@ -61,7 +61,6 @@ HourDedicatedPlayer(playerid)
 		if(PlayerInfo[playerid][pDedicatedPlayer] != 4) PlayerInfo[playerid][pDedicatedPlayer] = 1;
 		SendClientMessageEx(playerid, COLOR_YELLOW, "Congratulations you are now a Tier 1 Dedicated Player!");
 		format(szMiscArray, sizeof(szMiscArray), "%s has ascended to Tier 1 Dedicated Player after playing 50 hours!", GetPlayerNameEx(playerid));
-		SendDiscordMessage(6, szMiscArray);
 		SendClientMessageToAll(-1, szMiscArray);
 	}
 	else if(PlayerInfo[playerid][pDedicatedHours] >= 75 && PlayerInfo[playerid][pDedicatedPlayer] == 1)
@@ -70,50 +69,14 @@ HourDedicatedPlayer(playerid)
 		format(PlayerInfo[playerid][pDedicatedTimestamp], 11, "%d-%02d-%02d", thedate[0], thedate[1], thedate[2]);
 		SendClientMessageEx(playerid, COLOR_YELLOW, "Congratulations you are now a Tier 2 Dedicated Player!");
 		format(szMiscArray, sizeof(szMiscArray), "%s has ascended to Tier 2 Dedicated Player after playing 75 hours!", GetPlayerNameEx(playerid));
-		SendDiscordMessage(6, szMiscArray);
 		SendClientMessageToAll(-1, szMiscArray);
-		if(PlayerInfo[playerid][pDonateRank] >= 1)
-		{
-			AddFlag(playerid, INVALID_PLAYER_ID, "1 Month Bronze VIP - Non Transferable");
-			SendClientMessageEx(playerid, COLOR_YELLOW, "You have been awarded a 1 Month Bronze VIP Flag");
-		}
-		else
-		{
-			SendClientMessageEx(playerid, COLOR_YELLOW, "CONGRATULATIONS: You have been awarded a 1 Month Bronze VIP");
-			PlayerInfo[playerid][pDonateRank] = 1;
-			PlayerInfo[playerid][pTempVIP] = 0;
-			PlayerInfo[playerid][pBuddyInvited] = 0;
-			PlayerInfo[playerid][pVIPSellable] = 0;
-			PlayerInfo[playerid][pVIPExpire] = gettime()+2592000*1;
-		}
 	} 
 	else if(PlayerInfo[playerid][pDedicatedHours] >= 90 && PlayerInfo[playerid][pDedicatedPlayer] == 2)
 	{
 		if(PlayerInfo[playerid][pDedicatedPlayer] != 4) PlayerInfo[playerid][pDedicatedPlayer] = 3;
 		SendClientMessageEx(playerid, COLOR_YELLOW, "Congratulations you are now a Tier 3 Dedicated Player!");
 		format(szMiscArray, sizeof(szMiscArray), "%s has ascended to Tier 3 Dedicated Player after playing 90 hours!.", GetPlayerNameEx(playerid));
-		SendDiscordMessage(6, szMiscArray);
 		SendClientMessageToAll(-1, szMiscArray);	
-		if(PlayerInfo[playerid][pGVip] == 0) {	
-			if(PlayerInfo[playerid][pDonateRank] >= 2)
-			{
-
-				AddFlag(playerid, INVALID_PLAYER_ID, "1 Month Silver VIP - Non Transferable");
-				SendClientMessageEx(playerid, COLOR_YELLOW, "You have been awarded a 1 Month Silver VIP Flag");
-			}
-			else
-			{
-				SendClientMessageEx(playerid, COLOR_YELLOW, "CONGRATULATIONS: You have been awarded a 1 Month Silver VIP");
-				PlayerInfo[playerid][pDonateRank] = 2;
-				PlayerInfo[playerid][pTempVIP] = 0;
-				PlayerInfo[playerid][pBuddyInvited] = 0;
-				PlayerInfo[playerid][pVIPSellable] = 0;
-				PlayerInfo[playerid][pVIPExpire] = gettime()+2592000*1;
-			}
-		} else {
-			AddFlag(playerid, INVALID_PLAYER_ID, "1 Month Renewable Gold VIP - Non Transferable");
-			SendClientMessageEx(playerid, COLOR_YELLOW, "You have been awarded a 1 Month Renewable Gold VIP Flag");
-		}
 	} 
 }
 
@@ -127,6 +90,7 @@ DayDedicatedPlayer(playerid)
 	{
 		GiftPlayer(MAX_PLAYERS, playerid);
 		format(PlayerInfo[playerid][pDedicatedTimestamp], 11, "%d-%02d-%02d", thedate[0], thedate[1], thedate[2]);
+		PlayerInfo[playerid][pGiftTime] = 0;
 	} 
 	/*
 	else if(thedate[2] == 1 && thedate[1] != tdate[1])
@@ -429,7 +393,7 @@ CMD:dpwarn(playerid, params[])
 
 			format(string, sizeof(string), "You have been warned from the Dedicated chat by %s, reason: %s", GetPlayerNameEx(playerid), reason);
 			SendClientMessageEx(giveplayerid, COLOR_WHITE, string);
-			SendClientMessageEx(giveplayerid, COLOR_WHITE, "This action lasts for two hours. To appeal, please visit our forums: www.ng-gaming.com/forums");
+			SendClientMessageEx(giveplayerid, COLOR_WHITE, "This action lasts for two hours. To appeal, please visit our forums: www.ng-gaming.net/forums");
 
 			PlayerInfo[giveplayerid][pDedicatedWarn] = 120;
 		}	
@@ -506,8 +470,8 @@ CMD:osetdedicated(playerid, params[])
 			SetPVarInt(playerid, "Offline_Dedicated", level);
 			SetPVarString(playerid, "Offline_DName", szPlayerName);
 			
-            format(szQuery, sizeof(szQuery), "SELECT `pDedicatedPlayer` FROM `accounts` WHERE `Username` = '%s'", szPlayerName);
- 			mysql_function_query(MainPipeline, szQuery, true, "OnQueryFinish", "iii", OFFLINE_DEDICATED_THREAD, playerid, g_arrQueryHandle{playerid});
+            mysql_format(MainPipeline, szQuery, sizeof(szQuery), "SELECT `pDedicatedPlayer` FROM `accounts` WHERE `Username` = '%s'", szPlayerName);
+ 			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "iii", OFFLINE_DEDICATED_THREAD, playerid, g_arrQueryHandle{playerid});
  			
  			format(string, sizeof(string), "Attempting to offline set %s account to level %d Dedicated.", szPlayerName, level);
  			SendClientMessageEx(playerid, COLOR_WHITE, string);
@@ -538,7 +502,7 @@ CMD:dpmute(playerid, params[])
 		 				return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot use this command on this person!");
 
 					PlayerInfo[targetid][pDedicatedMuted] = 1;
-					format(string, sizeof(string), "You were muted from the Dedicated chat by %s, reason: %s. You may appeal this mute at www.ng-gaming.com/forums", GetPlayerNameEx(playerid), reason);
+					format(string, sizeof(string), "You were muted from the Dedicated chat by %s, reason: %s. You may appeal this mute at www.ng-gaming.net/forums", GetPlayerNameEx(playerid), reason);
 					SendClientMessageEx(targetid, COLOR_GRAD2, string);
 					format(string, sizeof(string), "AdmCmd: %s has muted %s from the Dedicated chat, reason: %s.", GetPlayerNameEx(playerid), GetPlayerNameEx(targetid), reason);
 					ABroadCast(COLOR_LIGHTRED, string, 4);

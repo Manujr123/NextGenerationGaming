@@ -134,7 +134,15 @@ CMD:accept(playerid, params[])
 			PlayerInfo[id][pMats] -= GetPVarInt(playerid, "pSellGunMats");
 			GivePlayerValidWeapon(playerid, GetPVarInt(playerid, "pSellGun"));
 
-			PlayerInfo[id][pArmsSkill] += GetPVarInt(playerid, "pSellGunXP");
+  			if(PlayerInfo[id][pDoubleEXP] > 0)
+			{
+				SendClientMessageEx(id, COLOR_YELLOW, "You have gained 2 skill points instead of 1. You have %d hours left on the Double EXP token.", PlayerInfo[id][pDoubleEXP]);
+   				PlayerInfo[id][pArmsSkill] += (GetPVarInt(playerid, "pSellGunXP")*2);
+			}
+			else
+			{
+  				PlayerInfo[id][pArmsSkill] += GetPVarInt(playerid, "pSellGunXP");
+			}
 
 			format(szMiscArray, sizeof(szMiscArray), "%s crafts a %s from their materials, handing it to %s.", GetPlayerNameEx(id), weapon, GetPlayerNameEx(playerid)); 
 			ProxDetector(30.0, playerid, szMiscArray, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
@@ -523,11 +531,11 @@ CMD:accept(playerid, params[])
                                 PlayerVehicleInfo[playerid][playervehicleid][pvMods][m] = PlayerVehicleInfo[VehicleOffer[playerid]][VehicleId[playerid]][pvMods][m];
                             }
 
-        					format(szMessage, sizeof(szMessage), "INSERT INTO `vehicles` (`sqlID`) VALUES ('%d')", GetPlayerSQLId(playerid));
-							mysql_function_query(MainPipeline, szMessage, true, "OnQueryCreateVehicle", "ii", playerid, playervehicleid);
+        					mysql_format(MainPipeline, szMessage, sizeof(szMessage), "INSERT INTO `vehicles` (`sqlID`) VALUES ('%d')", GetPlayerSQLId(playerid));
+							mysql_tquery(MainPipeline, szMessage, "OnQueryCreateVehicle", "ii", playerid, playervehicleid);
 
-							format(szMessage, sizeof(szMessage), "DELETE FROM `vehicles` WHERE `id` = '%d'", PlayerVehicleInfo[VehicleOffer[playerid]][VehicleId[playerid]][pvSlotId]);
-							mysql_function_query(MainPipeline, szMessage, false, "OnQueryFinish", "ii", SENDDATA_THREAD, VehicleOffer[playerid]);
+							mysql_format(MainPipeline, szMessage, sizeof(szMessage), "DELETE FROM `vehicles` WHERE `id` = '%d'", PlayerVehicleInfo[VehicleOffer[playerid]][VehicleId[playerid]][pvSlotId]);
+							mysql_tquery(MainPipeline, szMessage, "OnQueryFinish", "ii", SENDDATA_THREAD, VehicleOffer[playerid]);
 
 							PlayerVehicleInfo[VehicleOffer[playerid]][VehicleId[playerid]][pvSlotId] = 0;
                             PlayerVehicleInfo[VehicleOffer[playerid]][VehicleId[playerid]][pvId] = 0;
@@ -1334,14 +1342,11 @@ CMD:accept(playerid, params[])
                 if(IsPlayerConnected(giveplayerid)) {
                     if(giveplayerid != INVALID_PLAYER_ID) {
                         if(PlayerInfo[giveplayerid][pJob] == 2 || PlayerInfo[giveplayerid][pJob2] == 2 || PlayerInfo[giveplayerid][pJob3] == 2) {
-                            
-                            new iGroupID = PlayerInfo[playerid][pMember];
-
                             GetPlayerName(giveplayerid, giveplayer, sizeof(giveplayer));
                             GetPlayerName(playerid, sendername, sizeof(sendername));
                             format(szMessage, sizeof(szMessage), "* You allowed %s to free a Jailed Person.", giveplayer);
                             SendClientMessageEx(playerid, COLOR_LIGHTBLUE,szMessage);
-                            format(szMessage, sizeof(szMessage), "* %s %s approved (allowed) you to free a Jailed Person. (use /free)", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], sendername);
+                            format(szMessage, sizeof(szMessage), "* Officer %s approved (allowed) you to free a Jailed Person. (use /free)", sendername);
                             SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE,szMessage);
                             ApprovedLawyer[giveplayerid] = 1;
                             return 1;
@@ -1357,7 +1362,6 @@ CMD:accept(playerid, params[])
         }
         else if(strcmp(params, "bodyguard", true) == 0) {
         	if(GetPVarType(playerid, "IsInArena")) return SendClientMessageEx(playerid, COLOR_WHITE, "You can't do this while being in an arena!");
-        	if(PlayerInfo[GuardOffer[playerid]][pMats] < 150) return SendClientMessageEx(playerid, COLOR_WHITE, "The bodyguard no longer has the required amount of materials!");
             if(GuardOffer[playerid] != INVALID_PLAYER_ID) {
                 if(GetPlayerCash(playerid) > GuardPrice[playerid]) {
                     if(IsPlayerConnected(GuardOffer[playerid])) {
@@ -1388,7 +1392,6 @@ CMD:accept(playerid, params[])
                             format(szMessage, sizeof(szMessage), "* %s accepted your protection, and the $%d was added to your money.",GetPlayerNameEx(playerid),GuardPrice[playerid]);
                             SendClientMessageEx(GuardOffer[playerid], COLOR_LIGHTBLUE, szMessage);
                             GivePlayerCash(GuardOffer[playerid], GuardPrice[playerid]);
-                            PlayerInfo[GuardOffer[playerid]][pMats] -= 150;
                             GivePlayerCash(playerid, -GuardPrice[playerid]);
                             ExtortionTurfsWarsZone(GuardOffer[playerid], 2, GuardPrice[playerid]);
                             GuardOffer[playerid] = INVALID_PLAYER_ID;
@@ -1403,12 +1406,12 @@ CMD:accept(playerid, params[])
                     return 1;
                 }
                 else {
-                    SendClientMessageEx(playerid, COLOR_GREY, "You can't afford the Protection!");
+                    SendClientMessageEx(playerid, COLOR_GREY, "   You can't afford the Protection!");
                     return 1;
                 }
             }
             else {
-                SendClientMessageEx(playerid, COLOR_GREY, "No-one offered you any Protection!");
+                SendClientMessageEx(playerid, COLOR_GREY, "   No-one offered you any Protection!");
                 return 1;
             }
         }
@@ -1935,7 +1938,7 @@ CMD:accept(playerid, params[])
 						format(szMessage, sizeof(szMessage), "* You have accepted the contract to kill %s, you will recieve $%d when completed.", GetPlayerNameEx(HitToGet[playerid]), PlayerInfo[HitToGet[playerid]][pHeadValue]);
 						SendClientMessageEx(playerid, COLOR_LIGHTBLUE, szMessage);
 						format(szMessage, sizeof(szMessage), "%s has been assigned to the contract on %s, for $%d.", GetPlayerNameEx(playerid), GetPlayerNameEx(HitToGet[playerid]),  PlayerInfo[HitToGet[playerid]][pHeadValue]);
-						foreach(new i: Player) if(IsAHitmanLeader(i)) SendClientMessage(i, COLOR_YELLOW, szMessage);
+						foreach(new i: Player) if(IsAHitman(i)) SendClientMessage(i, COLOR_YELLOW, szMessage);
 						//SendClientMessage(playerid, COLOR_LIGHTBLUE, "Hit accepted.  Wait 15 seconds for the final go ahead from the Agency.");
 						//SetPVarInt(playerid, "HitCooldown", 15);
 						GoChase[playerid] = HitToGet[playerid];
@@ -2220,8 +2223,8 @@ CMD:accept(playerid, params[])
 								if(IsPlayerInVehicle(playerid, PlayerVehicleInfo[playerid][vehicleslot][pvId]))
 								{
 									if(vehicleslot != -1) {
-										format(szMessage, sizeof(szMessage), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d'", VehicleFuel[vehicleid], PlayerVehicleInfo[playerid][vehicleslot][pvSlotId]);
-										mysql_function_query(MainPipeline, szMessage, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+										mysql_format(MainPipeline, szMessage, sizeof(szMessage), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d'", VehicleFuel[vehicleid], PlayerVehicleInfo[playerid][vehicleslot][pvSlotId]);
+										mysql_tquery(MainPipeline, szMessage, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 									}
 								}
 							}
@@ -2629,8 +2632,8 @@ CMD:refill(playerid, params[])
 						if(IsPlayerInVehicle(playerid, PlayerVehicleInfo[playerid][vehicleslot][pvId]))
 						{
 							if(vehicleslot != -1) {
-								format(string, sizeof(string), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d'", VehicleFuel[vehicleid], PlayerVehicleInfo[playerid][vehicleslot][pvSlotId]);
-								mysql_function_query(MainPipeline, string, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+								mysql_format(MainPipeline, string, sizeof(string), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d'", VehicleFuel[vehicleid], PlayerVehicleInfo[playerid][vehicleslot][pvSlotId]);
+								mysql_tquery(MainPipeline, string, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 							}
 						}
 					}

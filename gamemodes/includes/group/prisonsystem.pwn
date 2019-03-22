@@ -53,7 +53,7 @@ ListDetainees(playerid)
 		iCount = 0, 
 		temp[4];
 	
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(GetPVarInt(i, "ArrestPoint") == GetArrestPointID(playerid) + 1)
 		{
@@ -242,7 +242,7 @@ DocLockdown(playerid)
 		}
 		format( szWarning, sizeof(szWarning), "ALERT: The Easter Basin Correctional Facility is now on Lockdown for an emergency (( %s ))", GetPlayerNameEx(playerid));
 		SendGroupMessage(GROUP_TYPE_LEA, COLOR_RED, szWarning);
-		//PlayAudioStreamForPlayer(i, "http://sampweb.ng-gaming.com/brendan/siren.mp3", -1083.90002441,4289.70019531,7.59999990, 500, 1);
+		//PlayAudioStreamForPlayer(i, "http://sampweb.ng-gaming.net/brendan/siren.mp3", -1083.90002441,4289.70019531,7.59999990, 500, 1);
 	}
 	else 
 	{
@@ -563,7 +563,7 @@ SetPlayerIntoJailBoxing(iTargetID)
 		
 		if(arrJailBoxingData[index][iParticipants] == 2)
 		{
-			foreach(new i : Player)
+			foreach(Player, i)
 			{
 				if(GetPVarInt(i, "_InJailBoxing") == index + 1 && i != iTargetID)
 				{
@@ -595,7 +595,7 @@ public StartJailBoxing(iArenaID)
 	new string[60 + MAX_PLAYER_NAME];
 	new iRangePoint;
 	
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(GetPVarType(i, "_InJailBoxing") && GetPVarInt(i, "_InJailBoxing") - 1 == iArenaID)
 		iRangePoint = i;
@@ -901,7 +901,7 @@ CMD:listprisoners(playerid, params[])
 		szString[20],
 		id;
 	if(sscanf(params, "d", id)) return SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /listprisoners [arrestpoint id]");
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if((GetPVarInt(i, "ArrestPoint") == id + 1) && PlayerInfo[i][pJailTime] > 0)
 		{
@@ -933,7 +933,7 @@ CMD:deliverinmates(playerid, params[])
 {
 	if(!IsADocGuard(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "You must be a DOC Guard to use this command.");
 	if(!IsPlayerInRangeOfPoint(playerid, 4, -2053.6279,-198.0207,15.0703)) return SendClientMessageEx(playerid, COLOR_GREY, "You must be at the doc delivery point");
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(IsPlayerInVehicle(i, GetPlayerVehicleID(playerid)) && GetPlayerVehicleSeat(i) != 0)
 		{
@@ -1231,7 +1231,7 @@ CMD:inmates(playerid, params[])
 	if(!IsADocGuard(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "You must be a DOC Guard to use this command.");
 	new szInmates[1024];
 	
-	foreach(new i : Player)
+	foreach(Player, i)
 	{
 		if(PlayerInfo[i][pJailTime] > 0 && strfind(PlayerInfo[i][pPrisonReason], "[IC]", true) != -1)
 		{

@@ -41,14 +41,14 @@
 
 hook OnGameModeInit() {
 
-	GarbageVehicles[0] = AddStaticVehicleEx(408,-1677.9817,-103.5482,4.1228,46.7276,-1,-1,300); // Garbage 1
-	GarbageVehicles[1] = AddStaticVehicleEx(408,-1681.0918,-106.8514,4.1226,46.7277,-1,-1,300); // Garbage 2
-	GarbageVehicles[2] = AddStaticVehicleEx(408,-1687.0087,-113.1360,4.1220,46.7275,-1,-1,300); // Garbage 3
-	GarbageVehicles[3] = AddStaticVehicleEx(408,-1693.8510,-120.4049,4.1216,46.7275,-1,-1,300); // Garbage 4
-	GarbageVehicles[4] = AddStaticVehicleEx(408,-1700.8054,-127.7921,4.1214,46.7295,-1,-1,300); // Garbage 5
-	GarbageVehicles[5] = AddStaticVehicleEx(408,-1708.0349,-135.4716,4.0950,46.7291,-1,-1,300); // Garbage 6
-	GarbageVehicles[6] = AddStaticVehicleEx(408,-1711.8217,-139.4936,4.0890,46.7277,-1,-1,300); // Garbage 7
-	GarbageVehicles[7] = AddStaticVehicleEx(408,-1722.9457,-140.9466,4.1066,359.2393,-1,-1,300); // Garbage 8
+	GarbageVehicles[0] = AddStaticVehicleEx(408,2450.0818,-2117.0393,14.0948,359.3405,-1,-1,300); // Garbage 1
+	GarbageVehicles[1] = AddStaticVehicleEx(408,2456.0059,-2117.0317,14.0978,359.8398,-1,-1,300); // Garbage 2
+	GarbageVehicles[2] = AddStaticVehicleEx(408,2461.9404,-2116.9187,14.1033,1.3363,-1,-1,300); // Garbage 3
+	GarbageVehicles[3] = AddStaticVehicleEx(408,2467.7634,-2116.7227,14.1018,0.6403,-1,-1,300); // Garbage 4
+	GarbageVehicles[4] = AddStaticVehicleEx(408,2474.4385,-2116.6218,14.0943,2.2394,-1,-1,300); // Garbage 5
+	GarbageVehicles[5] = AddStaticVehicleEx(408,2480.3513,-2116.6707,14.0944,359.6030,-1,-1,300); // Garbage 6
+	GarbageVehicles[6] = AddStaticVehicleEx(408,2485.4556,-2116.5200,14.0988,1.4351,-1,-1,300); // Garbage 7
+	GarbageVehicles[7] = AddStaticVehicleEx(408,2491.1963,-2116.4548,14.0918,0.3940,-1,-1,300); // Garbage 8
 }
 
 hook OnPlayerEnterCheckpoint(playerid)
@@ -109,7 +109,7 @@ command(garbagerun, playerid, params[])
 	        	
                 SetPVarInt(playerid, "pGarbageRun", 1);
                 DeletePVar(playerid, "pGarbageStage");
-                SetPVarInt(playerid, "pGarbagePath", random(3));
+                SetPVarInt(playerid, "pGarbagePath", random(5));
                     
                 SendClientMessageEx(playerid, COLOR_YELLOW, "You have started a garbage run, make your way to your first destination.");
                 AdvanceGarbageJob(playerid);
@@ -130,33 +130,33 @@ AdvanceGarbageJob(playerid)
 		{
 		    switch(GetPVarInt(playerid, "pGarbageStage"))
 		    {
-		        case 0: SetPlayerCheckpoint(playerid, -2320.2715,1028.9084,50.6953, 4.0);
-		        case 1: SetPlayerCheckpoint(playerid, -2448.9746,992.5217,45.2969, 4.0);
-		        case 2: SetPlayerCheckpoint(playerid, -2465.8354,775.3755,35.1719, 4.0);
-		        case 3: SetPlayerCheckpoint(playerid, -2764.8789,764.7040,52.7813, 4.0);
-		        case 4: SetPlayerCheckpoint(playerid, -1773.8528,1205.3352,25.1250, 4.0);
+		        case 0: SetPlayerCheckpoint(playerid, 1864.9694,-1868.8340,13.5393, 4.0);
+		        case 1: SetPlayerCheckpoint(playerid, 1339.1879,-1772.2593,13.5432, 4.0);
+		        case 2: SetPlayerCheckpoint(playerid, 1097.3889,-1315.5203,13.7031, 4.0);
+		        case 3: SetPlayerCheckpoint(playerid, 788.5202,-1616.8534,13.9347, 4.0);
+		        case 4: SetPlayerCheckpoint(playerid, 870.7766,-1339.1848,13.1193, 4.0);
 		    }
 		}
 		case 1:
 		{
 		    switch(GetPVarInt(playerid, "pGarbageStage"))
 		    {
-		        case 0: SetPlayerCheckpoint(playerid, -1791.8572,801.4511,24.8921, 4.0);
-		        case 1: SetPlayerCheckpoint(playerid, -2465.8354,775.3755,35.1719, 4.0);
-		        case 2: SetPlayerCheckpoint(playerid, -2764.8789,764.7040,52.7813, 4.0);
-		        case 3: SetPlayerCheckpoint(playerid, -1773.8528,1205.3352,25.1250, 4.0);
-		        case 4: SetPlayerCheckpoint(playerid, -2320.2715,1028.9084,50.6953, 4.0);
+		        case 0: SetPlayerCheckpoint(playerid, 2393.3289,-2011.2156,13.1266, 4.0);
+		        case 1: SetPlayerCheckpoint(playerid, 2226.3372,-1689.5676,13.5651, 4.0);
+		        case 2: SetPlayerCheckpoint(playerid, 2340.3894,-1314.6295,23.6431, 4.0);
+		        case 3: SetPlayerCheckpoint(playerid, 2567.5251,-1490.1581,23.5875, 4.0);
+		        case 4: SetPlayerCheckpoint(playerid, 2123.0171,-1724.6511,13.1059, 4.0);
 		    }
 		}
 		case 2:
 		{
 		    switch(GetPVarInt(playerid, "pGarbageStage"))
 		    {
-		        case 0: SetPlayerCheckpoint(playerid, -2465.8354,775.3755,35.1719, 4.0);
-		        case 1: SetPlayerCheckpoint(playerid, -2764.8789,764.7040,52.7813, 4.0);
-		        case 2: SetPlayerCheckpoint(playerid, -2320.2715,1028.9084,50.6953, 4.0);
-		        case 3: SetPlayerCheckpoint(playerid, -1791.8572,801.4511,24.8921, 4.0);
-		        case 4: SetPlayerCheckpoint(playerid, -1773.8528,1205.3352,25.1250, 4.0);
+		        case 0: SetPlayerCheckpoint(playerid, 365.6633,-2045.8699,7.2444, 4.0);
+		        case 1: SetPlayerCheckpoint(playerid, 1032.4659,-1873.3563,12.8004, 4.0);
+		        case 2: SetPlayerCheckpoint(playerid, 2223.6206,-2669.4250,13.1041, 4.0);
+		        case 3: SetPlayerCheckpoint(playerid, 2613.2957,-2385.6138,13.1910, 4.0);
+		        case 4: SetPlayerCheckpoint(playerid, 2197.1860,-1975.7141,13.1308, 4.0);
 		    }
 		}
 		case 3:

@@ -64,8 +64,6 @@ hook OnGameModeInit() {
 	SFPDLobbyButton[0] =  CreateButton(-1602.30322, 705.35291, 14.34120, -90);
 	SFPDLobbyButton[1] =  CreateButton(-1596.22266, 702.63599, 14.34120, 0);
 
-	SFElevator[0] = CreateButton(-1580.6760,700.3566,13.8619,90.0);
-	SFElevator[1] = CreateButton(-1601.4095,698.3928,19.6729,90.0);
 
 	// New SASD Interior buttons.
 	SASDButtons[0] = CreateButton(14.98460, 55.32560, 998.19952, 270);

@@ -963,7 +963,6 @@ Interact_FriskPlayer(playerid, giveplayerid) {
 
 	if (!ProxDetectorS(8.0, playerid, giveplayerid)) return SendClientMessageEx(playerid, COLOR_WHITE, "You are not in range of that player");
 	if(giveplayerid == playerid) { SendClientMessageEx(playerid, COLOR_GREY, "You cannot frisk yourself!"); return 1; }
-	if(PlayerInfo[giveplayerid][pAdmin] >= 2 && !PlayerInfo[giveplayerid][pTogReports]) return SendClientMessageEx(playerid, COLOR_GREY, "You can't frisk administrators.");
 
 	new packages = GetPVarInt(giveplayerid, "Packages");
 	new crates = PlayerInfo[giveplayerid][pCrates];
@@ -1110,13 +1109,11 @@ Interact_GiveTicket(playerid, giveplayerid, reason[], amount = -1) {
 	else {
 		if(!ProxDetectorS(8.0, playerid, giveplayerid)) return SendClientMessageEx(playerid, COLOR_GRAD2, "You are not in range of that player");
 
-        new iGroupID = PlayerInfo[playerid][pMember];
-        
 		format(szMiscArray, sizeof(szMiscArray), "* You gave %s a ticket costing $%d, reason: %s", GetPlayerNameEx(giveplayerid), amount, reason);
 		SendClientMessageEx(playerid, COLOR_LIGHTBLUE, szMiscArray);
-		format(szMiscArray, sizeof(szMiscArray), "* %s %s has given you a ticket costing $%d, reason: %s", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), amount, reason);
+		format(szMiscArray, sizeof(szMiscArray), "* Officer %s has given you a ticket costing $%d, reason: %s", GetPlayerNameEx(playerid), amount, reason);
 		SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, szMiscArray);
-		format(szMiscArray, sizeof(szMiscArray), "* %s %s writes up a ticket and gives it to %s.", arrGroupRanks[iGroupID][PlayerInfo[playerid][pRank]], GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+		format(szMiscArray, sizeof(szMiscArray), "* Officer %s writes up a ticket and gives it to %s.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
 		ProxDetector(30.0, playerid, szMiscArray, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 		SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, "* Type /accept ticket, to accept it.");
 		TicketOffer[giveplayerid] = playerid;

@@ -96,7 +96,7 @@ timer FinishMedKit[5000](playerid)
 	if(GetPVarInt(playerid, "BackpackMedKit") == 1)
 	{
 		SetHealth(playerid, 100);
-		SetArmour(playerid, 100);
+		SetArmour(playerid, 150);
 		PlayerInfo[playerid][pBItems][5]--;
 		SendClientMessageEx(playerid, COLOR_WHITE, "You have used the Med Kit from the backpack.");
 		new ip[MAX_PLAYER_NAME];
@@ -272,11 +272,11 @@ task SyncTime[60000]()
 			getdate(year,month,day);
 			if(month == 4 && (day == 25 || day == 26)) // NGG B-Day 2015
 			{
-				foreach(new i : Player)
+				foreach(Player, i)
 				{
 					PlayerInfo[i][pReceivedPrize] = 0;
 				}
-				mysql_function_query(MainPipeline, "UPDATE `accounts` SET `ReceivedPrize` = 0", false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_tquery(MainPipeline, "UPDATE `accounts` SET `ReceivedPrize` = 0", false, "OnQueryFinish", "i", SENDDATA_THREAD);
 			}*/
 		}
 	    if(tmphour == 3 || tmphour == 6 || tmphour == 9 || tmphour == 12 || tmphour == 15 || tmphour == 18 || tmphour == 21 || tmphour == 0) PrepareLotto();
@@ -311,7 +311,7 @@ task SyncTime[60000]()
 				format(szMiscArray, sizeof(szMiscArray), "The faction vault is at $%s.", number_format(arrGroupData[iGroupID][g_iBudget]));
 				GroupPayLog(iGroupID, szMiscArray);
 			}
-			if(arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_LEA || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_MEDIC || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_JUDICIAL || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_TAXI)
+			if(arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_LEA || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_MEDIC || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_JUDICIAL || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_TAXI || arrGroupData[iGroupID][g_iGroupType] == GROUP_TYPE_TOWING)
 			{
 				if(arrGroupData[iGroupID][g_iBudgetPayment] > 0)
 				{
@@ -430,8 +430,8 @@ task SyncTime[60000]()
 		format(szMiscArray, sizeof(szMiscArray), "The time is now %s. ((ST: %s))", ConvertToTwelveHour(ttTime), ConvertToTwelveHour(tmphour));
 		SendClientMessageToAllEx(COLOR_WHITE, szMiscArray);
 		new query[300];
-		format(query, sizeof(query), "SELECT b.shift, b.needs_%s, COUNT(DISTINCT s.id) as ShiftCount FROM cp_shift_blocks b LEFT JOIN cp_shifts s ON b.shift_id = s.shift_id AND s.date = '%d-%02d-%02d' AND s.status >= 2 AND s.type = 1 WHERE b.time_start = '%02d:00:00' AND b.type = 1 GROUP BY b.shift, b.needs_%s", GetWeekday(), year, month, day, tmphour, GetWeekday());
-		mysql_function_query(MainPipeline, query, true, "GetShiftInfo", "is", INVALID_PLAYER_ID, szMiscArray);
+		mysql_format(MainPipeline, query, sizeof(query), "SELECT b.shift, b.needs_%e, COUNT(DISTINCT s.id) as ShiftCount FROM cp_shift_blocks b LEFT JOIN cp_shifts s ON b.shift_id = s.shift_id AND s.date = '%d-%02d-%02d' AND s.status >= 2 AND s.type = 1 WHERE b.time_start = '%02d:00:00' AND b.type = 1 GROUP BY b.shift, b.needs_%e", GetWeekday(), year, month, day, tmphour, GetWeekday());
+		mysql_tquery(MainPipeline, query, "GetShiftInfo", "is", INVALID_PLAYER_ID, szMiscArray);
 		foreach(new i: Player)
 		{
 			if(PlayerInfo[i][pAdmin] >= 2)
@@ -454,8 +454,8 @@ task SyncTime[60000]()
 					{
 						SetPVarInt(i, "pBirthday", 1);
 						PlayerInfo[i][pLastBirthday] = gettime();
-						format(query, sizeof(query), "UPDATE `accounts` SET `LastBirthday`=%d WHERE `Username` = '%s'", PlayerInfo[i][pLastBirthday], GetPlayerNameExt(i));
-						mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "ii", SENDDATA_THREAD, i);
+						mysql_format(MainPipeline, query, sizeof(query), "UPDATE `accounts` SET `LastBirthday`=%d WHERE `Username` = '%e'", PlayerInfo[i][pLastBirthday], GetPlayerNameExt(i));
+						mysql_tquery(MainPipeline, query, "OnQueryFinish", "ii", SENDDATA_THREAD, i);
 					}
 				}
 				else
@@ -489,7 +489,6 @@ task SyncTime[60000]()
 				if(DynPoints[x][poTimer] > 0) DynPoints[x][poTimer]--, SavePoint(x);
 				if(!DynPoints[x][poTimer] && !DynPoints[x][poCapturable] && !DynPoints[x][poLocked]) {
 					format(szMiscArray, sizeof(szMiscArray), "%s has become available for capture.", DynPoints[x][poName]);
-					SendDiscordMessage(6, szMiscArray);
 					SendClientMessageToAllEx(COLOR_YELLOW, szMiscArray);
 					DynPoints[x][poCapturable] = 1;
 					SavePoint(x);
@@ -509,7 +508,6 @@ task SyncTime[60000]()
 		}
 
 		Misc_Save();
-		DrugPrices();
 
 		for(new i = 0; i < MAX_TURFS; i++)
 		{
@@ -526,24 +524,15 @@ task SyncTime[60000]()
 			    	}
 				}
 			}
-			new iTurf = randomEx(1, 10);
-			if(iTurf >= 5)
+			if(TurfWars[i][twOwnerId] != INVALID_GROUP_ID && TurfWars[i][twSpecial] == 2)
 			{
-				if(TurfWars[i][twOwnerId] != INVALID_GROUP_ID && TurfWars[i][twSpecial] == 2) //
-				{
-					arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][0] += 20;
-				    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][1] += 20;
-				    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][2] += 10;
-				    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][3] += 10;
-				    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][4] += 5;
-					
-					foreach(new x: Player) if(PlayerInfo[x][pMember] == TurfWars[i][twOwnerId]) SendClientMessageEx(x, COLOR_LIGHTBLUE, "Your family has recieved drugs for owning a drug turf.");
-				}
-			}
-			if(TurfWars[i][twOwnerId] != INVALID_GROUP_ID && TurfWars[i][twSpecial] == 3)
-			{
-				arrGroupData[TurfWars[i][twOwnerId]][g_iBudget] += TurfWars[i][twCashReward];
-			    foreach(new x: Player) if(PlayerInfo[x][pMember] == TurfWars[i][twOwnerId]) SendClientMessageEx(x, COLOR_LIGHTBLUE, "Your family has recieved $%s for owning an extortion turf.", number_format(TurfWars[i][twCashReward]));
+				arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][0] += 20;
+			    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][1] += 20;
+			    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][2] += 10;
+			    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][3] += 10;
+			    arrGroupData[TurfWars[i][twOwnerId]][g_iDrugs][4] += 5;
+
+			    foreach(new x: Player) if(PlayerInfo[x][pMember] == TurfWars[i][twOwnerId]) SendClientMessageEx(x, COLOR_LIGHTBLUE, "Your family has recieved drugs for owning a drug turf.");
 			}
 		}
 		//CallRemoteFunction("ActivateRandomQuestion", "");//Olympics
@@ -556,8 +545,8 @@ task SyncTime[60000]()
 					if(PlayerInfo[i][pDedicatedPlayer] != 4) PlayerInfo[i][pDedicatedPlayer] = 0;
 				}
 			}
-			format(query, sizeof(query), "UPDATE `accounts` SET `pDedicatedPlayer` = 0, `DedicatedHours` = 0 WHERE `DedicatedHours` > 0 AND `pDedicatedPlayer` != 4");
-			mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, query, sizeof(query), "UPDATE `accounts` SET `pDedicatedPlayer` = 0, `DedicatedHours` = 0 WHERE `DedicatedHours` > 0 AND `pDedicatedPlayer` != 4");
+			mysql_tquery(MainPipeline, query, "OnQueryFinish", "i", SENDDATA_THREAD);
 		}
 	}
 }
@@ -991,8 +980,8 @@ task hungerGames[1000]()
 /* Player Tasks - (Optimized from tasks + foreach loop) - Jingles */
 
 task PlayerHeartBeat[1000]() {
-	foreach(new i: Player)
-	{
+foreach(new i: Player)
+{
 		// alerttimer - Merged by Jingles
 		if(AlertTime[i] != 0) AlertTime[i]--;
 
@@ -1260,7 +1249,7 @@ task PlayerHeartBeat[1000]() {
 							vehicle_unlock_doors(vehicleid);
 							SetPVarInt(i, "VLPLocksLeft", GetPVarInt(i, "VLPLocksLeft")-1);
 							mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `vehicles` SET `pvLocksLeft` = '%d', `pvLastLockPickedBy` = '%e' WHERE `id` = '%d' AND `sqlID` = '%d'", GetPVarInt(i, "VLPLocksLeft"), GetPlayerNameExt(i), GetPVarInt(i, "LockPickVehicleSQLId"), GetPVarInt(i, "LockPickPlayerSQLId"));
-							mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "ii", SENDDATA_THREAD, i);
+							mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "ii", SENDDATA_THREAD, i);
 							new ip[MAX_PLAYER_NAME], ownername[MAX_PLAYER_NAME];
 							GetPlayerIp(i, ip, sizeof(ip)), GetPVarString(i, "LockPickPlayerName", ownername, sizeof(ownername));
 							format(szMiscArray, sizeof(szMiscArray), "[LOCK PICK] %s (IP:%s, SQLId: %d) successfully lock picked a %s(VID:%d SQLId %d) owned by %s(Offline, SQLId: %d)", GetPlayerNameEx(i), ip, GetPlayerSQLId(i), GetVehicleName(vehicleid), vehicleid, GetPVarInt(i, "LockPickVehicleSQLId"), ownername, GetPVarInt(i, "LockPickPlayerSQLId"));
@@ -1404,8 +1393,8 @@ task PlayerHeartBeat[1000]() {
 						SetPlayerSkin(i, GetPlayerSkin(i));
 						SetPlayerSpecialAction(i, SPECIAL_ACTION_NONE);
 						if(GetPVarType(i, "LockPickVehicleSQLId")) {
-							format(szMiscArray, sizeof(szMiscArray), "SELECT `pvWeapon0`, `pvWeapon1`, `pvWeapon2` FROM `vehicles` WHERE `id` = '%d' AND `sqlID` = '%d'", GetPVarInt(i, "LockPickVehicleSQLId"), GetPVarInt(i, "LockPickPlayerSQLId"));
-							mysql_function_query(MainPipeline, szMiscArray, true, "CheckTrunkContents", "i", i);
+							mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "SELECT `pvWeapon0`, `pvWeapon1`, `pvWeapon2` FROM `vehicles` WHERE `id` = '%d' AND `sqlID` = '%d'", GetPVarInt(i, "LockPickVehicleSQLId"), GetPVarInt(i, "LockPickPlayerSQLId"));
+							mysql_tquery(MainPipeline, szMiscArray, "CheckTrunkContents", "i", i);
 						}
 						else {
 							new slot = GetPlayerVehicle(GetPVarInt(i, "LockPickPlayer"), GetPVarInt(i, "LockPickVehicle"));
@@ -2426,15 +2415,13 @@ task PlayerHeartBeat[1000]() {
 			KillTimer(GetPVarInt(i, "rccamtimer"));
 		}
 	}
-	return 1;
+return 1;
 }
 
 // Timer Name: SyncUp()
 // TickRate: 1 Minute.
 task SyncUp[60000]()
 {
-	for(new b=0; b < MAX_BUSINESSES; b++) if(Businesses[b][bExtPos][0] != 0.0) RefreshBusinessPickup(b);
-
 	foreach(new i: Player)
 	{
 		SyncMinTime(i);
@@ -2971,7 +2958,7 @@ ptask PlayerMicroBeat[500](i) {
 			fVehHealth[i] = fExpHealth;
 		}
 	}
-//	if(GetPVarType(i, "pDTest")) DrivingSchoolSpeedMeter(i, player_get_speed(i));
+	if(GetPVarType(i, "pDTest")) DrivingSchoolSpeedMeter(i, player_get_speed(i));
 }
 
 // Task Name: fpsCounterUpdate
@@ -2990,12 +2977,12 @@ ptask fpsCounterUpdate[500](i)
 ptask ShopItemQueue[60000](i)
 {
 	szMiscArray[0] = 0;
-	format(szMiscArray, sizeof(szMiscArray), "SELECT * FROM `shop_orders` WHERE `user_id` = %d AND `status` = 0", GetPlayerSQLId(i));
-	mysql_function_query(MainPipeline, szMiscArray, true, "ExecuteShopQueue", "ii", i, 0);
+	mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "SELECT * FROM `shop_orders` WHERE `user_id` = %d AND `status` = 0", GetPlayerSQLId(i));
+	mysql_tquery(MainPipeline, szMiscArray, "ExecuteShopQueue", "ii", i, 0);
 
 	if(ShopToggle == 1)
 	{
-		format(szMiscArray, sizeof(szMiscArray), "SELECT * FROM `order_delivery_status` WHERE `player_id` = %d AND `status` = 0", GetPlayerSQLId(i));
-		mysql_function_query(ShopPipeline, szMiscArray, true, "ExecuteShopQueue", "ii", i, 1);
+		mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "SELECT * FROM `order_delivery_status` WHERE `player_id` = %d AND `status` = 0", GetPlayerSQLId(i));
+		mysql_tquery(ShopPipeline, szMiscArray, "ExecuteShopQueue", "ii", i, 1);
 	}
 }

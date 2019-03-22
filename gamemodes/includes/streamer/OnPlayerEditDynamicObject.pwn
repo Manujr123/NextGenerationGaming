@@ -177,9 +177,9 @@ public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y,
 				}
 				Streamer_SetIntData(STREAMER_TYPE_OBJECT, HouseInfo[iHouseID][hFurniture][iSlotID], E_STREAMER_EXTRA_ID, iHouseID);
 
-				format(szMiscArray, sizeof(szMiscArray), "UPDATE `furniture` SET `x` = '%f', `y` = '%f', `z` = '%f', `rx` = '%f', `ry` = '%f', `rz` = '%f' \
+				mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `furniture` SET `x` = '%f', `y` = '%f', `z` = '%f', `rx` = '%f', `ry` = '%f', `rz` = '%f' \
 					WHERE `houseid` = '%d' AND `slotid` = '%d'", x, y, z, rx, ry, rz, iHouseID, iSlotID);
-				mysql_function_query(MainPipeline, szMiscArray, false, "OnEditFurniture", "");
+				mysql_tquery(MainPipeline, szMiscArray, "OnEditFurniture", "");
 
 				foreach(new i : Player) Streamer_Update(i);
 
@@ -341,10 +341,6 @@ public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y,
 				new i = GetPVarInt(playerid, PVAR_GANGTAGEDITING);
 				if(IsValidDynamicObject(arrGangTags[i][gt_iObjectID])) DestroyDynamicObject(arrGangTags[i][gt_iObjectID]);
 				arrGangTags[i][gt_iObjectID] = CreateDynamicObject(GANGTAGS_OBJECTID, x, y, z, rx, ry, rz);
-				/*
-				format(szMiscArray, sizeof(szMiscArray), "SELECT * FROM `gangtags` WHERE `id` = '%d'", i);
-				mysql_function_query(MainPipeline, szMiscArray, true, "GangTag_OnSetText", "i", i);
-				*/
 				GangTag_AdmSave(playerid, i);
 				return 1;
 			}

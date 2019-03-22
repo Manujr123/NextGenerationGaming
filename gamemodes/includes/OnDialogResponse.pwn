@@ -48,7 +48,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
 	if(arrAntiCheat[playerid][ac_iFlags][AC_DIALOGSPOOFING] > 0) return 1;
-	if(dialogid == DIALOG_DISABLED) return ShowPlayerDialogEx(playerid, DIALOG_DISABLED, DIALOG_STYLE_MSGBOX, "Account Disabled - Visit http://www.ng-gaming.com/forums", "Your account has been disabled as it has been inactive for more than six months.\nPlease visit the forums and post an Administrative Request to begin the process to reactivate your account.", "Okay", "");
+	if(dialogid == DIALOG_DISABLED) return ShowPlayerDialogEx(playerid, DIALOG_DISABLED, DIALOG_STYLE_MSGBOX, "Account Disabled - Visit http://www.ng-gaming.net/forums", "Your account has been disabled as it has been inactive for more than six months.\nPlease visit the forums and post an Administrative Request to begin the process to reactivate your account.", "Okay", "");
 	new sendername[MAX_PLAYER_NAME];
 	new string[256];
 	szMiscArray[0] = 0;
@@ -197,8 +197,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
 				format(PlayerInfo[playerid][pReferredBy], MAX_PLAYER_NAME, "%s", szEscape);
 
-				format(szQuery, sizeof(szQuery), "SELECT `Username` FROM `accounts` WHERE `Username` = '%s'", szEscape);
-				mysql_function_query(MainPipeline, szQuery, true, "OnQueryFinish", "iii", MAIN_REFERRAL_THREAD, playerid, g_arrQueryHandle{playerid});
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "SELECT `Username` FROM `accounts` WHERE `Username` = '%s'", szEscape);
+				mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "iii", MAIN_REFERRAL_THREAD, playerid, g_arrQueryHandle{playerid});
 			}
 			else {
 				PlayerInfo[playerid][pTut]++;
@@ -454,8 +454,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					DeletePVar(playerid, "vDel");
 
 					new query[128];
-					format(query, sizeof(query), "DELETE FROM `vehicles` WHERE `id` = '%d'", PlayerVehicleInfo[playerid][i][pvSlotId]);
-					mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+					mysql_format(MainPipeline, query, sizeof(query), "DELETE FROM `vehicles` WHERE `id` = '%d'", PlayerVehicleInfo[playerid][i][pvSlotId]);
+					mysql_tquery(MainPipeline, query, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 
 					PlayerVehicleInfo[playerid][i][pvSlotId] = 0;
 
@@ -785,7 +785,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			LEFT JOIN betazorder_history h ON h.order_id = p.order_id AND h.order_history_id = (SELECT max(order_history_id) FROM betazorder_history WHERE p.order_id = order_id) \
 			LEFT JOIN betazorder o ON o.order_id = p.order_id \
 			WHERE p.order_id = %d", orderid);
-			mysql_function_query(ShopPipeline, query, true, "OnShopOrder", "i", playerid);
+			mysql_tquery(ShopPipeline, query, true, "OnShopOrder", "i", playerid);
 
 			SetPVarInt(playerid, "ShopOrderTimer", 60); SetTimerEx("OtherTimerEx", 1000, false, "ii", playerid, TYPE_SHOPORDERTIMER);
 		}
@@ -807,7 +807,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				LEFT JOIN betazorder_history h ON h.order_id = p.order_id AND h.order_history_id = (SELECT max(order_history_id) FROM betazorder_history WHERE p.order_id = order_id) \
 				LEFT JOIN betazorder o ON o.order_id = p.order_id \
 				WHERE p.order_id = %d", PlayerInfo[playerid][pOrder]);
-				mysql_function_query(ShopPipeline, query, true, "OnShopOrderEmailVer", "i", playerid);
+				mysql_tquery(ShopPipeline, query, true, "OnShopOrderEmailVer", "i", playerid);
 			}
 			else
 			{
@@ -824,7 +824,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			ShowNoticeGUIFrame(playerid, 6);
 			new query[256];
 			format(query, sizeof(query), "SELECT * FROM `shop` WHERE `order_id`=%d", PlayerInfo[playerid][pOrder]);
-			mysql_function_query(ShopPipeline, query, true, "OnShopOrder2", "ii", playerid, listitem);
+			mysql_tquery(ShopPipeline, query, true, "OnShopOrder2", "ii", playerid, listitem);
 		}
 	}
 
@@ -910,7 +910,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
 			SetPVarInt(playerid, "ShopOrderTimer", 60); SetTimerEx("OtherTimerEx", 1000, false, "ii", playerid, TYPE_SHOPORDERTIMER);
 
-			format(string, sizeof(string), "shop.ng-gaming.com/idcheck.php?id=%d", orderid);
+			format(string, sizeof(string), "shop.ng-gaming.net/idcheck.php?id=%d", orderid);
 			HTTP(playerid, HTTP_GET, string, "", "HttpCallback_ShopIDCheck");
 		}
 	}
@@ -919,7 +919,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	{
 		if(response)
 		{
-			ShowPlayerDialogEx(playerid, DIALOG_SHOPORDER, DIALOG_STYLE_INPUT, "Shop Order", "This is for shop orders from http://shop.ng-gaming.com\n\nIf you do not have a shop order then please cancel this dialog box now.\n\nWarning: Abuse of this feature may result to an indefinite block from this command.\n\nPlease enter your shop order ID (if you do not know it put 1):", "Submit", "Cancel" );
+			ShowPlayerDialogEx(playerid, DIALOG_SHOPORDER, DIALOG_STYLE_INPUT, "Shop Order", "This is for shop orders from http://shop.ng-gaming.net\n\nIf you do not have a shop order then please cancel this dialog box now.\n\nWarning: Abuse of this feature may result to an indefinite block from this command.\n\nPlease enter your shop order ID (if you do not know it put 1):", "Submit", "Cancel" );
 		}
 	}
 	if(dialogid == DIALOG_SHOPERROR2)
@@ -931,7 +931,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	}
 	if(dialogid == PMOTDNOTICE && 1 <= PlayerInfo[playerid][pDonateRank] <= 3 && (PlayerInfo[playerid][pVIPExpire] - 86400 < gettime()))
 	{
-		ShowPlayerDialogEx(playerid, VIP_EXPIRES, DIALOG_STYLE_MSGBOX, "VIP Expiration!", "Your VIP expires in less than a day - renew today at shop.ng-gaming.com!", "OK", "");
+		ShowPlayerDialogEx(playerid, VIP_EXPIRES, DIALOG_STYLE_MSGBOX, "VIP Expiration!", "Your VIP expires in less than a day - renew today at shop.ng-gaming.net!", "OK", "");
 	}
 	else if(dialogid == PMOTDNOTICE || dialogid == VIP_EXPIRES)
 	{
@@ -1695,8 +1695,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		}
 
 		new szQuery[128];
-		format(szQuery, sizeof(szQuery), "DELETE FROM `toys` WHERE `id` = '%d'", PlayerToyInfo[playerid][listitem][ptID]);
-		mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+		mysql_format(MainPipeline, szQuery, sizeof(szQuery), "DELETE FROM `toys` WHERE `id` = '%d'", PlayerToyInfo[playerid][listitem][ptID]);
+		mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 		PlayerToyInfo[playerid][listitem][ptID] = 0;
 		PlayerToyInfo[playerid][listitem][ptModelID] = 0;
 		PlayerToyInfo[playerid][listitem][ptBone] = 0;
@@ -2196,8 +2196,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					SetPVarInt(playerid, "WantedPh", numberstr);
 					SetPVarInt(playerid, "CurrentPh", PlayerInfo[playerid][pPnumber]);
 					SetPVarInt(playerid, "PhChangeCost", iCheck);
-					format(query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'", numberstr);
-					mysql_function_query(MainPipeline, query, true, "OnPhoneNumberCheck", "ii", playerid, 1);
+					mysql_format(MainPipeline, query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'", numberstr);
+					mysql_tquery(MainPipeline, query, "OnPhoneNumberCheck", "ii", playerid, 1);
 					return 1;
 				}
 				else if(GetPlayerCash(playerid) >= 300000 && GetPlayerCash(playerid) < 1000000)
@@ -2205,8 +2205,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					SetPVarInt(playerid, "WantedPh", numberstr);
 					SetPVarInt(playerid, "CurrentPh", PlayerInfo[playerid][pPnumber]);
 					SetPVarInt(playerid, "PhChangeCost", 300000);
-					format(query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
-					mysql_function_query(MainPipeline, query, true, "OnPhoneNumberCheck", "ii", playerid, 1);
+					mysql_format(MainPipeline, query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
+					mysql_tquery(MainPipeline, query, "OnPhoneNumberCheck", "ii", playerid, 1);
 					return 1;
 				}
 				else
@@ -2228,8 +2228,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					SetPVarInt(playerid, "WantedPh", numberstr);
 					SetPVarInt(playerid, "CurrentPh", PlayerInfo[playerid][pPnumber]);
 					SetPVarInt(playerid, "PhChangeCost", iCheck);
-					format(query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
-					mysql_function_query(MainPipeline, query, true, "OnPhoneNumberCheck", "ii", playerid, 1);
+					mysql_format(MainPipeline, query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
+					mysql_tquery(MainPipeline, query, "OnPhoneNumberCheck", "ii", playerid, 1);
 					return 1;
 				}
 				else if(GetPlayerCash(playerid) >= 200000 && GetPlayerCash(playerid) < 1000000)
@@ -2237,8 +2237,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					SetPVarInt(playerid, "WantedPh", numberstr);
 					SetPVarInt(playerid, "CurrentPh", PlayerInfo[playerid][pPnumber]);
 					SetPVarInt(playerid, "PhChangeCost", 200000);
-					format(query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
-					mysql_function_query(MainPipeline, query, true, "OnPhoneNumberCheck", "ii", playerid, 1);
+					mysql_format(MainPipeline, query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
+					mysql_tquery(MainPipeline, query, "OnPhoneNumberCheck", "ii", playerid, 1);
 					return 1;
 				}
 				else
@@ -2260,8 +2260,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					SetPVarInt(playerid, "WantedPh", numberstr);
 					SetPVarInt(playerid, "CurrentPh", PlayerInfo[playerid][pPnumber]);
 					SetPVarInt(playerid, "PhChangeCost", iCheck);
-					format(query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
-					mysql_function_query(MainPipeline, query, true, "OnPhoneNumberCheck", "ii", playerid, 1);
+					mysql_format(MainPipeline, query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
+					mysql_tquery(MainPipeline, query, "OnPhoneNumberCheck", "ii", playerid, 1);
 					return 1;
 				}
 				else if(GetPlayerCash(playerid) >= 50000 && GetPlayerCash(playerid) < 500000)
@@ -2269,8 +2269,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					SetPVarInt(playerid, "WantedPh", numberstr);
 					SetPVarInt(playerid, "CurrentPh", PlayerInfo[playerid][pPnumber]);
 					SetPVarInt(playerid, "PhChangeCost", 50000);
-					format(query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
-					mysql_function_query(MainPipeline, query, true, "OnPhoneNumberCheck", "ii", playerid, 1);
+					mysql_format(MainPipeline, query, sizeof(query), "SELECT `Username` FROM `accounts` WHERE `PhoneNr` = '%d'",numberstr);
+					mysql_tquery(MainPipeline, query, "OnPhoneNumberCheck", "ii", playerid, 1);
 					return 1;
 				}
 				else
@@ -2298,8 +2298,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			PlayerInfo[playerid][pPnumber] = GetPVarInt(playerid, "WantedPh");
 			new iCost = abs(GetPVarInt(playerid, "PhChangeCost"));
 			GivePlayerCash(playerid, -iCost);
-			format(string, sizeof(string), "UPDATE `accounts` SET `PhoneNr` = %d WHERE `id` = '%d'", PlayerInfo[playerid][pPnumber], GetPlayerSQLId(playerid));
-			mysql_function_query(MainPipeline, string, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+			mysql_format(MainPipeline, string, sizeof(string), "UPDATE `accounts` SET `PhoneNr` = %d WHERE `id` = '%d'", PlayerInfo[playerid][pPnumber], GetPlayerSQLId(playerid));
+			mysql_tquery(MainPipeline, string, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 			DeletePVar(playerid, "PhChangerId");
 			DeletePVar(playerid, "WantedPh");
 			DeletePVar(playerid, "PhChangeCost");
@@ -3102,10 +3102,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				}
 				else
 				{
-					if(!IsValidName(inputtext)) {
-						SendClientMessageEx(playerid, COLOR_WHITE, "Name change rejected. Please choose a name in the correct format: Firstname_Lastname.");
-						return 1;
-					}
+					if(!IsValidName(inputtext)) return SendClientMessageEx(playerid, COLOR_WHITE, "Name change rejected. Please choose a name in the correct format: Firstname_Lastname.");
+
+
 					/*new namechangecost;
 					namechangecost = (PlayerInfo[playerid][pLevel]) * 15000;
 
@@ -3129,7 +3128,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						SetPVarInt(playerid, "NameChangeCost", 0);
 						new playername[MAX_PLAYER_NAME];
 						GetPlayerName(playerid, playername, sizeof(playername));
-						format( String, sizeof( String ), "You have requested a namechange from %s to %s at no cost, please wait until a General Admin approves it.", playername, inputtext);
+						format( String, sizeof( String ), "You have requested a namechange from %s to %s at no cost, please wait until an admin approves it.", playername, inputtext);
 						SendClientMessageEx( playerid, COLOR_YELLOW, String );
 						SendReportToQue(playerid, "Name Change Request", 2, 4);
 						return 1;
@@ -3145,7 +3144,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						SetPVarString(playerid, "NewNameRequest", inputtext);
 						new playername[MAX_PLAYER_NAME];
 						GetPlayerName(playerid, playername, sizeof(playername));
-						format( String, sizeof( String ), "You have requested a namechange from %s to %s at no cost (Senior Mod), please wait until a General Admin approves it.", playername, inputtext);
+						format( String, sizeof( String ), "You have requested a namechange from %s to %s at no cost (Senior Mod), please wait until an admin approves it.", playername, inputtext);
 						SendClientMessageEx( playerid, COLOR_YELLOW, String );
 						SendReportToQue(playerid, "Name Change Request", 2, 4);
 						return 1;
@@ -3159,11 +3158,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						SetPVarInt(playerid, "NameChangeCost", 1);
 						new playername[MAX_PLAYER_NAME];
 						GetPlayerName(playerid, playername, sizeof(playername));
-						format( String, sizeof( String ), "You have requested a namechange from %s to %s for free, please wait until a General Admin approves it.", playername, inputtext);
+						format( String, sizeof( String ), "You have requested a namechange from %s to %s for free, please wait until an admin approves it.", playername, inputtext);
 						SendClientMessageEx( playerid, COLOR_YELLOW, String );
 						SendReportToQue(playerid, "Name Change Request", 2, 4);
 						return 1;
 					}
+					/*
 					if(PlayerInfo[playerid][pCredits] >= ShopItems[40][sItemPrice])
 					{
 						if(GetPVarType(playerid, "HasReport")) return SendClientMessageEx(playerid, COLOR_GREY, "You can only have 1 active report at a time. (/cancelreport)");
@@ -3178,9 +3178,34 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						SendReportToQue(playerid, "Name Change Request (Credits)", 2, 4);
 						return 1;
 					}
+
 					else
 					{
-						SendClientMessageEx(playerid, COLOR_GRAD2, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+						SendClientMessageEx(playerid, COLOR_GRAD2, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
+					}
+					*/
+					new namechangecost;
+					switch(PlayerInfo[playerid][pLevel])
+					{
+						case 1: namechangecost = 10000;
+						case 2: namechangecost = 15000;
+						case 3: namechangecost = 20000;
+						default: namechangecost = (PlayerInfo[playerid][pLevel]-3)*50000;
+					}
+					if(PlayerInfo[playerid][pCash] >= namechangecost)
+					{
+						if(GetPVarType(playerid, "HasReport")) return SendClientMessageEx(playerid, COLOR_GREY, "You can only have 1 active report at a time. (/cancelreport)");
+						SetPVarInt(playerid, "RequestingNameChange", 1);
+						SetPVarString(playerid, "NewNameRequest", inputtext);
+						SetPVarInt(playerid, "NameChangeCost", namechangecost);
+						SendClientMessageEx(playerid, COLOR_YELLOW, "You have requested a namechange from %s to %s for $%s, please wait until an admin approves it.", GetPlayerNameExt(playerid), inputtext, number_format(namechangecost));
+						SendReportToQue(playerid, "Name Change Request (Cash)", 2, 4);
+						return 1;
+					}
+
+					else
+					{
+						SendClientMessageEx(playerid, COLOR_GRAD2, "You don't have enough money for a name change.");
 					}
 				}
 			}
@@ -3236,7 +3261,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						SetPVarInt(playerid, "NameChangeCost", 0);
 						new playername[MAX_PLAYER_NAME];
 						GetPlayerName(playerid, playername, sizeof(playername));
-						format( String, sizeof( String ), "You have requested a namechange from %s to %s please wait until a General Admin approves it.", playername, inputtext);
+						format( String, sizeof( String ), "You have requested a namechange from %s to %s please wait until an admin approves it.", playername, inputtext);
 						SendClientMessageEx( playerid, COLOR_YELLOW, String );
 						// format( String, sizeof( String ), "{AA3333}AdmWarning{FFFF00}: %s (ID %d) requested a name change to %s for free (non-RP name) - /approvename %d (accept), or /denyname %d (deny).", playername, playerid, inputtext, playerid, playerid);
 						// ABroadCast( COLOR_YELLOW, String, 3 );
@@ -3337,8 +3362,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					AmountMade[39] += ShopItems[39][sItemPrice];
 
 					new szQuery[128];
-					format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold39` = '%d', `AmountMade39` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[39], AmountMade[39]);
-					mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+					mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold39` = '%d', `AmountMade39` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[39], AmountMade[39]);
+					mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 					format(string, sizeof(string), "You have purchased a Deluxe Car Alarm for %s credits.", number_format(ShopItems[39][sItemPrice]));
 					SendClientMessageEx(playerid, COLOR_CYAN, string);
@@ -4169,7 +4194,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				PlayerVehicleInfo[iTargetID][listitem][pvPosX] = DMVRelease[rand][0];
 				PlayerVehicleInfo[iTargetID][listitem][pvPosY] = DMVRelease[rand][1];
 				PlayerVehicleInfo[iTargetID][listitem][pvPosZ] = DMVRelease[rand][2];
-				PlayerVehicleInfo[iTargetID][listitem][pvPosAngle] = 359.4728;
+				PlayerVehicleInfo[iTargetID][listitem][pvPosAngle] = 180.000;
 				PlayerVehicleInfo[iTargetID][listitem][pvTicket] = 0;
 				g_mysql_SaveVehicle(iTargetID, listitem);
 			}
@@ -5202,8 +5227,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				iAllegiance = arrGroupData[PlayerInfo[playerid][pMember]][g_iAllegiance];
 			}
 			else iAllegiance = 1;
-			format(szMiscArray, sizeof(szMiscArray), "INSERT INTO `arrestreports` (`copid`, `suspectid`, `shortreport`, `origin`) VALUES ('%d', '%d', '%s', '%d')", GetPlayerSQLId(playerid), GetPlayerSQLId(suspect), g_mysql_ReturnEscaped(inputtext, MainPipeline), iAllegiance);
-			mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "INSERT INTO `arrestreports` (`copid`, `suspectid`, `shortreport`, `origin`) VALUES ('%d', '%d', '%e', '%d')", GetPlayerSQLId(playerid), GetPlayerSQLId(suspect), inputtext, iAllegiance);
+			mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
 			format(szMiscArray, sizeof(szMiscArray), "You have arrested %s for %d minutes with a fine of $%s", GetPlayerNameEx(suspect), time, number_format(moneys));
 			SendClientMessageEx(playerid, COLOR_LIGHTBLUE, szMiscArray);
 			PlayerInfo[suspect][pWantedJailFine] = 0;
@@ -6199,9 +6224,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			SetPVarInt(playerid, "_rRepID", giveplayerid);			format(string, sizeof(string), "You have successfully reported %s.", GetPlayerNameEx(giveplayerid));
 			SendClientMessage(playerid, COLOR_WHITE, string);
 
-			if(PlayerInfo[playerid][pAdmin] >= 2 || PlayerInfo[playerid][pSMod] == 1) format(string, sizeof(string), "INSERT INTO dm_watchdog (id,reporter,timestamp,superwatch) VALUES (%d,%d,%d,1)", GetPlayerSQLId(giveplayerid), GetPlayerSQLId(playerid), gettime());
-			else format(string, sizeof(string), "INSERT INTO dm_watchdog (id,reporter,timestamp) VALUES (%d,%d,%d)", GetPlayerSQLId(giveplayerid), GetPlayerSQLId(playerid), gettime());
-			mysql_function_query(MainPipeline, string, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+			if(PlayerInfo[playerid][pAdmin] >= 2 || PlayerInfo[playerid][pSMod] == 1) mysql_format(MainPipeline, string, sizeof(string), "INSERT INTO dm_watchdog (id,reporter,timestamp,superwatch) VALUES (%d,%d,%d,1)", GetPlayerSQLId(giveplayerid), GetPlayerSQLId(playerid), gettime());
+			else mysql_format(MainPipeline, string, sizeof(string), "INSERT INTO dm_watchdog (id,reporter,timestamp) VALUES (%d,%d,%d)", GetPlayerSQLId(giveplayerid), GetPlayerSQLId(playerid), gettime());
+			mysql_tquery(MainPipeline, string, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 
 			format(string, sizeof(string), "%s(%i) Deathmatching (last shot: %i seconds ago)", GetPlayerNameEx(giveplayerid), giveplayerid, gettime() - ShotPlayer[giveplayerid][playerid]);
 			SendReportToQue(playerid, string, 2, 1);
@@ -6346,8 +6371,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			format(stringg, sizeof(stringg), "Admin %s has deleted your toy (obj model: %d) from slot %d.", GetPlayerNameEx(playerid), object, slot);
 			SendClientMessageEx(giveplayerid, COLOR_WHITE, stringg);
 			format(string, sizeof(string), "[TOYDELETE] %s deleted %s's(%d) object %d in slot %d", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid), GetPlayerSQLId(giveplayerid), object, slot);
-			format(szQuery, sizeof(szQuery), "DELETE FROM `toys` WHERE `id` = %d", PlayerToyInfo[giveplayerid][slot][ptID]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "ii", SENDDATA_THREAD, giveplayerid);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "DELETE FROM `toys` WHERE `id` = %d", PlayerToyInfo[giveplayerid][slot][ptID]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, giveplayerid);
 			PlayerToyInfo[giveplayerid][slot][ptModelID] = 0;
 			PlayerToyInfo[giveplayerid][slot][ptBone] = 0;
 			PlayerToyInfo[giveplayerid][slot][ptSpecial] = 0;
@@ -6384,13 +6409,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					if(sscanf(inputtext, "u", target)) return ShowPlayerDialogEx(playerid, FLAG_LIST, DIALOG_STYLE_INPUT, "FLAG TRANSFER", "Who do you want to transfer the flag to?", "Select", "Cancel");
 					if(GetPVarInt(playerid, "viewingflags") == target) return SendClientMessageEx(playerid, COLOR_GRAD2, "ERROR: You cannot transfer to the same person!");
 					if(!IsPlayerConnected(target)) return ShowPlayerDialogEx(playerid, FLAG_LIST, DIALOG_STYLE_INPUT, "FLAG TRANSFER - ERROR", "Player is not connected!\nWho do you want to transfer the flag to?", "Select", "Cancel");
-					format(string, sizeof(string), "SELECT id, flag, issuer, time, type FROM `flags` WHERE `fid` = %i", GetPVarInt(playerid, "ManageFlagID"));
-					mysql_function_query(MainPipeline, string, true, "OnRequestTransferFlag", "iiii", playerid, GetPVarInt(playerid, "ManageFlagID"), target, GetPVarInt(playerid, "viewingflags"));
+					mysql_format(MainPipeline, string, sizeof(string), "SELECT id, flag, issuer, time, type FROM `flags` WHERE `fid` = %i", GetPVarInt(playerid, "ManageFlagID"));
+					mysql_tquery(MainPipeline, string, "OnRequestTransferFlag", "iiii", playerid, GetPVarInt(playerid, "ManageFlagID"), target, GetPVarInt(playerid, "viewingflags"));
 				}
 				if(listitem == 0)
 				{
-					format(string, sizeof(string), "SELECT fid, issuer, flag, time FROM `flags` WHERE fid = %d", GetPVarInt(playerid, "ManageFlagID"));
-					mysql_function_query(MainPipeline, string, true, "FlagQueryFinish", "iii", playerid, GetPVarInt(playerid, "viewingflags"), 0);
+					mysql_format(MainPipeline, string, sizeof(string), "SELECT fid, issuer, flag, time FROM `flags` WHERE fid = %d", GetPVarInt(playerid, "ManageFlagID"));
+					mysql_tquery(MainPipeline, string, "FlagQueryFinish", "iii", playerid, GetPVarInt(playerid, "viewingflags"), 0);
 				}
 				if(listitem == 1)
 				{
@@ -6398,8 +6423,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				}
 				if(listitem == 2)
 				{
-					format(string, sizeof(string), "SELECT flag, issuer, time, type FROM `flags` WHERE `fid` = %i", GetPVarInt(playerid, "ManageFlagID"));
-					mysql_function_query(MainPipeline, string, true, "OnRequestDeleteFlag", "ii", playerid, GetPVarInt(playerid, "ManageFlagID"));
+					mysql_format(MainPipeline, string, sizeof(string), "SELECT flag, issuer, time, type FROM `flags` WHERE `fid` = %i", GetPVarInt(playerid, "ManageFlagID"));
+					mysql_tquery(MainPipeline, string, "OnRequestDeleteFlag", "ii", playerid, GetPVarInt(playerid, "ManageFlagID"));
 				}
 			}
 		}
@@ -6411,8 +6436,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			new flagid;
 			if(sscanf(inputtext, "d", flagid)) return ShowPlayerDialogEx(playerid, FLAG_DELETE, DIALOG_STYLE_INPUT, "FLAG DELETION", "Which flag would you like to delete?", "Delete Flag", "Close");
 			new query[128];
-			format(query, sizeof(query), "SELECT flag, issuer, time, type FROM `flags` WHERE `fid` = %i", flagid);
-			mysql_function_query(MainPipeline, query, true, "OnRequestDeleteFlag", "ii", playerid, flagid);
+			mysql_format(MainPipeline, query, sizeof(query), "SELECT flag, issuer, time, type FROM `flags` WHERE `fid` = %i", flagid);
+			mysql_tquery(MainPipeline, query, "OnRequestDeleteFlag", "ii", playerid, flagid);
 		}
 	}
 	else if(dialogid == FLAG_DELETE2)
@@ -6430,8 +6455,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			new query[128];
 			SetPVarInt(playerid, "closetchoiceid", listitem);
-			format(query, sizeof(query), "SELECT `skinid` FROM `house_closet` WHERE playerid = %d ORDER BY `skinid` ASC", GetPlayerSQLId(playerid));
-			mysql_function_query(MainPipeline, query, true, "SkinQueryFinish", "ii", playerid, Skin_Query_ID);
+			mysql_format(MainPipeline, query, sizeof(query), "SELECT `skinid` FROM `house_closet` WHERE playerid = %d ORDER BY `skinid` ASC", GetPlayerSQLId(playerid));
+			mysql_tquery(MainPipeline, query, "SkinQueryFinish", "ii", playerid, Skin_Query_ID);
 		}
 	}
 	else if(dialogid == SKIN_CONFIRM)
@@ -6456,8 +6481,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			new query[128];
 			SetPVarInt(playerid, "closetchoiceid", listitem);
-			format(query, sizeof(query), "SELECT `id`, `skinid` FROM `house_closet` WHERE playerid = %d ORDER BY `skinid` ASC", GetPlayerSQLId(playerid));
-			mysql_function_query(MainPipeline, query, true, "SkinQueryFinish", "ii", playerid, Skin_Query_Delete_ID);
+			mysql_format(MainPipeline, query, sizeof(query), "SELECT `id`, `skinid` FROM `house_closet` WHERE playerid = %d ORDER BY `skinid` ASC", GetPlayerSQLId(playerid));
+			mysql_tquery(MainPipeline, query, "SkinQueryFinish", "ii", playerid, Skin_Query_Delete_ID);
 		}
 	}
 	else if(dialogid == SKIN_DELETE2)
@@ -6490,16 +6515,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			switch(arrGroupData[PlayerInfo[playerid][pMember]][g_iAllegiance])
 			{
-				case 1: mysql_function_query(MainPipeline, "SELECT `id`, `playerid`, `name` FROM `nation_queue` WHERE `nation` = 0 AND `status` = 1 ORDER BY `id` ASC", true, "NationAppFinish", "ii", playerid, AcceptApp);
-				case 2: mysql_function_query(MainPipeline, "SELECT `id`, `playerid`, `name` FROM `nation_queue` WHERE `nation` = 1 AND `status` = 1 ORDER BY `id` ASC", true, "NationAppFinish", "ii", playerid, AcceptApp);
+				case 1: mysql_tquery(MainPipeline, "SELECT `id`, `playerid`, `name` FROM `nation_queue` WHERE `nation` = 0 AND `status` = 1 ORDER BY `id` ASC", "NationAppFinish", "ii", playerid, AcceptApp);
+				case 2: mysql_tquery(MainPipeline, "SELECT `id`, `playerid`, `name` FROM `nation_queue` WHERE `nation` = 1 AND `status` = 1 ORDER BY `id` ASC", "NationAppFinish", "ii", playerid, AcceptApp);
 			}
 		}
 		else
 		{
 			switch(arrGroupData[PlayerInfo[playerid][pMember]][g_iAllegiance])
 			{
-				case 1: mysql_function_query(MainPipeline, "SELECT `id`, `playerid`, `name` FROM `nation_queue` WHERE `nation` = 0 AND `status` = 1 ORDER BY `id` ASC", true, "NationAppFinish", "ii", playerid, DenyApp);
-				case 2: mysql_function_query(MainPipeline, "SELECT `id`, `playerid`, `name` FROM `nation_queue` WHERE `nation` = 1 AND `status` = 1 ORDER BY `id` ASC", true, "NationAppFinish", "ii", playerid, DenyApp);
+				case 1: mysql_tquery(MainPipeline, "SELECT `id`, `playerid`, `name` FROM `nation_queue` WHERE `nation` = 0 AND `status` = 1 ORDER BY `id` ASC", "NationAppFinish", "ii", playerid, DenyApp);
+				case 2: mysql_tquery(MainPipeline, "SELECT `id`, `playerid`, `name` FROM `nation_queue` WHERE `nation` = 1 AND `status` = 1 ORDER BY `id` ASC", "NationAppFinish", "ii", playerid, DenyApp);
 			}
 		}
 	}
@@ -6851,7 +6876,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				}
 				case 1: //OOC Hit
 				{
-					ShowPlayerDialogEx(playerid, DIALOG_NOTHING, DIALOG_STYLE_MSGBOX, "OOC Hit", "{FFFFFF}OOC Hits are to be handled on the forums. (Player Complaint)\n\n                 ng-gaming.com/forums", "Close", "");
+					ShowPlayerDialogEx(playerid, DIALOG_NOTHING, DIALOG_STYLE_MSGBOX, "OOC Hit", "{FFFFFF}OOC Hits are to be handled on the forums. (Player Complaint)\n\n                 ng-gaming.net/forums", "Close", "");
 				}
 				case 2: //Server Advertising
 				{
@@ -7560,8 +7585,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			mysql_escape_string(newname, tmpName);
 			SetPVarString(Player, "NewNameRequest", tmpName);
 
-			format(string, sizeof(string), "SELECT `Username` FROM `accounts` WHERE `Username`='%s'", tmpName);
-			mysql_function_query(MainPipeline, string, true, "OnApproveName", "ii", playerid, Player);
+			mysql_format(MainPipeline, string, sizeof(string), "SELECT `Username` FROM `accounts` WHERE `Username`='%s'", tmpName);
+			mysql_tquery(MainPipeline, string, "OnApproveName", "ii", playerid, Player);
 
 		}
 		else
@@ -7591,10 +7616,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			new newname[25], tmpName[25], query[128];
 			GetPVarString(Player, "NewRFLName", newname, MAX_PLAYER_NAME);
-			mysql_real_escape_string(newname, tmpName);
+			mysql_escape_string(newname, tmpName);
 			SetPVarString(Player, "NewRFLName", tmpName);
-			format(query, sizeof(query), "SELECT `name` FROM `rflteams` WHERE `name` = '%s'", tmpName);
-			mysql_function_query(MainPipeline, query, true, "OnCheckRFLName", "ii", playerid, Player);
+			mysql_format(MainPipeline, query, sizeof(query), "SELECT `name` FROM `rflteams` WHERE `name` = '%s'", tmpName);
+			mysql_tquery(MainPipeline, query, "OnCheckRFLName", "ii", playerid, Player);
 		}
 		else
 		{
@@ -7733,8 +7758,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(giveplayer == INVALID_PLAYER_ID)
 		{
 			new szQuery[256];
-			format(szQuery, sizeof(szQuery), "SELECT `id`, `AdminLevel`, `TogReports` FROM `accounts` WHERE `Username` = '%s'", g_mysql_ReturnEscaped(inputtext,MainPipeline));
-			mysql_function_query(MainPipeline, szQuery, true, "RecipientLookupFinish", "i", playerid);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "SELECT `id`, `AdminLevel`, `TogReports` FROM `accounts` WHERE `Username` = '%e'", inputtext);
+			mysql_tquery(MainPipeline, szQuery, "RecipientLookupFinish", "i", playerid);
 		}
 		else
 		{
@@ -7783,8 +7808,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			Misc_Save();
 		}
 
-		format(query,sizeof(query),	"INSERT INTO `letters` (`Sender_Id`, `Receiver_Id`, `Date`, `Message`, `Delivery_Min`, `Notify`) VALUES (%d, %d, NOW(), '%s', %d, %d)", GetPlayerSQLId(playerid), GetPVarInt(playerid, "LetterRecipient"), g_mysql_ReturnEscaped(inputtext, MainPipeline), GetPVarInt(playerid, "LetterTime"), GetPVarInt(playerid, "LetterNotify"));
-		mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+		mysql_format(MainPipeline, query,sizeof(query),	"INSERT INTO `letters` (`Sender_Id`, `Receiver_Id`, `Date`, `Message`, `Delivery_Min`, `Notify`) VALUES (%d, %d, NOW(), '%e', %d, %d)", GetPlayerSQLId(playerid), GetPVarInt(playerid, "LetterRecipient"), inputtext, GetPVarInt(playerid, "LetterTime"), GetPVarInt(playerid, "LetterNotify"));
+		mysql_tquery(MainPipeline, query, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 
 		GetPVarString(playerid, "LetterRecipientName", rec, MAX_PLAYER_NAME);
 		if (GetPVarInt(playerid, "LetterTime") == 0)
@@ -7837,8 +7862,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else // Trash
 		{
 			new query[64];
-			format(query, sizeof(query), "DELETE FROM `letters` WHERE `ID` = %i", GetPVarInt(playerid, "ReadingMail"));
-			mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, query, sizeof(query), "DELETE FROM `letters` WHERE `ID` = %i", GetPVarInt(playerid, "ReadingMail"));
+			mysql_tquery(MainPipeline, query, "OnQueryFinish", "i", SENDDATA_THREAD);
 			ShowPlayerDialogEx(playerid, DIALOG_POTRASHED, DIALOG_STYLE_MSGBOX, "Info", "You've trashed your mail.", "Back", "Close");
 		}
 		DeletePVar(playerid, "ReadingMail");
@@ -8178,7 +8203,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	else if (dialogid == DIALOG_HBADGE && response)
 	{
 
-		if (!IsAHitman(playerid)) return 0;
+		if (!IsAHitman(playerid)) return 1;
 
 		new	iGroupID = listitem;
 
@@ -8191,7 +8216,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				SendClientMessageEx(playerid, COLOR_WHITE, string);
 				SetPlayerColor(playerid, arrGroupData[iGroupID][g_hDutyColour] * 256);
 				SetPVarInt(playerid, "HitmanBadgeColour", arrGroupData[iGroupID][g_hDutyColour] * 256);
-				SetPVarInt(playerid, "HitmanGroupID", listitem);
 			}
 			default: {
 				SendClientMessageEx(playerid, COLOR_GREY, "Invalid group specified.");
@@ -9314,8 +9338,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
 			SetPVarString(playerid, "PinNumber", inputtext);
 
-			format(string, sizeof(string), "SELECT `Pin` FROM `accounts` WHERE `Username` = '%s'", GetPlayerNameExt(playerid));
-			mysql_function_query(MainPipeline, string, true, "OnPinCheck2", "i", playerid);
+			mysql_format(MainPipeline, string, sizeof(string), "SELECT `Pin` FROM `accounts` WHERE `Username` = '%e'", GetPlayerNameExt(playerid));
+			mysql_tquery(MainPipeline, string, "OnPinCheck2", "i", playerid);
 
 		}
 	}
@@ -9347,17 +9371,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	{
 		if(response)
 		{
-			format(string, sizeof(string), "SELECT * FROM `sales` WHERE `id` = '%d'", Selected[playerid][listitem]);
+			mysql_format(MainPipeline, string, sizeof(string), "SELECT * FROM `sales` WHERE `id` = '%d'", Selected[playerid][listitem]);
 			SetPVarInt(playerid, "checkingsale", Selected[playerid][listitem]);
-			mysql_function_query(MainPipeline, string, true, "CheckSales2", "i", playerid);
+			mysql_tquery(MainPipeline, string, "CheckSales2", "i", playerid);
 		}
 	}
 	if(dialogid == DIALOG_VIEWSALE2)
 	{
 		if(response)
 		{
-			format(string, sizeof(string), "SELECT * FROM `sales` WHERE `id` = '%d'", GetPVarInt(playerid, "checkingsale"));
-			mysql_function_query(MainPipeline, string, true, "CheckSales3", "i", playerid);
+			mysql_format(MainPipeline, string, sizeof(string), "SELECT * FROM `sales` WHERE `id` = '%d'", GetPVarInt(playerid, "checkingsale"));
+			mysql_tquery(MainPipeline, string, "CheckSales3", "i", playerid);
 		}
 	}
 	if(dialogid == DIALOG_CREATEPIN2)
@@ -9390,8 +9414,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				WP_Hash(passbuffer, sizeof(passbuffer), inputtext);
 
 				new query[256];
-				format(query, sizeof(query), "UPDATE `accounts` SET `Pin`='%s' WHERE `id` = %d", passbuffer, GetPlayerSQLId(playerid));
-				mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+				mysql_format(MainPipeline, query, sizeof(query), "UPDATE `accounts` SET `Pin`='%s' WHERE `id` = %d", passbuffer, GetPlayerSQLId(playerid));
+				mysql_tquery(MainPipeline, query, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 				DeletePVar(playerid, "PinConfirm");
 				DeletePVar(playerid, "ChangePin");
 			}
@@ -9507,7 +9531,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(GetPVarInt(playerid, "MiscShop") == 1)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[6][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			else if(PlayerInfo[playerid][pTable] == 1)
 				return SendClientMessageEx(playerid, COLOR_GREY, "You already own a poker table.");
@@ -9519,8 +9543,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				//ShopItems[6][sSold]++;
 				//ShopItems[6][sMade] += ShopItems[6][sItemPrice];
 				new szQuery[128];
-				format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold6` = '%d', `AmountMade6` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[6], AmountMade[6]);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold6` = '%d', `AmountMade6` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[6], AmountMade[6]);
+				mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 				GivePlayerCredits(playerid, -ShopItems[6][sItemPrice], 1);
 				printf("Price6: %d", 250);
@@ -9537,7 +9561,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 2)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[7][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			else if(PlayerInfo[playerid][pBoombox] == 1)
 				return SendClientMessageEx(playerid, COLOR_GREY, "You already own a boombox.");
@@ -9549,8 +9573,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				//ShopItems[7][sSold]++;
 				//ShopItems[7][sMade] += ShopItems[7][sItemPrice];
 				new szQuery[128];
-				format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold7` = '%d', `AmountMade7` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[7], AmountMade[7]);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold7` = '%d', `AmountMade7` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[7], AmountMade[7]);
+				mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 				GivePlayerCredits(playerid, -ShopItems[7][sItemPrice], 1);
 				printf("Price7: %d", ShopItems[7][sItemPrice]);
@@ -9567,15 +9591,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 3)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[8][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			AmountSold[8]++;
 			AmountMade[8] += ShopItems[8][sItemPrice];
 			//ShopItems[8][sSold]++;
 			//ShopItems[8][sMade] += ShopItems[8][sItemPrice];
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold8` = '%d', `AmountMade8` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[8], AmountMade[8]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold8` = '%d', `AmountMade8` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[8], AmountMade[8]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			GivePlayerCredits(playerid, -ShopItems[8][sItemPrice], 1);
 			printf("Price8: %d", ShopItems[8][sItemPrice]);
@@ -9591,15 +9615,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 4)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[9][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			AmountSold[9]++;
 			AmountMade[9] += ShopItems[9][sItemPrice];
 			//ShopItems[9][sSold]++;
 			//ShopItems[9][sMade] += ShopItems[9][sItemPrice];
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold9` = '%d', `AmountMade9` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[9], AmountMade[9]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold9` = '%d', `AmountMade9` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[9], AmountMade[9]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			GivePlayerCredits(playerid, -ShopItems[9][sItemPrice], 1);
 			printf("Price9: %d", ShopItems[9][sItemPrice]);
@@ -9615,15 +9639,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 5)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[10][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			AmountSold[10]++;
 			AmountMade[10] += ShopItems[10][sItemPrice];
 			//ShopItems[10][sSold]++;
 			//ShopItems[10][sMade] += ShopItems[10][sItemPrice];
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold10` = '%d', `AmountMade10` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[10], AmountMade[10]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold10` = '%d', `AmountMade10` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[10], AmountMade[10]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			GivePlayerCredits(playerid, -ShopItems[10][sItemPrice], 1);
 			printf("Price10: %d", ShopItems[10][sItemPrice]);
@@ -9639,7 +9663,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 6)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[22][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[22][sItemPrice], 1);
 			printf("Price22: %d", ShopItems[22][sItemPrice]);
@@ -9649,8 +9673,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			//ShopItems[22][sSold]++;
 			//ShopItems[22][sMade] += ShopItems[22][sItemPrice];
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold22` = '%d', `AmountMade22` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[22], AmountMade[22]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold22` = '%d', `AmountMade22` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[22], AmountMade[22]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased Custom License Plate (Credits)");
 			SendReportToQue(playerid, "Custom License Plate (Credits)", 2, 2);
@@ -9664,7 +9688,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 7) // Vehicle Slots
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[23][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[23][sItemPrice], 1);
 			printf("Price23: %d", ShopItems[23][sItemPrice]);
@@ -9674,8 +9698,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold23` = '%d', `AmountMade23` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[23], AmountMade[23]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold23` = '%d', `AmountMade23` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[23], AmountMade[23]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			format(string, sizeof(string), "You have purchased a additional vehicle slot for %s credits.", number_format(ShopItems[23][sItemPrice]));
 			SendClientMessageEx(playerid, COLOR_CYAN, string);
@@ -9688,7 +9712,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 8) // Toy Slots
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[28][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[28][sItemPrice], 1);
 			printf("Price28: %d", ShopItems[28][sItemPrice]);
@@ -9698,8 +9722,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold28` = '%d', `AmountMade28` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[28], AmountMade[28]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold28` = '%d', `AmountMade28` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[28], AmountMade[28]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			format(string, sizeof(string), "You have purchased a additional toy slot for %s credits.", number_format(ShopItems[28][sItemPrice]));
 			SendClientMessageEx(playerid, COLOR_CYAN, string);
@@ -9712,7 +9736,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 9) // Spawn at Gold VIP+ room
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[30][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[30][sItemPrice], 1);
 			printf("Price30: %d", ShopItems[30][sItemPrice]);
@@ -9722,8 +9746,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold30` = '%d', `AmountMade30` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[30], AmountMade[30]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold30` = '%d', `AmountMade30` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[30], AmountMade[30]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			format(string, sizeof(string), "You have purchased a spawn at the Gold VIP+ room, you will be able to use it after your next death.", number_format(ShopItems[30][sItemPrice]));
 			SendClientMessageEx(playerid, COLOR_CYAN, string);
@@ -9737,7 +9761,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 10) // Restricted Last Name (NEW)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[31][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[31][sItemPrice], 1);
 			printf("Price31: %d", ShopItems[31][sItemPrice]);
@@ -9746,8 +9770,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[31] += ShopItems[31][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold31` = '%d', `AmountMade31` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[31], AmountMade[31]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold31` = '%d', `AmountMade31` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[31], AmountMade[31]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased Restricted Last Name (NEW) (Credits)");
 			format(string, sizeof(string), "You have purchased a Restricted Last Name (NEW) for %s credits.", number_format(ShopItems[31][sItemPrice]));
@@ -9760,7 +9784,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 11) // Restricted Last Name (CHANGE)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[32][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[32][sItemPrice], 1);
 			printf("Price32: %d", ShopItems[32][sItemPrice]);
@@ -9769,8 +9793,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[32] += ShopItems[32][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold32` = '%d', `AmountMade32` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[32], AmountMade[32]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold32` = '%d', `AmountMade32` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[32], AmountMade[32]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased Restricted Last Name (CHANGE) (Credits)");
 			format(string, sizeof(string), "You have purchased a Restricted Last Name (CHANGE) for %s credits.", number_format(ShopItems[32][sItemPrice]));
@@ -9783,7 +9807,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 12) // Custom User Title (NEW)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[33][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[33][sItemPrice], 1);
 			printf("Price33: %d", ShopItems[33][sItemPrice]);
@@ -9792,8 +9816,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[33] += ShopItems[33][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold33` = '%d', `AmountMade33` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[33], AmountMade[33]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold33` = '%d', `AmountMade33` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[33], AmountMade[33]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased Custom User Title (NEW) (Credits)");
 			format(string, sizeof(string), "You have purchased a Custom User Title (NEW) for %s credits.", number_format(ShopItems[33][sItemPrice]));
@@ -9806,7 +9830,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 13) // Custom User Title (CHANGE)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[34][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[34][sItemPrice], 1);
 			printf("Price34: %d", ShopItems[34][sItemPrice]);
@@ -9815,8 +9839,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[34] += ShopItems[34][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold34` = '%d', `AmountMade34` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[34], AmountMade[34]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold34` = '%d', `AmountMade34` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[34], AmountMade[34]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased Custom User Title (CHANGE) (Credits)");
 			format(string, sizeof(string), "You have purchased a Restricted Custom User Title (CHANGE) for %s credits.", number_format(ShopItems[34][sItemPrice]));
@@ -9829,7 +9853,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 14) // Teamspeak User Channel
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[35][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[35][sItemPrice], 1);
 			printf("Price35: %d", ShopItems[35][sItemPrice]);
@@ -9838,8 +9862,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[35] += ShopItems[35][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold35` = '%d', `AmountMade35` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[35], AmountMade[35]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold35` = '%d', `AmountMade35` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[35], AmountMade[35]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased Teamspeak User Channel (Credits)");
 			format(string, sizeof(string), "You have purchased a Teamspeak User Channel for %s credits.", number_format(ShopItems[35][sItemPrice]));
@@ -9853,7 +9877,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(PlayerInfo[playerid][pBackpack] > 0) return SendClientMessageEx(playerid, COLOR_GREY, "You can only purchase one backpack at a time, use /sellbackpack.");
 			if(PlayerInfo[playerid][pCredits] < ShopItems[36][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[36][sItemPrice], 1);
 			printf("Price35: %d", ShopItems[36][sItemPrice]);
@@ -9862,8 +9886,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[36] += ShopItems[36][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold36` = '%d', `AmountMade36` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[36], AmountMade[36]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold36` = '%d', `AmountMade36` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[36], AmountMade[36]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 			if(PlayerHoldingObject[playerid][9] != 0 || IsPlayerAttachedObjectSlotUsed(playerid, 9))
 				RemovePlayerAttachedObject(playerid, 9), PlayerHoldingObject[playerid][9] = 0;
 			SetPlayerAttachedObject(playerid, 9, 371, 1, -0.002, -0.140999, -0.01, 8.69999, 88.8, -8.79993, 1.11, 0.963);
@@ -9884,7 +9908,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(PlayerInfo[playerid][pBackpack] > 0) return SendClientMessageEx(playerid, COLOR_GREY, "You can only purchase one backpack at a time, use /sellbackpack.");
 			if(PlayerInfo[playerid][pCredits] < ShopItems[37][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[37][sItemPrice], 1);
 			printf("Price35: %d", ShopItems[37][sItemPrice]);
@@ -9893,8 +9917,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[37] += ShopItems[37][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold37` = '%d', `AmountMade37` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[37], AmountMade[37]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold37` = '%d', `AmountMade37` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[37], AmountMade[37]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 			if(PlayerHoldingObject[playerid][9] != 0 || IsPlayerAttachedObjectSlotUsed(playerid, 9))
 				RemovePlayerAttachedObject(playerid, 9), PlayerHoldingObject[playerid][9] = 0;
 			SetPlayerAttachedObject(playerid, 9, 371, 1, -0.002, -0.140999, -0.01, 8.69999, 88.8, -8.79993, 1.11, 0.963);
@@ -9915,7 +9939,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(PlayerInfo[playerid][pBackpack] > 0) return SendClientMessageEx(playerid, COLOR_GREY, "You can only purchase one backpack at a time, use /sellbackpack.");
 			if(PlayerInfo[playerid][pCredits] < ShopItems[38][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[38][sItemPrice], 1);
 			printf("Price35: %d", ShopItems[38][sItemPrice]);
@@ -9924,8 +9948,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[38] += ShopItems[38][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold38` = '%d', `AmountMade38` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[38], AmountMade[38]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold38` = '%d', `AmountMade38` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[38], AmountMade[38]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 			if(PlayerHoldingObject[playerid][9] != 0 || IsPlayerAttachedObjectSlotUsed(playerid, 9))
 				RemovePlayerAttachedObject(playerid, 9), PlayerHoldingObject[playerid][9] = 0;
 			SetPlayerAttachedObject(playerid, 9, 3026, 1, -0.254999, -0.109, -0.022999, 10.6, -1.20002, 3.4, 1.265, 1.242, 1.062);
@@ -9945,7 +9969,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 18) // Deluxe Car Alarm
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[39][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			if(GetPlayerVehicleCount(playerid) != 0)
 			{
@@ -9965,7 +9989,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		else if(GetPVarInt(playerid, "MiscShop") == 19) // Furniture Bronze
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[41][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			if(PlayerInfo[playerid][pFurnitureSlots] >= MAX_FURNITURE_SLOTS) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot buy anymore furniture slots.");
 			PlayerInfo[playerid][pFurnitureSlots] += 25;
@@ -9986,13 +10010,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountSold[41]++;
 			AmountMade[41] += ShopItems[41][sItemPrice];
 
-			format(szMiscArray, sizeof(szMiscArray), "UPDATE `sales` SET `TotalSold41` = '%d', `AmountMade41` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[41], AmountMade[41]);
-			mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `sales` SET `TotalSold41` = '%d', `AmountMade41` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[41], AmountMade[41]);
+			mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
 		}
 		else if(GetPVarInt(playerid, "MiscShop") == 20) // Furniture Bronze
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[42][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			if(PlayerInfo[playerid][pFurnitureSlots] >= MAX_FURNITURE_SLOTS) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot buy anymore furniture slots.");
 			PlayerInfo[playerid][pFurnitureSlots] += 40;
@@ -10013,13 +10037,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountSold[42]++;
 			AmountMade[42] += ShopItems[42][sItemPrice];
 
-			format(szMiscArray, sizeof(szMiscArray), "UPDATE `sales` SET `TotalSold42` = '%d', `AmountMade42` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[42], AmountMade[42]);
-			mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `sales` SET `TotalSold42` = '%d', `AmountMade42` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[42], AmountMade[42]);
+			mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
 		}
 		else if(GetPVarInt(playerid, "MiscShop") == 21) // Furniture Gold
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[43][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			if(PlayerInfo[playerid][pFurnitureSlots] >= MAX_FURNITURE_SLOTS) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot buy anymore furniture slots.");
 			PlayerInfo[playerid][pFurnitureSlots] += 50;
@@ -10040,8 +10064,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountSold[43]++;
 			AmountMade[43] += ShopItems[43][sItemPrice];
 
-			format(szMiscArray, sizeof(szMiscArray), "UPDATE `sales` SET `TotalSold43` = '%d', `AmountMade43` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[43], AmountMade[43]);
-			mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `sales` SET `TotalSold43` = '%d', `AmountMade43` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[43], AmountMade[43]);
+			mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
 		}
 	    DeletePVar(playerid, "MiscShop");
 	}
@@ -10183,7 +10207,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[20][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			new
 				szQuery[215];
@@ -10194,20 +10218,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			//ShopItems[20][sSold]++;
 			//ShopItems[20][sMade] += ShopItems[20][sItemPrice];
 
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold20` = '%d', `AmountMade20` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[20], AmountMade[20]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold20` = '%d', `AmountMade20` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[20], AmountMade[20]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			if(IsPlayerInRangeOfPoint(playerid, 4, 1102.8999, -1440.1669, 15.7969))
 			{
-				format(szQuery, sizeof(szQuery), "INSERT INTO `rentedcars` (`sqlid`, `modelid`, `posx`, `posy`, `posz`, `posa`, `spawned`, `hours`) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '1', '180')", GetPlayerSQLId(playerid), GetPVarInt(playerid, "VehicleID"), 1060.4927,-1474.9323,13.1905,345.2816);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "INSERT INTO `rentedcars` (`sqlid`, `modelid`, `posx`, `posy`, `posz`, `posa`, `spawned`, `hours`) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '1', '180')", GetPlayerSQLId(playerid), GetPVarInt(playerid, "VehicleID"), 1060.4927,-1474.9323,13.1905,345.2816);
+				mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 				SetPVarInt(playerid, "RentedVehicle", CreateVehicle(GetPVarInt(playerid, "VehicleID"), 1060.4927, -1474.9323, 13.1905, 345.2816, random(128), random(128), 2000000));
 			}
 			else if(IsPlayerInRangeOfPoint(playerid, 4, 1796.0620, -1588.5571, 13.4951))
 			{
-				format(szQuery, sizeof(szQuery), "INSERT INTO `rentedcars` (`sqlid`, `modelid`, `posx`, `posy`, `posz`, `posa`, `spawned`, `hours`) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '1', '180')", GetPlayerSQLId(playerid), GetPVarInt(playerid, "VehicleID"), 1787.6924, -1605.8617,13.1750, 76.7439);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "INSERT INTO `rentedcars` (`sqlid`, `modelid`, `posx`, `posy`, `posz`, `posa`, `spawned`, `hours`) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '1', '180')", GetPlayerSQLId(playerid), GetPVarInt(playerid, "VehicleID"), 1787.6924, -1605.8617,13.1750, 76.7439);
+				mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 				SetPVarInt(playerid, "RentedVehicle", CreateVehicle(GetPVarInt(playerid, "VehicleID"), 1787.6924, -1605.8617, 13.1750, 76.7439, random(128), random(128), 2000000));
 			}
@@ -10234,7 +10258,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[5][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			else if(!vehicleCountCheck(playerid))
 				return ShowPlayerDialogEx(playerid, 0, DIALOG_STYLE_MSGBOX, "Error", "You can't have any more vehicles, you own too many!", "OK", "");
@@ -10275,8 +10299,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					//ShopItems[5][sSold]++;
 					//ShopItems[5][sMade] += ShopItems[5][sItemPrice];
 					new szQuery[128];
-					format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold5` = '%d', `AmountMade5` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[5], AmountMade[5]);
-					mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+					mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold5` = '%d', `AmountMade5` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[5], AmountMade[5]);
+					mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 					new Float: arr_fPlayerPos[4];
 
@@ -10301,8 +10325,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					//ShopItems[5][sMade] += ShopItems[5][sItemPrice];
 
 					new szQuery[128];
-					format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold5` = '%d', `AmountMade5` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[5], AmountMade[5]);
-					mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+					mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold5` = '%d', `AmountMade5` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[5], AmountMade[5]);
+					mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 					new Float: arr_fPlayerPos[4], createdcar;
 
@@ -10753,7 +10777,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			Prices = GetPVarInt(playerid, "BusinessPrice");
 
 			if(PlayerInfo[playerid][pCredits] < Prices)
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			if(!GetPVarType(playerid, "BusinessMonths"))
 				return SendClientMessageEx(playerid, COLOR_GREY, "An error has occurred please try again.");
@@ -10767,7 +10791,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					AmountMade[11] += Prices;
 					//ShopItems[11][sSold]++;
 					//ShopItems[11][sMade] += Prices;
-					format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold11` = '%d', `AmountMade11` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[11], AmountMade[11]);
+					mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold11` = '%d', `AmountMade11` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[11], AmountMade[11]);
 				}
 				case 2:
 				{
@@ -10775,7 +10799,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					AmountMade[12] += Prices;
 					//ShopItems[12][sSold]++;
 					//ShopItems[12][sMade] += Prices;
-					format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold12` = '%d', `AmountMade12` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[12], AmountMade[12]);
+					mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold12` = '%d', `AmountMade12` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[12], AmountMade[12]);
 				}
 				case 3:
 				{
@@ -10783,11 +10807,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					AmountMade[13] += Prices;
 					//ShopItems[13][sSold]++;
 					//ShopItems[13][sMade] += Prices;
-					format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold13` = '%d', `AmountMade13` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[13], AmountMade[13]);
+					mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold13` = '%d', `AmountMade13` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[13], AmountMade[13]);
 				}
 			}
 
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			new Months = GetPVarInt(playerid, "BusinessMonths");
 			GivePlayerCredits(playerid, -Prices, 1);
@@ -10820,7 +10844,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < BusinessSales[GetPVarInt(playerid, "BusinessSale")][bPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			if (PlayerInfo[playerid][pBusiness] != INVALID_BUSINESS_ID)
 				return SendClientMessageEx(playerid, COLOR_GREY, "You already own a business.");
@@ -10913,7 +10937,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[14][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[14][sItemPrice], 1);
 			printf("Price14: %d", ShopItems[14][sItemPrice]);
@@ -10922,8 +10946,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			//ShopItems[14][sSold]++;
 			//ShopItems[14][sMade] += ShopItems[14][sItemPrice];
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold14` = '%d', `AmountMade14` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[14], AmountMade[14]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold14` = '%d', `AmountMade14` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[14], AmountMade[14]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased House (Credits)");
 			SendReportToQue(playerid, "House (Credits)", 2, 2);
@@ -10940,7 +10964,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[15][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[15][sItemPrice], 1);
 			printf("Price15: %d", ShopItems[15][sItemPrice]);
@@ -10949,8 +10973,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			//ShopItems[15][sSold]++;
 			//ShopItems[15][sMade] += ShopItems[15][sItemPrice];
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold15` = '%d', `AmountMade15` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[15], AmountMade[15]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold15` = '%d', `AmountMade15` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[15], AmountMade[15]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased House Interior Change (Credits)");
 			SendReportToQue(playerid, "House Interior Change (Credits)", 2, 2);
@@ -10967,7 +10991,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[16][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[16][sItemPrice], 1);
 			printf("Price16: %d", ShopItems[16][sItemPrice]);
@@ -10976,8 +11000,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			//ShopItems[16][sSold]++;
 			//ShopItems[16][sMade] += ShopItems[16][sItemPrice];
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold16` = '%d', `AmountMade16` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[16], AmountMade[16]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold16` = '%d', `AmountMade16` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[16], AmountMade[16]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			AddFlag(playerid, INVALID_PLAYER_ID, "Purchased House Move (Credits)");
 			SendReportToQue(playerid, "House Move (Credits)", 2, 2);
@@ -10994,7 +11018,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[24][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[24][sItemPrice], 1);
 			printf("Price24: %d", ShopItems[24][sItemPrice]);
@@ -11002,8 +11026,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[24] += ShopItems[24][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold24` = '%d', `AmountMade24` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[24], AmountMade[24]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold24` = '%d', `AmountMade24` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[24], AmountMade[24]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			GarageVW++;
 			g_mysql_SaveMOTD();
@@ -11024,7 +11048,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[25][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[25][sItemPrice], 1);
 			printf("Price25: %d", ShopItems[25][sItemPrice]);
@@ -11032,8 +11056,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[25] += ShopItems[25][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold25` = '%d', `AmountMade25` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[25], AmountMade[25]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold25` = '%d', `AmountMade25` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[25], AmountMade[25]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			GarageVW++;
 			g_mysql_SaveMOTD();
@@ -11054,7 +11078,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[26][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[26][sItemPrice], 1);
 			printf("Price26: %d", ShopItems[26][sItemPrice]);
@@ -11062,8 +11086,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[26] += ShopItems[26][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold26` = '%d', `AmountMade26` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[26], AmountMade[26]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold26` = '%d', `AmountMade26` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[26], AmountMade[26]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			GarageVW++;
 			g_mysql_SaveMOTD();
@@ -11084,7 +11108,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[27][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -ShopItems[27][sItemPrice], 1);
 			printf("Price27: %d", ShopItems[27][sItemPrice]);
@@ -11092,8 +11116,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			AmountMade[27] += ShopItems[27][sItemPrice];
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold27` = '%d', `AmountMade27` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[27], AmountMade[27]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold27` = '%d', `AmountMade27` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[27], AmountMade[27]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			GarageVW++;
 			g_mysql_SaveMOTD();
@@ -11286,7 +11310,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < GetPVarInt(playerid, "VIPPrice"))
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			if(PlayerInfo[playerid][pDonateRank] != 0)
 				return SendClientMessageEx(playerid, COLOR_GREY, "You already have VIP, please wait for it to expire.");
@@ -11328,7 +11352,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				AmountMade[1] += GetPVarInt(playerid, "VIPPrice");
 				VIPType = "Gold";
 				//ShopItems[1][sMade] += GetPVarInt(playerid, "VIPPrice");
-				format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold1` = '%d', `AmountMade1` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[1], AmountMade[1]);
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold1` = '%d', `AmountMade1` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[1], AmountMade[1]);
 				DeletePVar(playerid, "GoldRenewal");
 			}
 			else
@@ -11341,7 +11365,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						AmountMade[3] += GetPVarInt(playerid, "VIPPrice");
 						//ShopItems[3][sSold]++;
 						//ShopItems[3][sMade] += GetPVarInt(playerid, "VIPPrice");
-						format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold3` = '%d', `AmountMade3` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[3], AmountMade[3]);
+						mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold3` = '%d', `AmountMade3` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[3], AmountMade[3]);
 					}
 					case 2:
 					{
@@ -11350,7 +11374,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						AmountMade[2] += GetPVarInt(playerid, "VIPPrice");
 						//ShopItems[2][sSold]++;
 						//ShopItems[2][sMade] += GetPVarInt(playerid, "VIPPrice");
-						format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold2` = '%d', `AmountMade2` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[2], AmountMade[2]);
+						mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold2` = '%d', `AmountMade2` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[2], AmountMade[2]);
 					}
 					case 3:
 					{
@@ -11359,12 +11383,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						AmountMade[0] += GetPVarInt(playerid, "VIPPrice");
 						//ShopItems[0][sSold]++;
 						//ShopItems[0][sMade] += GetPVarInt(playerid, "VIPPrice");
-						format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold0` = '%d', `AmountMade0` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[0], AmountMade[0]);
+						mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold0` = '%d', `AmountMade0` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[0], AmountMade[0]);
 					}
 				}
 			}
 
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			format(string, sizeof(string), "You have purchased %s VIP (%d Month(s)) for %s credits.", VIPType,GetPVarInt(playerid, "VIPMonths"), number_format(GetPVarInt(playerid, "VIPPrice")));
 			SendClientMessageEx(playerid, COLOR_CYAN, string);
@@ -11381,7 +11405,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < ShopItems[17][sItemPrice])
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			PlayerInfo[playerid][pGiftTime] = 0;
 
@@ -11395,8 +11419,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			//ShopItems[17][sSold]++;
 			//ShopItems[17][sMade] += ShopItems[17][sItemPrice];
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold17` = '%d', `AmountMade17` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[17], AmountMade[17]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold17` = '%d', `AmountMade17` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[17], AmountMade[17]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			format(string, sizeof(string), "[GIFTTIMERRESET] [User: %s(%i)] [IP: %s] [Credits: %s] [Gift Timer Reset] [Price: %s]",GetPlayerNameEx(playerid), GetPlayerSQLId(playerid), GetPlayerIpEx(playerid), number_format(PlayerInfo[playerid][pCredits]), number_format(ShopItems[17][sItemPrice]));
 			Log("logs/credits.log", string), print(string);
@@ -11407,7 +11431,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < 20)
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			PlayerInfo[playerid][pTrickortreat] = 0;
 
@@ -11443,7 +11467,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			if(PumpkinStock <= 0)
 				return SendClientMessageEx(playerid, COLOR_GREY, "This limited item has sold out!");
 			if(PlayerInfo[playerid][pCredits] < 150)
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -150, 1);
 			PumpkinStock--;
@@ -11512,7 +11536,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			if(PlayerInfo[playerid][pCredits] < 150)
-				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+				return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			GivePlayerCredits(playerid, -150, 1);
 			format(string, sizeof(string), "You have purchased the Cluckin Bell Hat toy for %s credits.", number_format(150));
@@ -11622,7 +11646,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	{
 		if(PlayerInfo[playerid][pCredits] < ShopItems[4][sItemPrice])
 		{
-			SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits for that item. Purchase some credits at shop.ng-gaming.com");
+			SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits for that item. Purchase some credits at shop.ng-gaming.net");
 		}
 		else
 		{
@@ -11646,8 +11670,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			//ShopItems[4][sSold]++;
 			//ShopItems[4][sMade] += ShopItems[4][sItemPrice];
 			new szQuery[1024];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold4` = '%d', `AmountMade4` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[4], AmountMade[4]);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold4` = '%d', `AmountMade4` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[4], AmountMade[4]);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			format(string, sizeof(string), "[TOY %i] [User: %s(%i)] [IP: %s] [Credits: %s] [Toy: %s] [Price: %s]", AmountSold[4], GetPlayerNameEx(playerid), GetPlayerSQLId(playerid), GetPlayerIpEx(playerid), number_format(PlayerInfo[playerid][pCredits]), name, number_format(ShopItems[4][sItemPrice]));
 			Log("logs/credits.log", string), print(string);
@@ -11784,8 +11808,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			//ShopItems[21][sSold]++;
 			//ShopItems[21][sMade] += GetPVarInt(playerid, "CreditsFirstAmount")-GetPVarInt(playerid, "CreditsAmount");
 
-			format(szMessage, sizeof(szMessage), "UPDATE `sales` SET `TotalSold21` = '%d', `AmountMade21` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[21], AmountMade[21]);
-			mysql_function_query(MainPipeline, szMessage, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szMessage, sizeof(szMessage), "UPDATE `sales` SET `TotalSold21` = '%d', `AmountMade21` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[21], AmountMade[21]);
+			mysql_tquery(MainPipeline, szMessage, "OnQueryFinish", "i", SENDDATA_THREAD);
 			print(szMessage);
 
 			format(szMessage, sizeof(szMessage), "You have accepted the offer of %s credits for $%s from %s.", number_format(GetPVarInt(playerid, "CreditsAmount")), number_format(GetPVarInt(playerid, "CreditsOffer")), GetPlayerNameEx(GetPVarInt(playerid, "CreditsSeller")));
@@ -11920,8 +11944,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			PlayerInfo[playerid][pArmsSkill] = 1200;
 
 			new szQuery[128];
-			format(szQuery, sizeof(szQuery), "UPDATE `accounts` SET `TotalCredits`=%d WHERE `id` = %d", PlayerInfo[playerid][pTotalCredits], GetPlayerSQLId(playerid));
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `TotalCredits`=%d WHERE `id` = %d", PlayerInfo[playerid][pTotalCredits], GetPlayerSQLId(playerid));
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 		}
 	}
 	if(dialogid == GIVETOY)
@@ -12001,7 +12025,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		{
 			if(response)
 			{
-				new resultline[1024], header[256], pvtstring[256], adminstring[128], advisorstring[128];
+				new resultline[1024], header[64], pvtstring[256], adminstring[128], advisorstring[128];
 
 				if (PlayerInfo[playerid][pAdmin] >= 2)
 				{
@@ -12011,11 +12035,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				if(PlayerInfo[playerid][pAdmin] >= 4 && PlayerInfo[targetid][pAdmin] >= 2) format(adminstring, sizeof(adminstring), "Accepted Reports: %s\nTrashed Reports: %s\n", number_format(PlayerInfo[targetid][pAcceptReport]), number_format(PlayerInfo[targetid][pTrashReport]));
 				if((PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pPR] >= 1 || PlayerInfo[playerid][pASM] >= 1) && PlayerInfo[targetid][pHelper] >= 2) format(advisorstring, sizeof(advisorstring), "Hours on Duty: %s\nAccepted Help Requests: %s\n", number_format(PlayerInfo[targetid][pDutyHours]), number_format(PlayerInfo[targetid][pAcceptedHelp]));
 
-                new szDate[3], szTime[3];
-                getdate(szDate[0], szDate[1], szDate[2]);
-                gettime(szTime[0], szTime[1], szTime[2]);
-
-		        format(header, sizeof(header), "%s's stats | %02d/%d/%02d %02d:%02d:%02d", GetPlayerNameEx(targetid), szDate[1], szDate[2], szDate[0], szTime[0], szTime[1], szTime[2]);
+				format(header, sizeof(header), "Showing Statistics of %s", GetPlayerNameEx(targetid));
 				format(resultline, sizeof(resultline),"{FFFFFF}Wanted Level: %d\n\
 					Crimes: %s\n\
 					Arrests: %s\n\
@@ -12147,7 +12167,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			}
 			// Do not comment this out! This is needed to re-format the ad with the proper format - Nathan
 			format(advert, sizeof(advert), "Advertisement: %s - contact: %s (%d)", advert, GetPlayerNameEx(reportid), PlayerInfo[reportid][pPnumber]);
-			SendDiscordMessage(7, advert);
 			SendClientMessageEx(reportid, -1, "Your Priority Advertisement has been approved & published.");
 			if(GetPVarInt(reportid, "AdvertVoucher") > 0)
 			{
@@ -12160,9 +12179,30 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				format(szString, sizeof(szString), "Platinum VIP: You have used a free advertisement, you have %d left for today.", PlayerInfo[reportid][pFreeAdsLeft]);
 				SendClientMessageEx(reportid, COLOR_YELLOW, szString);
 			}
-			GivePlayerCash(reportid, -5000);
-			shared = 5000 / 3;
-			iAdverTimer = gettime()+20;
+			else if(PlayerInfo[reportid][pDonateRank] == 2)
+			{
+				GivePlayerCash(reportid, -125000);
+				shared = 125000 / 3;
+				SendClientMessageEx(reportid, COLOR_YELLOW, "VIP Discount: You have paid $125,000 for being Silver VIP.");
+			}
+			else if(PlayerInfo[reportid][pDonateRank] == 3)
+			{
+				GivePlayerCash(reportid, -100000);
+				shared = 100000 / 3;
+				SendClientMessageEx(reportid, COLOR_YELLOW, "VIP Discount: You have paid $100,000 for being Gold VIP.");
+			}
+			else if(PlayerInfo[reportid][pDonateRank] >= 4)
+			{
+				GivePlayerCash(reportid, -50000);
+				shared = 50000 / 3;
+				SendClientMessageEx(reportid, COLOR_YELLOW, "VIP Discount: You have paid $50,000 for being Platinum VIP.");
+			}
+			else
+			{
+				GivePlayerCash(reportid, -150000);
+				shared = 150000 / 3;
+			}
+			iAdverTimer = gettime()+30;
 
 			if(shared > 0)
 			{
@@ -12179,7 +12219,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			{
 				if(!gNews[i] && InsideMainMenu{i} != 1 && InsideTut{i} != 1 && ActiveChatbox[i] != 0) SendClientMessage(i, TEAM_GROVE_COLOR, advert);
 			}
-			format(advert, sizeof(advert), "%s -- (%d)", advert, GetPlayerSQLId(reportid));
+			format(advert, sizeof(advert), "%s -- (SQLID: %d) | Accepted by: %s -- (SQLID: %d)", advert, GetPlayerSQLId(reportid), GetPlayerNameEx(playerid), GetPlayerSQLId(playerid));
 			Log("logs/pads.log", advert);
 
 			/*if(Homes[reportid] > 0 && AdvertType[reportid] == 1 && !PlayerInfo[playerid][pShopNotice])
@@ -12479,22 +12519,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				}
 				case 4:
 				{
-					if(PlayerInfo[playerid][pDrugSmuggler] >= 400)
+					if(PlayerInfo[playerid][pDrugSmuggler] >= 200)
 					{
 						SendClientMessageEx(playerid, COLOR_GREY, "Your skill level of this job is already the highest one.");
 						return 1;
 					}
-					PlayerInfo[playerid][pDrugSmuggler] = 400;
+					PlayerInfo[playerid][pDrugSmuggler] = 200;
 					SendClientMessageEx(playerid, COLOR_YELLOW, "Your Drugs Smuggling skill level has been set to 5.");
 				}
 				case 5:
 				{
-					if(PlayerInfo[playerid][pArmsSkill] >= 400)
+					if(PlayerInfo[playerid][pArmsSkill] >= 1200)
 					{
 						SendClientMessageEx(playerid, COLOR_GREY, "Your skill level of this job is already the highest one.");
 						return 1;
 					}
-					PlayerInfo[playerid][pArmsSkill] = 400;
+					PlayerInfo[playerid][pArmsSkill] = 1200;
 					SendClientMessageEx(playerid, COLOR_YELLOW, "Your Arms Dealer skill level has been set to 5.");
 				}
 				case 6:
@@ -12567,8 +12607,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			return ShowPlayerDialogEx(playerid, DIALOG_WDREPORT, DIALOG_STYLE_INPUT, "Incident Report", string, "Submit", "");
 		}
 		new szQuery[256];
-		format(szQuery, sizeof(szQuery), "INSERT INTO `watchdog_reports` (reporter, report, reported, type, time) VALUES ('%d', '%s', '%d', '%d', UNIX_TIMESTAMP())", GetPlayerSQLId(playerid), g_mysql_ReturnEscaped(inputtext, MainPipeline), GetPlayerSQLId(GetPVarInt(playerid, "SpectatingWatch")), GetPVarInt(playerid, "WDReport"));
-		mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+		mysql_format(MainPipeline, szQuery, sizeof(szQuery), "INSERT INTO `watchdog_reports` (reporter, report, reported, type, time) VALUES ('%d', '%e', '%d', '%d', UNIX_TIMESTAMP())", GetPlayerSQLId(playerid), inputtext, GetPlayerSQLId(GetPVarInt(playerid, "SpectatingWatch")), GetPVarInt(playerid, "WDReport"));
+		mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 		SendClientMessageEx(playerid, COLOR_GRAD4, inputtext);
 		SendClientMessageEx(playerid, COLOR_GRAD1, "Incident Report successfully submitted.");
 	}
@@ -12966,7 +13006,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(response)
 		{
 			new item = GetPVarInt(playerid, "m_Item");
-			if(PlayerInfo[playerid][pCredits] < MicroItems[item]) return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.com to purchase credits.");
+			if(PlayerInfo[playerid][pCredits] < MicroItems[item]) return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough credits to purchase this item. Visit shop.ng-gaming.net to purchase credits.");
 
 			AmountSoldMicro[item]++;
 			AmountMadeMicro[item] += MicroItems[item];
@@ -12978,8 +13018,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				if(m != MAX_MICROITEMS-1) strcat(asString, "|"), strcat(amString, "|");
 			}
 			new szQuery[512];
-			format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSoldMicro` = '%s', `AmountMadeMicro` = '%s' WHERE `Month` > NOW() - INTERVAL 1 MONTH", asString, amString);
-			mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+			mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSoldMicro` = '%s', `AmountMadeMicro` = '%s' WHERE `Month` > NOW() - INTERVAL 1 MONTH", asString, amString);
+			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 			GivePlayerCredits(playerid, -MicroItems[item], 1);
 			printf("MicroPrice%d: %d", item, MicroItems[item]);
@@ -13110,40 +13150,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			DeletePVar(playerid, "m_Response");
 		}
 	}
-	if(dialogid == DIALOG_SF_ELEVATOR)
-	{
-		if(response)
-		{
-			switch(listitem)
-			{
-				case 0:
-				{
-					SetPlayerPos(playerid, -1601.4095, 698.3928, 19.6729);
-				}
-				case 1:
-				{
-					SendClientMessageEx(playerid, COLOR_GRAD2, "You're already on this floor.");
-				}
-			}
-		}
-	}
-	if(dialogid == DIALOG_SF_ELEVATOR_2)
-	{
-		if(response)
-		{
-			switch(listitem)
-			{
-				case 0:
-				{
-					SendClientMessageEx(playerid, COLOR_GRAD2, "You're already on this floor.");
-				}
-				case 1:
-				{
-					SetPlayerPos(playerid, -1601.4095, 698.3928, 19.6729);
-				}
-			}
-		}
-	}
 	if(dialogid == DIALOG_EDITMICROSHOP)
 	{
 		if(response)
@@ -13240,9 +13246,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		if(!GetPVarType(Player, "hSignRequest")) return SendClientMessageEx(playerid, COLOR_GREY, "That person isn't requesting a namechange!");
 		if(response)
 		{
-			new desc[64];
+			new desc[64], escapeDesc[66];
 			GetPVarString(Player, "hSignRequestText", desc, 64);
-			format(HouseInfo[GetPVarInt(Player, "hSignRequest")][hSignDesc], 64, "%s", g_mysql_ReturnEscaped(desc, MainPipeline));
+			mysql_escape_string(desc, escapeDesc);
+			format(HouseInfo[GetPVarInt(Player, "hSignRequest")][hSignDesc], 64, "%s", escapeDesc);
 			SaveHouse(GetPVarInt(Player, "hSignRequest"));
 			SendClientMessageEx(Player, COLOR_YELLOW, "Your house sale sign text has been approved.");
 			format(string, sizeof(string), " You have approved %s's house sale sign text change on House ID: %d", GetPlayerNameEx(Player), GetPVarInt(Player, "hSignRequest"));

@@ -252,13 +252,23 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				}				
 				if(GetPVarInt(playerid, "AdvertVoucher") > 0)
 				{
-					ShowMainAdvertMenu(playerid);
 				}
 				else if(PlayerInfo[playerid][pFreeAdsLeft] > 0)
 				{
-					ShowMainAdvertMenu(playerid);	
 				}
-				else if(GetPlayerCash(playerid) < 5000) {
+				else if(PlayerInfo[playerid][pDonateRank] == 2 && GetPlayerCash(playerid) < 125000) {
+					ShowMainAdvertMenu(playerid);
+					return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough cash for this.");
+				}
+				else if(PlayerInfo[playerid][pDonateRank] == 3 && GetPlayerCash(playerid) < 100000) {
+					ShowMainAdvertMenu(playerid);
+					return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough cash for this.");
+				}
+				else if(PlayerInfo[playerid][pDonateRank] >= 4 && GetPlayerCash(playerid) < 50000) {
+					ShowMainAdvertMenu(playerid);
+					return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough cash for this.");
+				}
+				else if(PlayerInfo[playerid][pDonateRank] <= 1 && GetPlayerCash(playerid) < 150000) {
 					ShowMainAdvertMenu(playerid);
 					return SendClientMessageEx(playerid, COLOR_GREY, "You don't have enough cash for this.");
 				}

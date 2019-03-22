@@ -34,8 +34,8 @@
 
 
 //MySQL Connection Variable
-new MainPipeline;
-new ShopPipeline;
+new MySQL: MainPipeline;
+new MySQL: ShopPipeline;
 new ShopToggle = 0;
 
 #if defined zombiemode
@@ -91,7 +91,6 @@ enum VehicleNameShopEnum
 #endif
 
 new ToyList = mS_INVALID_LISTID, CarList = mS_INVALID_LISTID, PlaneList = mS_INVALID_LISTID, BoatList = mS_INVALID_LISTID,  CarList2 = mS_INVALID_LISTID,  ToyList2 = mS_INVALID_LISTID, CarList3 = mS_INVALID_LISTID, SkinList = mS_INVALID_LISTID;
-new RegiSkins = mS_INVALID_LISTID;
 
 new lockercosttype[][] = { "Locker Stock", "Group Budget", "Player" };
 new stock
@@ -372,11 +371,11 @@ new Tooltips[][] =
 	"Next Generation Gaming Staff will never ask you for your password.",
 	"Bored? Have a round of Paintball at the ~r~Paintball Arena~w~!",
 	"Remember! We log everything, and have auto-detection for the majority of hacks.",
-	"Don't have a voip server? No Problem! Use our ~b~TeamSpeak~w~ at ~y~ts.ng-gaming.com:9987~w~.",
-	"We are not just a sa-mp community, don't forget to check our other projects at ~y~ng-gaming.com~w~!",
-	"Don't forget to check out our E-store at ~y~shop.ng-gaming.com~w~, Helps keep this server up and running~w~!",
+	"Don't have a voip server? No Problem! Use our ~b~TeamSpeak~w~ at ~y~ts.ng-gaming.net:9987~w~.",
+	"We are not just a sa-mp community, don't forget to check our other projects at ~y~ng-gaming.net~w~!",
+	"Don't forget to check out our E-store at ~y~shop.ng-gaming.net~w~, Helps keep this server up and running~w~!",
 	"We have a full Advisors staff waiting to help you! Use ~g~/requesthelp~w~ to communicate with them!",
-	"Found a bug? Don't report it to our staff, please goto our bug forums at ~y~ng-gaming.com~w~.",
+	"Found a bug? Don't report it to our staff, please goto our bug forums at ~y~ng-gaming.net~w~.",
 	"Remember to read the ~r~rules~w~, failure to do so may lead toward punishment or even a ban.",
 	"Wait at least 5 minutes inbetween ~g~/reports~w~, We work hard to get to everyone who reports.",
 	"Want to make a suggestion? Our suggestions box is on our forums, submit away!",
@@ -787,8 +786,8 @@ new ShotPlayer[MAX_PLAYERS][MAX_PLAYERS];
 new LastShot[MAX_PLAYERS];
 new unbanip[MAX_PLAYERS][16];
 new GarbageVehicles[8];
-new TruckerVehicles[19];
-new PizzaVehicles[11];
+new TruckerVehicles[37];
+new PizzaVehicles[23];
 new VIPVehicles[50];
 new FamedVehicles[39];
 new Homes[MAX_PLAYERS];
@@ -812,7 +811,7 @@ new ReportCount[MAX_PLAYERS];
 new ReportHourCount[MAX_PLAYERS];
 new WDReportCount[MAX_PLAYERS];
 new WDReportHourCount[MAX_PLAYERS];
-new noooc = 0;
+new noooc = 1;
 new rflstatus = 0;
 new GlobalMOTD[128];
 new AdminMOTD[128];
@@ -1040,8 +1039,11 @@ new Float:JailPhonePos[5][3] = {
 
 new bool:bJailPhoneUse[5] = false;
 
-new Float:DMVRelease[1][3] = {
-{-2073.0342,-84.0594,34.9957}
+new Float:DMVRelease[4][3] = {
+{850.336,-583.911,18.250},
+{854.729,-583.911,18.250},
+{859.060,-583.911,18.250},
+{863.397,-583.911,18.250}
 };
 
 /*new Float:DMVReleaseNE[4][3] = {
@@ -1237,19 +1239,10 @@ new dgVar[dgItems][4];
 new dgAmount, dgTimer = -1, dgTimerTime, dgGoldToken;
 new bool: IsDynamicGiftBoxEnabled = false;
 
+/*
 new arrFires[MAX_STRUCTURE_FIRES][eStructureFires];
 new iServerFires = 0;
-
-new Float:JoinCameraPosition[8][3] = {
-	{2211.1460, -1748.3909, 29.3744},
-	{1283.8524, -1385.5304, -10.0},
-	{1514.7783, -1700.2913, -10.0},
-	{655.5394, -1867.2231, -10.0},
-	{370.0804, -2087.8767, -10.0},
-	{1797.3397, -1578.3440, -10.0},
-	{1188.4574, -1309.2242, -10.0},
-	{1716.1129,-1880.0715,-10.0}
-};
+*/
 
 new HoldingObjectsShop[][HoldingEnumAll] = {
 {18647,0,	"RedNeonTube1"},
@@ -1345,7 +1338,7 @@ new HoldingObjectsShop[][HoldingEnumAll] = {
 {19878, 0, "Skateboard"}
 };
 
-new HoldingObjectsCop[14][HoldingEnumAll] = {
+new HoldingObjectsCop[20][HoldingEnumAll] = { 
 {18642,1000,"Taser1"},
 {19141,2500,"SWATHelmet1"},
 {19142,2500,"SWATArmour1"},
@@ -1359,7 +1352,13 @@ new HoldingObjectsCop[14][HoldingEnumAll] = {
 {19138,1000,"PoliceGlasses1"},
 {19139,1000,"PoliceGlasses2"},
 {19140,1000,"PoliceGlasses3"},
-{19904,1000,"OrangeVest"}
+{19904,1000,"OrangeVest"},
+{19776,1000,"FBICard"},
+{19773,1000,"Holster"},
+{19347,1000,"SheriffBadge"},
+{19942,1000,"Radio"},
+{18641,1000,"Flashlight"},
+{11749,1000,"Handcuffs"}
 };
 
 new HoldingObjectsAll[][HoldingEnumAll] = {
@@ -1692,7 +1691,14 @@ new HoldingObjectsAll[][HoldingEnumAll] = {
 {19558, 0, "Pizza Hat"},
 {19559, 0, "Hiker Backpack"},
 {19773, 0, "Gun Holster"},
-{19878, 0, "Skateboard"}
+{19878, 0, "Skateboard"},
+{19904,1000,"OrangeVest"},
+{19776,1000,"FBICard"},
+{19773,1000,"Holster"},
+{19347,1000,"SheriffBadge"},
+{19942,1000,"Radio"},
+{18641,1000,"Flashlight"},
+{11749,1000,"Handcuffs"}
 };
 
 new HoldingObjects[206][HoldingEnum] = {
@@ -2565,9 +2571,17 @@ stock Get2DMainZone(Float:x, Float:y, zone[], len)
 	return 0;
 }
 
-new Float:lpRandomLocations[2][3] = {
-	{-1787.0878,1205.2778,24.9566},
-	{-2435.9521,1032.6508,50.2223}
+new Float:lpRandomLocations[10][3] = {
+	{2867.5901,2573.4387,10.8203},
+	{-1552.5514,119.2396,3.2238},
+	{1743.3508,720.1166,10.8154},
+	{2616.8364,-2226.5535,13.3828},
+	{-1582.0787,1274.2910,6.8461},
+	{-1512.6736,1274.1342,6.8469},
+	{-1731.8909,1525.9912,6.8558},
+	{-1731.6244,1503.1536,6.8568},
+	{-2712.7786,216.4535,3.9102},
+	{-2404.3477,-39.8431,34.9892}
 };
 
 // hospital spawn definitions
@@ -2603,7 +2617,7 @@ new Float:HospitalDeliveryPoints[MAX_DELIVERY_POINTS][3] = {
 	{-2695.5725,639.4147,14.4531},
 	{-2656.0339,615.2567,66.0938},
 	{-1528.814331, 2540.706054, 55.835937},
-	{-2482.4338,2231.1106,4.8463},
+	{-552.8751, -1020.0660, 24.0724},//Flint Ground
 	{3001.2070, -2528.8562, 13.6845},
 	{1579.58, 1768.88, 10.82},
 	{-2196.9641,-2303.8191,30.6250},
@@ -2612,7 +2626,8 @@ new Float:HospitalDeliveryPoints[MAX_DELIVERY_POINTS][3] = {
 	{-1506.1542,442.8032,42.3125},
 	{2370.19434, -140.55753, 35.99259},
 	{2386.92969, -142.99750, 28.31969},
-	{1606.2567, 1769.2424, 37.3125}
+	{1606.2567, 1769.2424, 37.3125},
+	{-579.727905, -1031.585083, 35.166545} //Flint Rooftop
 };
 
 /*new HospitalDeliveryPointsInfo[MAX_DELIVERY_POINTS] = {
@@ -2627,7 +2642,7 @@ new Float:HospitalDeliveryPoints[MAX_DELIVERY_POINTS][3] = {
 {HOSPITAL_SANFIERRO},
 {HOSPITAL_SANFIERRO},
 {HOSPITAL_ELQUEBRADOS},
-{HOSPITAL_BAYSIDE},
+{HOSPITAL_FLINT},
 {HOSPITAL_DEMORGAN},
 {HOSPITAL_LASVENTURAS},
 {0},
@@ -2637,24 +2652,24 @@ new Float:HospitalDeliveryPoints[MAX_DELIVERY_POINTS][3] = {
 // 1D - Hospital Spawn Price 2D - insurance purchase price
 // edit to however you like
 new HospitalSpawnInfo[MAX_HOSPITALS][2] = {
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200},
-{350,200}
+{3000,2500},
+{3000,2500},
+{2000,2500},
+{3000,2500},
+{3000,2500},
+{1000,2500},
+{1000,2500},
+{3000,2500},
+{3000,2500},
+{1000,2500},
+{1000,2500},
+{1000,2500},
+{1000,2500},
+{1000,2500},
+{1000,2500},
+{1000,2500},
+{1000,2500},
+{1000,2500}
 };
 
 new arrHospitalBedData[MAX_HOSPITALS][eHospitalBedData];
@@ -2678,9 +2693,6 @@ new DocButton[19];
 new DocCPButton[2];
 new SFPDHighCMDButton[3], SFPDHighCMDDoor[3], SFPDLobbyButton[2], SFPDLobbyDoor[2];
 new SASDButtons[4], SASDDoors[2]; // New SASD interior vars.
-
-
-new SFElevator[2];
 
 new bool:emailcheck = false;
 
@@ -2771,7 +2783,5 @@ new
 	IsDoingAnim[MAX_PLAYERS],
 	GhostHacker[MAX_PLAYERS][7];
 
-
-new sanewsvault;
-
-new DrugType[MAX_PLAYERS] = -1;
+new
+	bool:BuddyInvite = true;

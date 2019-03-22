@@ -64,7 +64,7 @@ CMD:defendtime(playerid, params[])
 	}	
 	return 1;
 }
-/*
+
 CMD:offerappeal(playerid, params[])
 {
   	if(!IsALawyer(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "   You are not a Lawyer!");
@@ -87,7 +87,7 @@ CMD:offerappeal(playerid, params[])
 CMD:free(playerid, params[])
 {
 
-	if(!IsALawyer(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "You are not a Lawyer!");
+	if(!IsALawyer(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "   You are not a Lawyer!");
 
 	if(PlayerInfo[playerid][pLawSkill] >= 401)
 	{
@@ -139,8 +139,6 @@ CMD:free(playerid, params[])
 	else SendClientMessageEx(playerid, COLOR_GRAD1, "That person doesn't need a laywer.");
 	return 1;
 }
-*/
-/*
 CMD:finishappeal(playerid, params[])
 {
 	if(!IsALawyer(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "   You are not a Lawyer!");
@@ -159,68 +157,10 @@ CMD:finishappeal(playerid, params[])
 	}
 	return 1;
 }
-*/
-
-CMD:appealtime(playerid, params[])
-{
-	if(PlayerInfo[playerid][pJob] != 2 && PlayerInfo[playerid][pJob2] != 2 && PlayerInfo[playerid][pJob3] != 2)
-	{
-		SendClientMessageEx(playerid, COLOR_GREY, "You are not a Lawyer!");
-		return 1;
-	}
-	new
-		giveplayerid;
-
-	if(sscanf(params, "u", giveplayerid)) {
-		SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /appealtime [player]");
-	}
-	else if(!IsPlayerConnected(giveplayerid)) {
-		SendClientMessageEx(playerid, COLOR_GREY, "Invalid player specified.");
-	}
-	else if(giveplayerid == playerid) {
-		SendClientMessageEx(playerid, COLOR_GREY, "You cannot lower your own time.");
-	}
-	else if(PlayerInfo[giveplayerid][pJailTime] > 20) {
-
-		new
-			string[128];
-
-		format(string, sizeof(string), "* You have lowered %s's sentence.", GetPlayerNameEx(giveplayerid));
-		SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
-		format(string, sizeof(string), "* Your sentence has been lowered, by Lawyer %s.", GetPlayerNameEx(playerid));
-		SendClientMessageEx(giveplayerid, COLOR_LIGHTBLUE, string);
-
-		new time;
-		new level = PlayerInfo[playerid][pLawSkill];
-		if(level >= 0 && level <= 50) time = 17;
-			else if(level >= 51 && level <= 100) time = 15;
-			else if(level >= 101 && level <= 200) time = 10;
-			else if(level >= 201 && level <= 400) time = 7;
-			else if(level >= 401) time = 3;
-		PlayerInfo[giveplayerid][pJailTime] = time;
-
-		if(PlayerInfo[playerid][pDoubleEXP] > 0)
-		{
-			format(string, sizeof(string), "You have gained 2 lawyer skill points instead of 1. You have %d hours left on the Double EXP token.", PlayerInfo[playerid][pDoubleEXP]);
-			SendClientMessageEx(playerid, COLOR_YELLOW, string);
-			PlayerInfo[playerid][pLawSkill] += 2;
-		}
-		else ++PlayerInfo[playerid][pLawSkill];
-
-		switch(PlayerInfo[playerid][pLawSkill]) {
-			case 50: SendClientMessageEx(playerid, COLOR_YELLOW, "* Your lawyer skill is now Level 2, you will earn more money and now have a shorter reload time.");
-			case 100: SendClientMessageEx(playerid, COLOR_YELLOW, "* Your lawyer skill is now Level 3, you will earn more money and now have a shorter reload time.");
-			case 200: SendClientMessageEx(playerid, COLOR_YELLOW, "* Your lawyer skill is now Level 4, you will earn more money and now have a shorter reload time.");
-			case 400: SendClientMessageEx(playerid, COLOR_YELLOW, "* Your lawyer skill is now Level 5, you will earn more money and now have a shorter reload time.");
-		}
-	}
-	else SendClientMessageEx(playerid, COLOR_GRAD1, "That person doesn't need a laywer.");
-	return 1;
-}
 
 CMD:defend(playerid, params[])
 {
-	if(!IsALawyer(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "You are not a Lawyer!");
+	if(!IsALawyer(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "   You are not a Lawyer!");
 
 	new string[128];
 	if(gettime() < PlayerInfo[playerid][pLawyerTime])
@@ -232,7 +172,7 @@ CMD:defend(playerid, params[])
 
 	new giveplayerid, money;
 	if(sscanf(params, "ud", giveplayerid, money)) return SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /defend [player] [price]");
-	if(money < 20000 || money > 1000000) { SendClientMessageEx(playerid, COLOR_GREY, "Price not lower then $20,000 or above $1,000,000!"); return 1; }
+	if(money < 20000 || money > 1000000) { SendClientMessageEx(playerid, COLOR_GREY, "   Price not lower then $20,000 or above $1,000,000!"); return 1; }
 	if(IsPlayerConnected(giveplayerid))
 	{
 		if(ProxDetectorS(8.0, playerid, giveplayerid))

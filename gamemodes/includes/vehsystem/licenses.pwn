@@ -35,6 +35,14 @@
 	* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+CMD:getlicense(playerid, params[])
+{
+	if (!IsPlayerInRangeOfPoint(playerid,2.0,366.54, 159.09, 1008.38)) { return 1; }
+	if (PlayerInfo[playerid][pWantedLevel] > 0) return SendClientMessageEx(playerid, COLOR_LIGHTRED, "You have an outstanding arrest warrant - acquisition of a license is prohibited.");
+	ShowPlayerDialogEx(playerid, DIALOG_LICENSE_BUY, DIALOG_STYLE_LIST, "Select the type of license you wish to acquire.", "Boating License ($5,000)\r\nPilot License ($25,000)\r\nTaxi License ($35,000)", "Purchase", "Cancel");
+	return 1;
+}
+
 CMD:revokelicense(playerid, params[])
 {
 	if(IsACop(playerid) || (IsAMedic(playerid) && arrGroupData[PlayerInfo[playerid][pMember]][g_iAllegiance] == 2) || IsAGovernment(playerid) || IsAJudge(playerid))

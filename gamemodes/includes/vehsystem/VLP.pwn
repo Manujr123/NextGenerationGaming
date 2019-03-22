@@ -66,7 +66,7 @@ DestroyVLPTextDraws(playerid) {
 }
 
 //Vehicle Lock Pick Textdraws
-CreateVLPTextDraws(playerid)
+/*CreateVLPTextDraws(playerid)
 {
 	VLPTextDraws[playerid][0] = CreatePlayerTextDraw(playerid, 638.264770, 390.386749, "Attempting to lock pick vehicle");
 	PlayerTextDrawLetterSize(playerid, VLPTextDraws[playerid][0], 0.449999, 1.600000);
@@ -119,9 +119,9 @@ CreateVLPTextDraws(playerid)
 	PlayerTextDrawBackgroundColor(playerid, VLPTextDraws[playerid][3], 51);
 	PlayerTextDrawFont(playerid, VLPTextDraws[playerid][3], 1);
 	PlayerTextDrawSetProportional(playerid, VLPTextDraws[playerid][3], 1);
-}
+}*/
 
-ShowVLPTextDraws(playerid, vehicleid, TYPE = 0) {
+/*ShowVLPTextDraws(playerid, vehicleid, TYPE = 0) {
 	CreateVLPTextDraws(playerid);
 	new tdMessage[9 + MAX_ZONE_NAME], tdCarLocation[MAX_ZONE_NAME], Float:CarPos[3];
 	GetVehiclePos(vehicleid, CarPos[0], CarPos[1], CarPos[2]);
@@ -147,7 +147,7 @@ ShowVLPTextDraws(playerid, vehicleid, TYPE = 0) {
 	}
 	for(new i = 0; i < 4; i++)
 		PlayerTextDrawShow(playerid, VLPTextDraws[playerid][i]);
-}
+}*/
 
 CMD:pickvehicle(playerid, params[])
 {
@@ -156,8 +156,13 @@ CMD:pickvehicle(playerid, params[])
 
 CMD:pickveh(playerid, params[])
 {
+	/*
 	new szMessage[150], Float: vehSize[3], Float: Pos[3], Float:a, success;
 
+	if(gettime() < PlayerInfo[playerid][pLockPickTime]) {
+		format(szMessage, sizeof(szMessage), "You must wait %s in order to attempt another lock pick.", ConvertTimeS(PlayerInfo[playerid][pLockPickTime] - gettime()));
+		return SendClientMessageEx(playerid, COLOR_WHITE, szMessage);
+	}
 	if(GetPVarType(playerid, "AttemptingLockPick")) return SendClientMessageEx(playerid, COLOR_WHITE, "You are already attempting a lockpick, please wait.");
 	if(GetPVarType(playerid, "DeliveringVehicleTime")) return SendClientMessageEx(playerid, COLOR_WHITE, "Deliver the vehicle you lock picked first or wait some time.");
 	if(!PlayerInfo[playerid][pToolBox]) return SendClientMessageEx(playerid, COLOR_WHITE, "You need a Tool Box in order to lock pick a vehicle, get one from a Craftsman.");
@@ -242,13 +247,21 @@ CMD:pickveh(playerid, params[])
 	else {
 		return SendClientMessageEx(playerid, COLOR_WHITE, "You need to be next to the drivers door in order to lock pick it.");
 	}
+	*/
+	SendClientMessageEx(playerid, COLOR_WHITE, "This command has been disabled temporaly disabled due to an unknown issue.");
+	SendClientMessageEx(playerid, COLOR_WHITE, "Please do not report about this being disabled, we are testing something.");
 	return 1;
 }
 CMD:cracktrunk(playerid, params[])
 {
+	/*
 	if(PlayerInfo[playerid][pWRestricted] || PlayerInfo[playerid][pConnectHours] < 2) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot use this command while having a weapon restriction.");
 	new szMessage[150], Float: x, Float: y, Float: z;
 
+	if(gettime() < PlayerInfo[playerid][pLockPickTime]) {
+		format(szMessage, sizeof(szMessage), "You must wait %s in order to attempt another crack trunk.", ConvertTimeS(PlayerInfo[playerid][pLockPickTime] - gettime()));
+		return SendClientMessageEx(playerid, COLOR_WHITE, szMessage);
+	}
 	if(!PlayerInfo[playerid][pToolBox]) return SendClientMessageEx(playerid, COLOR_WHITE, "You need a Tool Box in order to lock pick a vehicle, get one from a Craftsman.");
 	if(!PlayerInfo[playerid][pCrowBar]) return SendClientMessageEx(playerid, COLOR_WHITE, "You need a Crow Bar in order to crack this trunk, get one from a Craftsman.");
 	if(!PlayerInfo[playerid][pScrewdriver]) return SendClientMessageEx(playerid, COLOR_WHITE, "You need a Screwdriver in order to lock pick a vehicle, get one from a Craftsman.");
@@ -305,7 +318,9 @@ CMD:cracktrunk(playerid, params[])
 	}
 	else {
 		return SendClientMessageEx(playerid, COLOR_WHITE, "You need to be at the back of the car that you lock picked.");
-	}
+	}*/
+	SendClientMessageEx(playerid, COLOR_WHITE, "This command has been disabled temporaly disabled due to an unknown issue.");
+	SendClientMessageEx(playerid, COLOR_WHITE, "Please do not report about this being disabled, we are testing something.");
 	return 1;
 }
 
@@ -361,8 +376,8 @@ DeliverVehicleTimer(i)
 			SendClientMessageEx(i, COLOR_YELLOW, "You failed to deliver the vehicle, the vehicle has been restored.");
 			if(GetPVarType(i, "LockPickVehicleSQLId")) 
 			{
-				format(szMiscArray, sizeof(szMiscArray), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d' AND `sqlID` = '%d'", VehicleFuel[GetPVarInt(i, "LockPickVehicle")], GetPVarInt(i, "LockPickVehicleSQLId"), GetPVarInt(i, "LockPickPlayerSQLId"));
-				mysql_function_query(MainPipeline, szMiscArray, false, "OnQueryFinish", "ii", SENDDATA_THREAD, i);
+				mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d' AND `sqlID` = '%d'", VehicleFuel[GetPVarInt(i, "LockPickVehicle")], GetPVarInt(i, "LockPickVehicleSQLId"), GetPVarInt(i, "LockPickPlayerSQLId"));
+				mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "ii", SENDDATA_THREAD, i);
 				DeletePVar(i, "LockPickVehicleSQLId");
 				DeletePVar(i, "LockPickPlayerSQLId");
 				DeletePVar(i, "LockPickPlayerName");

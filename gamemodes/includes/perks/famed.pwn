@@ -167,24 +167,6 @@ CMD:fc(playerid, params[]) {
 	return 1;
 }
 
-CMD:togfamed(playerid, params[])
-{
-	if(PlayerInfo[playerid][pFamed] >= 1 || PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pASM] >= 1)
-	{
-		if(PlayerInfo[playerid][pToggledChats][8]) {
-
-			PlayerInfo[playerid][pToggledChats][8] = 1;
-			SendClientMessageEx(playerid, COLOR_WHITE, "You have disabled the famed chat.");
-		}
-		else {
-			PlayerInfo[playerid][pToggledChats][8] = 0;
-			SendClientMessageEx(playerid, COLOR_WHITE, "You have enabled the famed chat.");
-		}
-	}
-	else return SendClientMessageEx(playerid, COLOR_GRAD1, "You're not a famed member!");
-	return 1;
-}
-
 CMD:fmute(playerid, params[])
 {
 	if(PlayerInfo[playerid][pFamed] >= 4 || PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pASM] >= 1)
@@ -203,7 +185,7 @@ CMD:fmute(playerid, params[])
 		 				return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot use this command on this person!");
 
 					PlayerInfo[targetid][pFMuted] = 1;
-					format(string, sizeof(string), "You were muted from the famed channel by %s, reason: %s. You may appeal this mute at www.ng-gaming.com/forums", GetPlayerNameEx(playerid), reason);
+					format(string, sizeof(string), "You were muted from the famed channel by %s, reason: %s. You may appeal this mute at www.ng-gaming.net/forums", GetPlayerNameEx(playerid), reason);
 					SendClientMessageEx(targetid, COLOR_GRAD2, string);
 					format(string, sizeof(string), "AdmCmd: %s has muted %s from the Famed Channel, reason: %s.", GetPlayerNameEx(playerid), GetPlayerNameEx(targetid), reason);
 					ABroadCast(COLOR_LIGHTRED, string, 2);
@@ -257,7 +239,7 @@ CMD:funmute(playerid, params[])
 
 CMD:setfamed(playerid, params[])
 {
-    if(PlayerInfo[playerid][pFamed] >= 6 || PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pASM] >= 1)
+    if(PlayerInfo[playerid][pFamed] >= 6 || PlayerInfo[playerid][pAdmin] >= 1337)
     {
         new string[128], targetid, level;
 	    if(sscanf(params, "ui", targetid, level)) {
@@ -315,8 +297,8 @@ CMD:osetfamed(playerid, params[])
 			SetPVarInt(playerid, "Offline_Famed", level);
 			SetPVarString(playerid, "Offline_Name", szPlayerName);
 			
-            format(szQuery, sizeof(szQuery), "SELECT `Famed` FROM `accounts` WHERE `Username` = '%s'", szPlayerName);
- 			mysql_function_query(MainPipeline, szQuery, true, "OnQueryFinish", "iii", OFFLINE_FAMED_THREAD, playerid, g_arrQueryHandle{playerid});
+            mysql_format(MainPipeline, szQuery, sizeof(szQuery), "SELECT `Famed` FROM `accounts` WHERE `Username` = '%s'", szPlayerName);
+ 			mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "iii", OFFLINE_FAMED_THREAD, playerid, g_arrQueryHandle{playerid});
  			
  			format(string, sizeof(string), "Attempting to offline set %s account to level %d famed.", szPlayerName, level);
  			SendClientMessageEx(playerid, COLOR_WHITE, string);
@@ -417,17 +399,30 @@ CMD:famedplate(playerid, params[])
 
 CMD:fmembers(playerid, params[])
 {
-	if(PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pASM] >= 1 || PlayerInfo[playerid][pFamed] >= 4)
+	if(PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pASM] >= 1 || PlayerInfo[playerid][pFamed] >= 1)
 	{
 		new string[2048];
+		strcat(string, "Name\tRank", sizeof(string));
 		foreach(new i: Player) 
 		{
-			if(PlayerInfo[i][pFamed] >= 1)
+			if(PlayerInfo[i][pFamed] >= 1 && PlayerInfo[i][pTogReports] == 0)
 			{
-				format(string, sizeof(string), "%s\nLevel %d Famed %s", string, PlayerInfo[i][pFamed], GetPlayerNameEx(i));
+				new famedrank[64];
+				switch(PlayerInfo[i][pFamed])
+				{
+					case 1: famedrank = "{228B22}Old-School\n";
+					case 2: famedrank = "{FF7F00}Chartered Old-School\n";
+					case 3: famedrank = "{ADFF2F}Famed\n";
+					case 4: famedrank = "{8F00FF}Famed Commissioner\n";
+					case 5: famedrank = "{8F00FF}Famed Moderator\n";
+					case 6: famedrank = "{8F00FF}Famed Vice-Chairman\n";
+					case 7: famedrank = "{8F00FF}Famed Chairman\n";
+					default: famedrank = "Unknown";
+				}
+				format(string, sizeof(string), "%s\n{FFFFFF}%s\t%s", string, GetPlayerNameEx(i), famedrank);
 			}	
 		}
-		ShowPlayerDialogEx(playerid, 0, DIALOG_STYLE_LIST, "Current Online Famed Members", string, "Close", "");
+		ShowPlayerDialogEx(playerid, 0, DIALOG_STYLE_TABLIST_HEADERS, "Online Famed Members", string, "Close", "");
 	}
 	else
 		return SendClientMessageEx(playerid, COLOR_GRAD1, "You're not authorized to use this command!");

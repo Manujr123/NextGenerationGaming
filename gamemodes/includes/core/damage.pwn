@@ -35,7 +35,6 @@
 	* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include <YSI\y_hooks>
-
 /*
 static Float:WeaponRange[] = {
 
@@ -78,8 +77,8 @@ static Float:WeaponRange[] = {
 	55.0, // 36 - Heatseeker
 	5.1, // 37 - Flamethrower
 	75.0  // 38 - Minigun
-};
-*/
+};*/
+
 
 new HitStatus[MAX_PLAYERS];
 
@@ -144,11 +143,13 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			}
 		}
 	}
+/*
 	if(GetPVarInt(playerid, "FireStart") == 1) {
 		if(fX != 0 && fY != 0 && hittype != BULLET_HIT_TYPE_PLAYER && hittype != BULLET_HIT_TYPE_VEHICLE) {
 			if(gettime() > GetPVarInt(playerid, "fCooldown")) CreateStructureFire(fX, fY, fZ, GetPlayerVirtualWorld(playerid));
 		}
 	}
+*/
  	if(hittype != BULLET_HIT_TYPE_NONE ) // Bullet Crashing uses just this hittype
     {
         if(!(-1000.0 <= fX <= 1000.0) || !(-1000.0 <= fY <= 1000.0) || !(-1000.0 <= fZ <= 1000.0)) // a valid offset, it's impossible that a offset bigger than 1000 is legit (also less than -1000.0 is impossible, not used by this hack, but still, let's check for it, just for the future, who knows what hacks will appear). The object with biggest offset is having ~700-800 radius.
@@ -235,8 +236,14 @@ stock IsInvalidGunAnim(playerid)
 
 public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 {
-	printf("ONPLAYERTAKEDAMAGE: VICTIM: %d, SHOOTER: %d, %f, %d", damagedid, playerid, amount, weaponid);
 	szMiscArray[0] = 0;
+	if(gPlayerLogged{playerid} == 0) {
+		format(szMiscArray, sizeof(szMiscArray), "%s(%d) [%s] has moved from the login screen position.", GetPlayerNameEx(playerid), GetPlayerSQLId(playerid), GetPlayerIpEx(playerid));
+		Log("logs/security.log", szMiscArray);
+		SendClientMessage(playerid, COLOR_WHITE, "SERVER: You attempted to deal damage to someone when not logged in.");
+		SetTimerEx("KickEx", 1000, 0, "i", playerid);
+		return 1;
+	}
 	if((0 <= bodypart < 2)) return 1;
 	if(IsAimingColt(playerid) && IsInvalidGunAnim(playerid)) {
 		ClearAnimations(playerid, 1);
@@ -262,7 +269,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 					Log("logs/hack.log", szMiscArray);
 				}
 			}
-			foreach(new i : Player)
+			foreach(Player, i)
 			{
 				if(IsPlayerConnected(i))
 				{
@@ -280,7 +287,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 		switch(weaponid)
 		{
 			case 0 .. 3, 5 .. 8, 10 .. 15, 28, 32: if(amount > 20.0) amount = 20.0;
-			case 4: if(amount > 301.0) amount = 301.0;
+			case 4: if(amount > 150.0) amount = 150.0;
 			case 9: if(amount > 30.0) amount = 30.0;
 			case 23: if(amount > 14.0) amount = 14.0;
 			case 24, 38: if(amount > 47.0) amount = 47.0;
@@ -300,11 +307,11 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 		{
 			amount *= 1.65;
 		}
-/*		if(weaponid == WEAPON_SNIPER)
+		/*if(weaponid == WEAPON_SNIPER)
 		{
 			amount *= 1.30;
-		}
-*/		//heroin damage reduction
+		}*/
+		//heroin damage reduction
 		if (GetPVarInt(damagedid, "HeroinDamageResist") == 1) {
 			amount *= 0.45;
 		}
@@ -324,7 +331,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 		}
 
 		if(!IsPlayerStreamedIn(playerid, damagedid) || !IsPlayerStreamedIn(damagedid, playerid)) return 1;
-/*
+		/*
 		new Float:fOriginX, Float:fOriginY, Float:fOriginZ, Float:fHitPosX, Float:fHitPosY, Float:fHitPosZ,
 			Float:x, Float:y, Float:z;
 
@@ -343,8 +350,8 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 		if(fDistance > WeaponRange[weaponid]) return 1;
 		new Float:fHitDist = GetPlayerDistanceFromPoint(damagedid, fHitPosX, fHitPosY, fHitPosZ),
 		iVehCheck = IsPlayerInAnyVehicle(damagedid);
-		if ((!iVehCheck && fHitDist > 20.0) || fHitDist > 50.0) return 1;
-*/
+		if ((!iVehCheck && fHitDist > 20.0) || fHitDist > 50.0) return 1;*/
+
 		new vehmodel = GetVehicleModel(GetPlayerVehicleID(playerid));
 		if(GetPVarInt(playerid, "EventToken") == 0 && !GetPVarType(playerid, "IsInArena") && (vehmodel != 425 && vehmodel != 432 && vehmodel != 447 && vehmodel != 464 && vehmodel != 476 && vehmodel != 520) && GetWeaponSlot(weaponid) != -1)
 		{
@@ -462,8 +469,9 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 	    	else if(GetPlayerState(damagedid) == PLAYER_STATE_ONFOOT)
 			{
 				if(GetPlayerCameraMode(damagedid) == 53 || GetPlayerCameraMode(damagedid) == 7 || GetPlayerCameraMode(damagedid) == 8 || GetPlayerCameraMode(damagedid) == 51) return SendClientMessageEx(playerid, COLOR_WHITE, "You cannot bag players that are actively aiming.");
-				if(HelpingNewbie[damagedid] != INVALID_PLAYER_ID) return SendClientMessageEx(playerid, COLOR_GRAD2, "You cannot taze an advisor while they are helping someone.");
-				if(PlayerInfo[damagedid][pHospital] == 1) return SendClientMessageEx(playerid, COLOR_GRAD2, "Players in hospital cannot be tazed!");
+				if((PlayerInfo[damagedid][pAdmin] >= 2 || PlayerInfo[damagedid][pWatchdog] >= 2) && PlayerInfo[damagedid][pTogReports] != 1) return SendClientMessageEx(playerid, COLOR_GRAD2, "Admins can not be bagged!");
+				if(HelpingNewbie[damagedid] != INVALID_PLAYER_ID) return SendClientMessageEx(playerid, COLOR_GRAD2, "You cannot bag an advisor while they are helping someone.");
+				if(PlayerInfo[damagedid][pHospital] == 1) return SendClientMessageEx(playerid, COLOR_GRAD2, "Players in hospital cannot be bagged!");
 				new Float:fHealth, Float:fArmour;
 
 				GetHealth(damagedid, fHealth);
@@ -497,19 +505,6 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 			pTazer{damagedid} = 0;
 			SendClientMessageEx(damagedid, COLOR_WHITE, "Your tazer has been holstered as you have taken damage from bullets.");
 		}
-
-		/*if((0 <= PlayerInfo[playerid][pMember] < MAX_GROUPS) && (0 <= PlayerInfo[damagedid][pMember] < MAX_GROUPS)) { // Make sure there in a group first of all
-			if(PlayerInfo[playerid][pMember] == PlayerInfo[damagedid][pMember]) {
-				if(PlayerInfo[playerid][pDuty] && PlayerInfo[damagedid][pDuty]) return 1;
-			}
-		}
-		// incase one above doesn't work
-		if((0 <= PlayerInfo[damagedid][pMember] < MAX_GROUPS)) {
-			if(PlayerInfo[playerid][pMember] == PlayerInfo[damagedid][pMember]) {
-				if(PlayerInfo[playerid][pDuty] && PlayerInfo[damagedid][pDuty]) return 1;
-			}
-		}*/
-
 		// Apply Ending Result
 		if(armour < 0.1)
 		{
@@ -537,7 +532,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 			else SetArmour(damagedid, difference);
 		}
 
-		foreach(new i : Player)
+		foreach(Player, i)
 		{
 			if(IsPlayerConnected(i))
 			{
@@ -570,7 +565,6 @@ timer DeathScreen[4000](playerid) {
 
 public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
-	printf("ONPLAYERTAKEDAMAGE: VICTIM: %d, SHOOTER: %d, %f, %d", playerid, issuerid, amount, weaponid);
 	szMiscArray[0] = 0;
 	if((0 <= bodypart < 2)) return 1;
 	if(PlayerIsDead[playerid]) return 1;
@@ -620,6 +614,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		}
 		if(issuerid != 65535) {
 			if(IsPlayerPaused(issuerid)) return 1;
+			/*
 			if(GhostHacker[issuerid][0] > 0 && GhostHacker[issuerid][6] < gettime()) GhostHacker[issuerid][6] = gettime()+6, GhostHacker[issuerid][0] = 0;
 			if(IsPlayerPaused(issuerid) || IsDoingAnim[issuerid] || IsInvalidGunAnim(issuerid)) {
 				if(GhostHacker[issuerid][1] < gettime()) {
@@ -631,7 +626,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 						Log("logs/hack.log", szMiscArray);
 					}
 				}
-				foreach(new i : Player)
+				foreach(Player, i)
 				{
 					if(IsPlayerConnected(i))
 					{
@@ -642,7 +637,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					}
 				}
 				return 1;
-			}
+			}*/
 			if(GetPVarInt(playerid, "AttemptingLockPick") == 1) {
 				DeletePVar(playerid, "AttemptingLockPick");
 				DeletePVar(playerid, "LockPickCountdown");
@@ -668,7 +663,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				format(szMiscArray, sizeof(szMiscArray), "(( You took damage from %s(%d) using %s.))", GetPlayerNameEx(issuerid), issuerid, GetWeaponNameEx(weaponid));
 				SendClientMessageEx(playerid, COLOR_RED, "(( You failed to pick lock this vehicle because you took damage. ))");
 				SendClientMessageEx(playerid, COLOR_RED, szMiscArray);
-				SendClientMessageEx(playerid, COLOR_RED, "(( If this was DM, visit ng-gaming.com and make a Player Complaint. ))");
+				SendClientMessageEx(playerid, COLOR_RED, "(( If this was DM, visit ng-gaming.net and make a Player Complaint. ))");
 				ClearAnimationsEx(playerid, 1);
 			}
 			if(GetPVarType(playerid, "AttemptingCrackTrunk")) {
@@ -679,7 +674,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				format(szMiscArray, sizeof(szMiscArray), "(( You took damage from %s(%d) using %s.))", GetPlayerNameEx(issuerid), issuerid, GetWeaponNameEx(weaponid));
 				SendClientMessageEx(playerid, COLOR_RED, "(( You failed to crack this vehicle's trunk because you took damage. ))");
 				SendClientMessageEx(playerid, COLOR_RED, szMiscArray);
-				SendClientMessageEx(playerid, COLOR_RED, "(( If this was DM, visit ng-gaming.com and make a Player Complaint. ))");
+				SendClientMessageEx(playerid, COLOR_RED, "(( If this was DM, visit ng-gaming.net and make a Player Complaint. ))");
 			}
 
 			if(GetPVarInt(playerid, "commitSuicide") == 1) SetPVarInt(playerid, "commitSuicide", 0);
@@ -743,7 +738,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				else SetArmour(playerid, difference);
 			}
 		}
-		foreach(new i : Player)
+		foreach(Player, i)
 		{
 			if(IsPlayerConnected(i))
 			{
@@ -796,8 +791,8 @@ public OnPlayerDeath(playerid, killerid, reason)
 		if(zombieevent == 1 && GetPVarType(playerid, "pIsZombie"))
 		{
 			new string[128];
-			format(string, sizeof(string), "INSERT INTO humankills (id, num, name) VALUES (%d,1, '%s') ON DUPLICATE KEY UPDATE num = num + 1", PlayerInfo[killerid][pId], GetPlayerNameEx(killerid));
-			mysql_function_query(MainPipeline, string, false, "OnQueryFinish", "ii", SENDDATA_THREAD, killerid);
+			mysql_format(MainPipeline, string, sizeof(string), "INSERT INTO humankills (id, num, name) VALUES (%d,1, '%s') ON DUPLICATE KEY UPDATE num = num + 1", PlayerInfo[killerid][pId], GetPlayerNameEx(killerid));
+			mysql_tquery(MainPipeline, string, "OnQueryFinish", "ii", SENDDATA_THREAD, killerid);
 		}
 
 		if(zombieevent == 1 && GetPVarType(playerid, "pIsZombie"))
@@ -921,9 +916,9 @@ public OnPlayerDeath(playerid, killerid, reason)
 		GetWeaponName(reason, weaponname, sizeof(weaponname));
 
 		new query[256];
-		format(query, sizeof(query), "INSERT INTO `kills` (`id`, `killerid`, `killedid`, `date`, `weapon`) VALUES (NULL, %d, %d, NOW(), '%s')", GetPlayerSQLId(killerid), GetPlayerSQLId(playerid), weaponname);
+		mysql_format(MainPipeline, query, sizeof(query), "INSERT INTO `kills` (`id`, `killerid`, `killedid`, `date`, `weapon`) VALUES (NULL, %d, %d, NOW(), '%e')", GetPlayerSQLId(killerid), GetPlayerSQLId(playerid), weaponname);
 		PlayerKills[killerid]++;
-		mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+		mysql_tquery(MainPipeline, query, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 		if(GetPVarType(killerid, "IsInArena")) PlayerInfo[killerid][pDMKills]++;
 		if(GetPVarType(playerid, "FixVehicleTimer")) KillTimer(GetPVarInt(playerid, "FixVehicleTimer")), DeletePVar(playerid, "FixVehicleTimer");
@@ -1144,9 +1139,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 				GivePlayerCash(killerid, floatround(takemoney * 0.9));
 				GivePlayerCash(playerid, -takemoney);
 				format(szMessage, sizeof(szMessage),"Hitman %s has fulfilled the contract on %s and collected $%d.",GetPlayerNameEx(killerid),GetPlayerNameEx(playerid),takemoney);
-				foreach(new i: Player) if(IsAHitmanLeader(i)) SendClientMessage(i, COLOR_YELLOW, szMessage);
-				format(szMessage, sizeof szMessage, "You have completed the hit on %s and collected $%s", GetPlayerNameEx(playerid), number_format(takemoney));
-				SendClientMessage(killerid, COLOR_YELLOW, szMessage);
+				foreach(new i: Player) if(IsAHitman(i)) SendClientMessage(i, COLOR_YELLOW, szMessage);
 				format(szMessage, sizeof(szMessage),"You have been critically injured by a hitman and lost $%d.",takemoney);
 				PlayerInfo[playerid][pContractDetail][0] = 0;
 				ResetPlayerWeaponsEx(playerid);
@@ -1171,13 +1164,11 @@ public OnPlayerDeath(playerid, killerid, reason)
 			new takemoney = PlayerInfo[killerid][pHeadValue]; //floatround((PlayerInfo[killerid][pHeadValue] / 4) * 2);
 			GivePlayerCash(killerid, takemoney);
 			format(szMessage, sizeof(szMessage),"Hitman %s has failed the contract on %s and lost $%s.", GetPlayerNameEx(playerid), GetPlayerNameEx(killerid), number_format(takemoney));
-			foreach(new i: Player) if(IsAHitmanLeader(i)) SendClientMessage(i, COLOR_HMARADIO, szMessage);
+			foreach(new i: Player) if(IsAHitman(i)) SendClientMessage(i, COLOR_YELLOW, szMessage);
 			GivePlayerCash(playerid, -takemoney);
 			format(szMessage, sizeof(szMessage),"You have just killed a hitman and gained $%s, removing the contract on your head.", number_format(takemoney));
 			PlayerInfo[killerid][pContractDetail][0] = 0;
 			SendClientMessageEx(killerid, COLOR_YELLOW, szMessage);
-			format(szMessage, sizeof szMessage, "You have failed the contract on %s and lost $%s.", GetPlayerNameEx(killerid), number_format(takemoney));
-			SendClientMessage(playerid, COLOR_YELLOW, szMessage);
 			PlayerInfo[killerid][pHeadValue] = 0;
 			PlayerInfo[playerid][pFHits] += 1;
 			GotHit[playerid] = 0;

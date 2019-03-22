@@ -5,7 +5,7 @@
 #define ATM_TRANSFER_TO		10002
 #define ATM_TRANSFER_AMT	10003
 
-new ATMPoint[59]; 
+new ATMPoint[43]; 
 
 LoadATMPoints() {
 	
@@ -52,23 +52,6 @@ LoadATMPoints() {
 	ATMPoint[40] = CreateDynamicSphere(527.5063, 1417.8333, 11000.0996, 3.0);
 	ATMPoint[41] = CreateDynamicSphere(1538.3831, -2785.1677, 15.3602, 3.0);
 	ATMPoint[42] = CreateDynamicSphere(218.18401, 1809.87610, 2000.68555, 3.0);  // Lucky Cowboy Casino
-	//Start of SF ATMs
-	ATMPoint[43] = CreateDynamicSphere(-2035.6193,-101.7436,35.1641, 3.0);
-	ATMPoint[44] = CreateDynamicSphere(-2651.0686,11.5854,6.1328, 3.0);
-	ATMPoint[45] = CreateDynamicSphere(-2646.1189,11.5842,6.1328, 3.0);
-	ATMPoint[46] = CreateDynamicSphere(-2695.2202,260.2504,4.6328, 3.0);
-	ATMPoint[47] = CreateDynamicSphere(-2581.2837,316.3672,5.1797, 3.0);
-	ATMPoint[48] = CreateDynamicSphere(-2433.5686,320.5928,35.1719, 3.0);
-	ATMPoint[49] = CreateDynamicSphere(-2278.6555,694.8168,49.4453, 3.0);
-	ATMPoint[50] = CreateDynamicSphere(-2453.7808,754.7458,35.1719, 3.0);
-	ATMPoint[51] = CreateDynamicSphere(-2420.0537,984.8395,45.2969, 3.0);
-	ATMPoint[52] = CreateDynamicSphere(-1617.6875,1007.1616,7.1875, 3.0);
-	ATMPoint[53] = CreateDynamicSphere(-1671.9882,1222.5699,7.2500, 3.0);
-	ATMPoint[54] = CreateDynamicSphere(-1677.6743,435.9996,7.1797, 3.0);
-	ATMPoint[55] = CreateDynamicSphere(-1950.5873,303.2300,35.4688, 3.0);
-	ATMPoint[56] = CreateDynamicSphere(-1982.1252,-434.9133,35.5313, 3.0);
-	ATMPoint[57] = CreateDynamicSphere(1980.7321,121.5698,26.8067, 3.0);
-	ATMPoint[58] = CreateDynamicSphere(-1981.6829,121.5393,27.6875, 3.0);
 
 	// for(new i = 0; i < 37; i++) Streamer_SetIntData(STREAMER_TYPE_AREA, ATMPoint[i], E_STREAMER_EXTRA_ID, i);
 

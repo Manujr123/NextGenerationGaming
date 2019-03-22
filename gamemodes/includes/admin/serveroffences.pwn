@@ -87,7 +87,7 @@ CMD:reverse(playerid, params[])
 			SetHealth(giveplayerid, 100);
 			//SetPlayerWantedLevel(giveplayerid, 0);
 			PlayerInfo[giveplayerid][pJailTime] = 0;
-			SetPlayerPos(giveplayerid, -1528.5812,489.6914,7.1797);
+			SetPlayerPos(giveplayerid, 1529.6,-1691.2,13.3);
 			SetPlayerInterior(giveplayerid,0);
 			PlayerInfo[giveplayerid][pInt] = 0;
 			SetPlayerVirtualWorld(giveplayerid, 0);
@@ -401,7 +401,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			SetHealth(releasedID, 100);
 			//SetPlayerWantedLevel(releasedID, 0);
 			PlayerInfo[releasedID][pJailTime] = 0;
-			SetPlayerPos(releasedID, -1528.5812,489.6914,7.1797);
+			SetPlayerPos(releasedID, 1529.6,-1691.2,13.3);
 			SetPlayerInterior(releasedID,0);
 			PlayerInfo[releasedID][pInt] = 0;
 			SetPlayerVirtualWorld(releasedID, 0);

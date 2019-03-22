@@ -40,7 +40,7 @@
 			/*  ---------------- DISABLE NPCs ----------------- */
 #define	FOREACH_NO_BOTS
 			/*  ---------------- PRAGMAS ----------------- */
-//#pragma dynamic 4500000
+#pragma dynamic 4500000
 			/*  ---------------- NATIVES ----------------- */
 native WP_Hash(buffer[], len, const str[]);
 native gpci(playerid, serial[], maxlen);
@@ -63,9 +63,8 @@ native IsValidVehicle(vehicleid);
 			/*  ---------------- SERVER DEFINES ----------------- */
 #define 		MAX_PING 					1200
 #define			INVALID_SAMP_ID				65535
-#define			SAMP_WEB					"ng-gaming.com"
-#define			CP_WEB						"cp.ng-gaming.com"
-#define 		CP_WEB_TOKEN				"FKIJWDIN*2DJ"
+#define			SAMP_WEB					"sampweb.ng-gaming.net"
+#define			CP_WEB						"cp.ng-gaming.net"
 			/*  ---------------- TIMERS ----------------- */
 #define			TYPE_TPMATRUNTIMER 			1
 #define			TYPE_TPDRUGRUNTIMER 		2
@@ -100,11 +99,11 @@ native IsValidVehicle(vehicleid);
 #define 		MAX_DDOORS					(3000)
 #define 		MAX_GARAGES					(3000)
 #define 		MAX_HOUSES 					(5500)
-#define 		MAX_OWNABLE_HOUSES 			(1)
+#define 		MAX_OWNABLE_HOUSES 			(2)
 #define 		MAX_GATES 					(4000)
 #define 		MAX_EVENTPOINTS 			(100)
 #define 		INVALID_HOUSE_ID			(-1)
-#define			MAX_TURFS					(400)
+#define			MAX_TURFS					(200)
 #define			MAX_ARENAS					(15)
 #define			MAX_MAILBOXES				(50)
 #define 		MAX_3DLABELS 				(500)
@@ -163,8 +162,10 @@ native IsValidVehicle(vehicleid);
 #define			BODY_PART_RIGHT_LEG	8
 #define			BODY_PART_HEAD		9
 
+/*
 #define			MAX_STRUCTURE_FIRES			100
 #define			MAX_FIRE_HEALTH				1000
+*/
 
 // strcpy - Simon / Y_LESS
 /*#define strcpy(%0,%1,%2) \
@@ -344,7 +345,6 @@ native IsValidVehicle(vehicleid);
 #define			TWEDITTURFSLOCKED			(160)
 #define			TWEDITTURFSVUL				(170)
 #define			TWEDITTURFSPERKS			(180)
-#define 		TWEDITTURFSCASH				(181)
 #define			PBMAINMENU					(200)
 #define			PBARENASELECTION			(210)
 #define			PBTOKENBUYMENU				(220)
@@ -648,6 +648,7 @@ native IsValidVehicle(vehicleid);
 #define 		DIALOG_GROUP_INTRADIOACC	(3374)
 #define 		DIALOG_GROUP_BUGACC			(3375)
 #define 		DIALOG_GROUP_GOVACC			(3376)
+#define 		DIALOG_GROUP_TRESACC		(3399)
 #define 		DIALOG_GROUP_FREENC			(3377)
 #define 		DIALOG_GROUP_FREEDIVNC		(3378)
 #define 		DIALOG_GROUP_SPIKES			(3379)
@@ -772,7 +773,6 @@ native IsValidVehicle(vehicleid);
 #define 		DIALOG_SWITCHGROUP 			(3940)
 #define 		DIALOG_MAKELEADER			(3950)
 #define         DIALOG_HBADGE               (3951)
-#define         DIALOG_HBADGESHOW			(3952)
 
 #define         DIALOG_AUCTIONS             (3960)
 #define         DIALOG_AUCTIONS2            (3970)
@@ -1322,11 +1322,9 @@ native IsValidVehicle(vehicleid);
 #define 		DIALOG_HELPCATOTHER1			8033
 
 #define 		DIALOG_MAINTENANCE				8034
-
-#define 		DIALOG_SF_ELEVATOR				8035
-#define			DIALOG_SF_ELEVATOR_2			8036
+#define 		DIALOG_HORSE_RACE				8035
 // GangTags
-#define 			GANGTAG_TIME				30000
+#define 			GANGTAG_TIME				60000
 
 #define 			MAX_GANGTAGS 				100
 #define 			MAX_GANGTAGS_LEN			48
@@ -1526,7 +1524,7 @@ native IsValidVehicle(vehicleid);
 #define		MAX_HOSPITALS				(18)
 #define		MAX_HOSPITALBEDS			(10)
 #define		MAX_DOCHOSPITALBEDS			(3)
-#define		MAX_DELIVERY_POINTS			(21)
+#define		MAX_DELIVERY_POINTS			(22)
 
 // hospital location definitions
 #define		HOSPITAL_ALLSAINTS			(0)
@@ -1537,7 +1535,7 @@ native IsValidVehicle(vehicleid);
 #define 	HOSPITAL_LASVENTURAS		(5)
 #define		HOSPITAL_FORTCARSON			(6)
 #define		HOSPITAL_ANGELPINE			(7)
-#define		HOSPITAL_BAYSIDE			(8)
+#define		HOSPITAL_FLINT				(8)
 #define		HOSPITAL_DEMORGAN			(9)
 #define 	HOSPITAL_DOCJAIL			(10)
 #define		HOSPITAL_LSVIP				(11)
@@ -1610,6 +1608,9 @@ native IsValidVehicle(vehicleid);
 #define 			PVAR_GANGTAGID					"GT_ID"
 #define 			PVAR_GANGTAGEDITING				"GT_ED"
 #define 			PVAR_GANGTAGTEXT				"GT_TE"
+
+/* IRC/Slack */
+#define MAX_BOTS (1)
 
 // Forwards placed here are for warning: 208
 forward Float:player_get_speed(playerid);

@@ -2,7 +2,7 @@ stock ShowStats(playerid,targetid)
 {
 	if(IsPlayerConnected(targetid))
 	{
-		new resultline[1024], header[256], org[128], employer[GROUP_MAX_NAME_LEN], rank[GROUP_MAX_RANK_LEN], division[GROUP_MAX_DIV_LEN];
+		new resultline[1024], header[65], org[128], employer[GROUP_MAX_NAME_LEN], rank[GROUP_MAX_RANK_LEN], division[GROUP_MAX_DIV_LEN];
 		new sext[16], std[20], nation[24], biz[128];
 		if(PlayerInfo[targetid][pSex] == 1) { sext = "Male"; } else { sext = "Female"; }
 		switch(GetPVarInt(targetid, "STD"))
@@ -81,7 +81,6 @@ stock ShowStats(playerid,targetid)
 		if(PlayerInfo[targetid][pMarriedID] == -1) format(PlayerInfo[targetid][pMarriedName], MAX_PLAYER_NAME, "Nobody");
 		new nxtlevel = PlayerInfo[targetid][pLevel]+1;
 		new expamount = nxtlevel*4;
-		new costlevel = nxtlevel*25000;
 		new Float:health, Float:armor;
 		GetHealth(targetid, health);
 		GetArmour(targetid, armor);
@@ -95,12 +94,7 @@ stock ShowStats(playerid,targetid)
 			format(fifstr, sizeof(fifstr), "{FF8000}FIF Hours:{FFFFFF} %d\n{FF8000}FIF Chances:{FFFFFF} %d\n", FIFInfo[targetid][FIFHours], FIFInfo[targetid][FIFChances]);
 		}
 		SetPVarInt(playerid, "ShowStats", targetid);
-
-        new szDate[3], szTime[3];
-        getdate(szDate[0], szDate[1], szDate[2]);
-        gettime(szTime[0], szTime[1], szTime[2]);
-
-		format(header, sizeof(header), "%s's stats | %02d/%d/%02d %02d:%02d:%02d", GetPlayerNameEx(targetid), szDate[1], szDate[2], szDate[0], szTime[0], szTime[1], szTime[2]);
+		format(header, sizeof(header), "Showing Statistics of %s", GetPlayerNameEx(targetid));
 		format(resultline, sizeof(resultline),"%s\n\
 			%s\
 			%s\
@@ -118,7 +112,7 @@ stock ShowStats(playerid,targetid)
 			Dedicated Hours: %s\n\
 			Fitness: %d\n\
 			Upgrade Points: %s\n\
-			Next Level: %s{303030}/{FFFFFF}%s hours ($%s)\n\
+			Next Level: %s{303030}/{FFFFFF}%s hours\n\
 			Nation: %s\n\
 			%s\
 			%s\
@@ -145,7 +139,6 @@ stock ShowStats(playerid,targetid)
 			number_format(PlayerInfo[targetid][gPupgrade]),
 			number_format(PlayerInfo[targetid][pExp]),
 			number_format(expamount),
-			number_format(costlevel),
 			nation,
 			org,
 			biz,

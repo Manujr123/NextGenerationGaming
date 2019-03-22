@@ -125,7 +125,7 @@ CMD:placeboombox(playerid, params[])
 	}
 	else
 	{
-		SendClientMessageEx(playerid, COLOR_GRAD1, "You don't have a boom box! Buy from one shop.ng-gaming.com");
+		SendClientMessageEx(playerid, COLOR_GRAD1, "You don't have a boom box! Buy from one shop.ng-gaming.net");
 	}
 	return 1;
 }

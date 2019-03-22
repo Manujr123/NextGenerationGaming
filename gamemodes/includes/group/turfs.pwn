@@ -40,8 +40,8 @@
 SaveTurfWar(turfid)
 {
 	new string[128];
-	format(string, sizeof(string), "UPDATE `turfs` SET data='%s|%d|%d|%d|%d|%f|%f|%f|%f|%d' WHERE id = %d",
-	g_mysql_ReturnEscaped(TurfWars[turfid][twName], MainPipeline),
+	mysql_format(MainPipeline, string, sizeof(string), "UPDATE `turfs` SET data='%e|%d|%d|%d|%d|%f|%f|%f|%f' WHERE id = %d",
+	TurfWars[turfid][twName],
 	TurfWars[turfid][twOwnerId],
 	TurfWars[turfid][twLocked],
 	TurfWars[turfid][twSpecial],
@@ -50,9 +50,8 @@ SaveTurfWar(turfid)
 	TurfWars[turfid][twMinY],
 	TurfWars[turfid][twMaxX],
 	TurfWars[turfid][twMaxY],
-	TurfWars[turfid][twCashReward],
 	turfid + 1);
-	mysql_function_query(MainPipeline, string, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+	mysql_tquery(MainPipeline, string, "OnQueryFinish", "i", SENDDATA_THREAD);
 	return 1;
 }
 
@@ -67,12 +66,12 @@ SaveTurfWars()
 forward OnLoadTurfWars();
 public OnLoadTurfWars()
 {
-	new i, rows, fields, tmp[128];
-	cache_get_data(rows, fields, MainPipeline);
+	new i, rows, tmp[128];
+	cache_get_row_count(rows);
 	while(i < rows)
 	{
-		cache_get_field_content(i, "data", tmp, MainPipeline);
-		if(!sscanf(tmp, "p<|>s[64]iiiiffffd",
+		cache_get_value_name(i, "data", tmp);
+		if(!sscanf(tmp, "p<|>s[64]iiiiffff",
 			TurfWars[i][twName],
 			TurfWars[i][twOwnerId],
 			TurfWars[i][twLocked],
@@ -81,8 +80,7 @@ public OnLoadTurfWars()
 			TurfWars[i][twMinX],
 			TurfWars[i][twMinY],
 			TurfWars[i][twMaxX],
-			TurfWars[i][twMaxY],
-			TurfWars[i][twCashReward]
+			TurfWars[i][twMaxY]
 		)) CreateTurfWarsZone(0, i++);
 	}
 	if(i) printf("[LoadTurfWars] %d turfs loaded.", i);
@@ -93,7 +91,7 @@ public OnLoadTurfWars()
 stock LoadTurfWars()
 {
 	printf("[Turf Wars] Loading turfs from the database, please wait...");
-	mysql_function_query(MainPipeline, "SELECT * FROM `turfs`", true, "OnLoadTurfWars", "");
+	mysql_tquery(MainPipeline, "SELECT * FROM `turfs`", "OnLoadTurfWars", "");
 }
 
 InitTurfWars()
@@ -111,7 +109,6 @@ InitTurfWars()
 	    TurfWars[i][twAreaId] = -1;
 	    TurfWars[i][twFlash] = -1;
 	    TurfWars[i][twFlashColor] = 0;
-		TurfWars[i][twCashReward] = 0;
 	}
 	return 1;
 }
@@ -476,7 +473,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					}
 					case 4: // Edit Perks
 					{
-						ShowPlayerDialogEx(playerid,TWEDITTURFSPERKS,DIALOG_STYLE_LIST,"Turf Wars - Edit Turfs Perks Menu:","None\nExtortion\nDrugs\nCash","Change","Back");
+						ShowPlayerDialogEx(playerid,TWEDITTURFSPERKS,DIALOG_STYLE_LIST,"Turf Wars - Edit Turfs Perks Menu:","None\nExtortion\nDrugs","Change","Back");
 					}
 					case 5: // Reset War
 					{
@@ -575,34 +572,12 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			{
 				new tw = GetPVarInt(playerid, "EditingTurfs");
 				TurfWars[tw][twSpecial] = listitem;
-				if(listitem == 3)
-				{
-					ShowPlayerDialogEx(playerid, TWEDITTURFSCASH, DIALOG_STYLE_INPUT, "Turf Wars - Adjust Cash Reward", "Input the cash rewarded per hour from the turf.", "Confirm", "Cancel");
-				}
-				else
-				{
-					SaveTurfWar(tw);
-					ShowPlayerDialogEx(playerid,TWEDITTURFSMENU,DIALOG_STYLE_LIST,"Turf Wars - Edit Turfs Menu:","Edit Dimensions...\nEdit Owners...\nEdit Vulnerable Time...\nEdit Locked...\nEdit Perks...\nReset War...\nDestroy Turf","Select","Back");
-				}
-				
-			}
-			else
-			{
-				ShowPlayerDialogEx(playerid,TWEDITTURFSMENU,DIALOG_STYLE_LIST,"Turf Wars - Edit Turfs Menu:","Edit Dimensions...\nEdit Owners...\nEdit Vulnerable Time...\nEdit Locked...\nEdit Perks...\nReset War...\nDestroy Turf","Select","Back");
-			}
-		}
-		case TWEDITTURFSCASH:
-		{
-			if(IsNumeric(inputtext))
-			{
-				new tw = GetPVarInt(playerid, "EditingTurfs");
-				TurfWars[tw][twCashReward] = strval(inputtext);
 				SaveTurfWar(tw);
 				ShowPlayerDialogEx(playerid,TWEDITTURFSMENU,DIALOG_STYLE_LIST,"Turf Wars - Edit Turfs Menu:","Edit Dimensions...\nEdit Owners...\nEdit Vulnerable Time...\nEdit Locked...\nEdit Perks...\nReset War...\nDestroy Turf","Select","Back");
 			}
 			else
 			{
-				ShowPlayerDialogEx(playerid, TWEDITTURFSCASH, DIALOG_STYLE_INPUT, "Turf Wars - Adjust Cash Reward", "Non Numeric Input\n\nInput the cash rewarded per hour from the turf.", "Confirm", "Cancel");
+				ShowPlayerDialogEx(playerid,TWEDITTURFSMENU,DIALOG_STYLE_LIST,"Turf Wars - Edit Turfs Menu:","Edit Dimensions...\nEdit Owners...\nEdit Vulnerable Time...\nEdit Locked...\nEdit Perks...\nReset War...\nDestroy Turf","Select","Back");
 			}
 		}
 	}
@@ -853,7 +828,7 @@ CMD:claimturf(playerid, params[])
         return 1;
     }
     if(rank < arrGroupData[family][g_iTurfCapRank]) {
-        SendClientMessageEx(playerid, COLOR_GRAD2, "You have cannot claim turfs due to your rank!");
+    	SendClientMessageEx(playerid, COLOR_GRAD2, "You cannot claim turfs due to your rank!");
         return 1;
     }
     if(tw != -1) {
@@ -876,15 +851,6 @@ CMD:claimturf(playerid, params[])
 						}
 					}
                 }
-
-				for(new i = 0; i < MAX_TURFS; i++)
-				{
-					if(TurfWars[i][twAttemptId] == family)
-					{
-						SendClientMessageEx(playerid, COLOR_GRAD2, "Your family is already attempting to capture a turf!");
-						return 1;
-					}
-				}
 
                 if(count > 2) {
                     TakeoverTurfWarsZone(family, tw);
@@ -916,15 +882,6 @@ CMD:claimturf(playerid, params[])
 						}
 					}
 				}	
-
-				for(new i = 0; i < MAX_TURFS; i++)
-				{
-					if(TurfWars[i][twAttemptId] == family)
-					{
-						SendClientMessageEx(playerid, COLOR_GRAD2, "Your family is already attempting to capture a turf!");
-						return 1;
-					}
-				}
 
                 if(count == 0 && leocount == 0) {
                     if(family != TurfWars[tw][twOwnerId]) {

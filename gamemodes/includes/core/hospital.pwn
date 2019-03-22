@@ -146,8 +146,8 @@ DeliverPlayerToHospital(playerid, iHospital)
 				AmountSold[18]++;
 				AmountMade[18] += ShopItems[18][sItemPrice];
 				new szQuery[128];
-				format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold18` = '%d', `AmountMade18` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[18], AmountMade[18]);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold18` = '%d', `AmountMade18` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[18], AmountMade[18]);
+				mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 				format(string, sizeof(string), "[HC] [User: %s(%i)][IP: %s][Credits: %s][Adv][Price: %s]", GetPlayerNameEx(playerid), GetPlayerSQLId(playerid), GetPlayerIpEx(playerid), number_format(PlayerInfo[playerid][pCredits]), number_format(ShopItems[18][sItemPrice]));
 				Log("logs/credits.log", string), print(string);
@@ -170,8 +170,8 @@ DeliverPlayerToHospital(playerid, iHospital)
 				AmountSold[19]++;
 				AmountMade[19] += ShopItems[19][sItemPrice];
 				new szQuery[128];
-				format(szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold19` = '%d', `AmountMade19` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[19], AmountMade[19]);
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `sales` SET `TotalSold19` = '%d', `AmountMade19` = '%d' WHERE `Month` > NOW() - INTERVAL 1 MONTH", AmountSold[19], AmountMade[19]);
+				mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 
 				format(string, sizeof(string), "[AHC] [User: %s(%i)][IP: %s][Credits: %s][Super][Price: %s]", GetPlayerNameEx(playerid), GetPlayerSQLId(playerid), GetPlayerIpEx(playerid), number_format(PlayerInfo[playerid][pCredits]), number_format(ShopItems[19][sItemPrice]));
 				Log("logs/credits.log", string), print(string);
@@ -266,8 +266,8 @@ GetHospitalName(iHospital)
 		case HOSPITAL_LASVENTURAS: string = "Las Venturas";
 		case HOSPITAL_FORTCARSON: string = "Fort Carson";
 		case HOSPITAL_ANGELPINE: string = "Angel Pine";
-		case HOSPITAL_BAYSIDE: string = "Bayside";
-		case HOSPITAL_DEMORGAN: string = "Demorgan";
+		case HOSPITAL_FLINT: string = "Flint County";
+		case HOSPITAL_DEMORGAN: string = "DeMorgan";
 		case HOSPITAL_DOCJAIL: string = "DOC Jail";
 		case HOSPITAL_LSVIP: string = "LS VIP";
 		case HOSPITAL_SFVIP: string = "SF VIP";
@@ -304,52 +304,50 @@ public ReleaseFromHospital(playerid, iHospital, iBed)
 		KillTimer(arrHospitalBedData[iHospital][iTimer][iBed]);
 		PlayerTextDrawHide(playerid, HospTime[playerid]);
 		
-		if(PlayerInfo[playerid][pInsurance] == HOSPITAL_HOMECARE && PlayerInfo[playerid][pWantedLevel] < 1) // if they have homecare, set them at home for free
-		{
-			// set them to their house entrance location....
-			// using house spawn system from previous insurance system
-			ShowPlayerDialogEx(playerid, SPAWNATHOME_CHOICE, DIALOG_STYLE_LIST, "Choose your house", "Home 1\nHome 2\nHome 3", "Spawn", "");
-
-			/*for(new i = 0; i < sizeof(HouseInfo); i++)
+		if(TakePlayerMoney(playerid, HospitalSpawnInfo[iHospital][0])) {
+			if(PlayerInfo[playerid][pInsurance] == HOSPITAL_HOMECARE && PlayerInfo[playerid][pWantedLevel] < 1) // if they have homecare, set them at home for free
 			{
-				if(PlayerInfo[playerid][pPhousekey] == i || PlayerInfo[playerid][pPhousekey2] == i)
-				{
-					Streamer_UpdateEx(playerid, HouseInfo[i][hInteriorX],HouseInfo[i][hInteriorY],HouseInfo[i][hInteriorZ]);
-					SetPlayerInterior(playerid,HouseInfo[i][hIntIW]);
-					SetPlayerPos(playerid,HouseInfo[i][hInteriorX],HouseInfo[i][hInteriorY],HouseInfo[i][hInteriorZ]);
-					GameTextForPlayer(playerid, "~w~Welcome Home", 5000, 1);
-					PlayerInfo[playerid][pInt] = HouseInfo[i][hIntIW];
-					PlayerInfo[playerid][pVW] = HouseInfo[i][hIntVW];
-					SetPlayerVirtualWorld(playerid,HouseInfo[i][hIntVW]);
-					if(HouseInfo[i][hCustomInterior] == 1) Player_StreamPrep(playerid, HouseInfo[i][hInteriorX],HouseInfo[i][hInteriorY],HouseInfo[i][hInteriorZ], FREEZE_TIME);
-					break;
-				}
-			}*/
-			
-			format(string, sizeof(string), "Medical: You have been charged $%d for your hospital bill and transported to your home.", HospitalSpawnInfo[iHospital][0]);
-			SendClientMessageEx(playerid, COLOR_RED, string);
-		}
-		else
-		{
-			format(string, sizeof(string), "Medical: You have been charged $%d for your hospital bill at %s", HospitalSpawnInfo[iHospital][0], GetHospitalName(iHospital));
-			SendClientMessageEx(playerid, COLOR_RED, string);
-		}
-		
-		PlayerInfo[playerid][pHospital] = 0;
-		GivePlayerCash(playerid, - HospitalSpawnInfo[iHospital][0]);
+				// set them to their house entrance location....
+				// using house spawn system from previous insurance system
+				ShowPlayerDialogEx(playerid, SPAWNATHOME_CHOICE, DIALOG_STYLE_LIST, "Choose your house", "Home 1\nHome 2\nHome 3", "Spawn", "");
 
-		switch(iHospital) {
-			case 3, 17: {
-				TRTax += HospitalSpawnInfo[iHospital][1]; // NE Hospitals
-				format(string, sizeof(string), "%s has paid their medical fees, adding $%d to the vault.", GetPlayerNameEx(playerid), HospitalSpawnInfo[iHospital][0]);
-				GroupPayLog(8, string);
+				format(string, sizeof(string), "Medical: You have been charged $%d for your hospital bill and transported to your home.", HospitalSpawnInfo[iHospital][0]);
+				SendClientMessageEx(playerid, COLOR_RED, string);
 			}
-			default: {
-				Tax += (HospitalSpawnInfo[iHospital][1] / 2); // SA Hospitals
-				arrGroupData[9][g_iBudget] += (HospitalSpawnInfo[iHospital][1] / 2);
-				format(string, sizeof(string), "%s has paid their medical fees, adding $%d to the vault.", GetPlayerNameEx(playerid), (HospitalSpawnInfo[iHospital][0] / 2));
-				GroupPayLog(9, string);
+			else
+			{
+				format(string, sizeof(string), "Medical: You have been charged $%d for your hospital bill at %s", HospitalSpawnInfo[iHospital][0], GetHospitalName(iHospital));
+				SendClientMessageEx(playerid, COLOR_RED, string);
 			}
+			
+			PlayerInfo[playerid][pHospital] = 0;
+
+			switch(iHospital) {
+				case 3, 4, 7, 8, 16: {
+					TRTax += HospitalSpawnInfo[iHospital][1]; // NE Hospitals
+					format(string, sizeof(string), "%s has paid their medical fees, adding $%d to the vault.", GetPlayerNameEx(playerid), HospitalSpawnInfo[iHospital][0]);
+					GroupPayLog(8, string);
+				}
+				default: {
+					Tax += (HospitalSpawnInfo[iHospital][1] / 2); // SA Hospitals
+					arrGroupData[9][g_iBudget] += (HospitalSpawnInfo[iHospital][1] / 2);
+					format(string, sizeof(string), "%s has paid their medical fees, adding $%d to the vault.", GetPlayerNameEx(playerid), (HospitalSpawnInfo[iHospital][0] / 2));
+					GroupPayLog(9, string);
+				}
+			}
+		} else {
+			if(PlayerInfo[playerid][pInsurance] == HOSPITAL_HOMECARE && PlayerInfo[playerid][pWantedLevel] < 1) // if they have homecare, set them at home for free
+			{
+				format(string, sizeof(string), "Medical: You have been charged $%d for your hospital bill and transported to your home.", HospitalSpawnInfo[iHospital][0]);
+				SendClientMessageEx(playerid, COLOR_RED, string);
+			}
+			else
+			{
+				format(string, sizeof(string), "Medical: You have been charged $%d for your hospital bill at %s", HospitalSpawnInfo[iHospital][0], GetHospitalName(iHospital));
+				SendClientMessageEx(playerid, COLOR_RED, string);
+			}
+			PlayerInfo[playerid][pHospital] = 0;
+			GivePlayerCash(playerid, -HospitalSpawnInfo[iHospital][0]);
 		}		
 		if(!GetPVarType(playerid, "HealthCareActive")) SetHealth(playerid, 50);
 		else SetHealth(playerid, 100), DeletePVar(playerid, "HealthCareActive");
@@ -434,7 +432,7 @@ ReturnDeliveryPoint(iDPID)
 		case 8: iPoint = HOSPITAL_SANFIERRO;
 		case 9: iPoint = HOSPITAL_SANFIERRO;
 		case 10: iPoint = HOSPITAL_ELQUEBRADOS;
-		case 11: iPoint = HOSPITAL_BAYSIDE;
+		case 11: iPoint = HOSPITAL_FLINT;
 		case 12: iPoint = HOSPITAL_DEMORGAN;
 		case 13: iPoint = HOSPITAL_LASVENTURAS;
 		case 14: iPoint = HOSPITAL_ANGELPINE;
@@ -444,6 +442,7 @@ ReturnDeliveryPoint(iDPID)
 		case 18: iPoint = HOSPITAL_PALOMINO;
 		case 19: iPoint = HOSPITAL_PALOMINO; 
 		case 20: iPoint = HOSPITAL_LASVENTURAS;
+		case 21: iPoint = HOSPITAL_FLINT;
 	}
 	
 	return iPoint;
@@ -587,6 +586,21 @@ CMD:kill(playerid, params[]) {
 	}
 	return 1;
 }
+
+/*
+RemoveVendingMachines(playerid)
+{
+	// Remove 24/7 machines
+	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 955, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 956, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 6000.0);
+	return 1;
+}
+*/
 
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 

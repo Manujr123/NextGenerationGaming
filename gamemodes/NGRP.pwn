@@ -20,7 +20,8 @@
 								**  Development Staff:
 									Miguel (s0nic)
 									Farva
-									Connolly
+									Hector
+									Thomas
 				Past Developers:
 								*** Director of SA:MP Development:
 									Dom
@@ -36,6 +37,7 @@
 									Donuts
 									Mo Cena
 									Calgon
+									Connolly
 
 								** 	Developers:
 									AlexR
@@ -80,7 +82,7 @@
 /*  ---------------- SCRIPT REVISION ----------------- */
 
 // Do not forget to change this everytime you commit - it's mandatory!
-#define SERVER_GM_TEXT "NG:RP v3.0.00"
+#define SERVER_GM_TEXT "NG:RP v3.0.451"
 
 //#define AREA_DEBUG
 //#define TEXTLABEL_DEBUG
@@ -102,8 +104,6 @@
 #include <easyDialog>
 #include <callbacks>
 #include <attachments>
-#include <Pawn.RakNet>
-#include <compat>
 #include <bcrypt>
 //#include <profiler>
 
@@ -209,6 +209,7 @@
 //#include "./includes/core/tutorial_new.pwn"
 #include "./includes/core/deluxegps.pwn"
 //#include "./includes/core/nametags.pwn"
+#include "./includes/core/vending.pwn"
 
 // #tryinclude "./includes/core/inactive.pwn"
 
@@ -230,7 +231,6 @@
 #include "./includes/dynamic/parking.pwn"
 #include "./includes/dynamic/MetalDetectors.pwn"
 #include "./includes/dynamic/points.pwn"
-#include "./includes/dynamic/dynsprunks.pwn"
 
 //vehicle system includes
 #include "./includes/vehsystem/vehiclecore.pwn"
@@ -249,6 +249,7 @@
 #include "./includes/events/event.pwn"
 #include "./includes/events/eventpoints.pwn"
 #include "./includes/events/fif.pwn"
+//#include "./includes/events/findtheflag.pwn"
 #include "./includes/events/hungergames.pwn"
 #include "./includes/events/paintball.pwn"
 #include "./includes/events/rewardplay.pwn"
@@ -264,7 +265,7 @@
 #include "./includes/group/citizenship.pwn"
 //#include "./includes/group/contract.pwn"
 #include "./includes/group/hitman.pwn"
-#include "./includes/group/fires.pwn"
+//#include "./includes/group/fires.pwn"
 #include "./includes/group/gov.pwn"
 #include "./includes/group/groupcore.pwn"
 #include "./includes/group/judicial.pwn"
@@ -286,7 +287,7 @@
 #include "./includes/group/gangtags.pwn"
 #include "./includes/group/GunLicense.pwn"
 //#include "./includes/group/URLrace.pwn"
-//#include "./includes/group/sanews.pwn"
+#include "./includes/group/sanews.pwn"
 #include "./includes/group/casefile.pwn"
 #include "./includes/group/groupweapons.pwn"
 
@@ -311,7 +312,6 @@
 #include "./includes/jobs/armsdealer.pwn"
 //#include "./includes/jobs/newshipment.pwn" - not supposed to be in yet! Don't forget to uncomment the reset, line 1975 in callbacks.pwn
 #include "./includes/core/drugcore.pwn"
-#include "./includes/jobs/dealing.pwn"
 
 //perk system includes
 #include "./includes/perks/boombox.pwn"
@@ -324,6 +324,7 @@
 #include "./includes/perks/toys.pwn"
 #include "./includes/perks/vipcore.pwn"
 #include "./includes/perks/casino.pwn"
+#include "./includes/perks/horsey.pwn"
 
 //#include "./includes/core/ammo.pwn"
 #include "./includes/core/phone_new.pwn"
@@ -341,14 +342,14 @@
 
 // Jingles WIP
 #include "./includes/core/minigame.pwn"
-#include "./includes/anticheat2.pwn"
+//#include "./includes/anticheat2.pwn"
 #include "./includes/furnituretextures.pwn"
 #include "./includes/furniture.pwn"
 #include "./includes/group/elections.pwn"
 //#include "./includes/events/naturaldisaster.pwn"
 
 // Westen WIP
-#include "./includes/dynamic/dynpolls2.pwn"
+//#include "./includes/dynamic/dynpolls2.pwn"
 
 // Jason WIP
 //#include "./includes/core/interact.pwn"

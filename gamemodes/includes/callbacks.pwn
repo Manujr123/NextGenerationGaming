@@ -773,14 +773,6 @@ public OnPlayerPressButton(playerid, buttonid)
 			}
 		}
 	}
-	if(buttonid == SFElevator[0])
-	{
-		ShowPlayerDialogEx(playerid, DIALOG_SF_ELEVATOR, DIALOG_STYLE_LIST, "Choose Floor", "Upper Floor\nLower Floor (current)", "Confirm", "Cancel");
-	}
-	if(buttonid == SFElevator[1])
-	{
-		ShowPlayerDialogEx(playerid, DIALOG_SF_ELEVATOR_2, DIALOG_STYLE_LIST, "Choose Floor", "Upper Floor (current)\nLower Floor", "Confirm", "Cancel");
-	}
 	if(buttonid == DocCPButton[0] || buttonid == DocCPButton[1])
 	{
 		if(!IsADocGuard(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "Access denied");
@@ -1053,23 +1045,6 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
    			ShowPlayerDialogEx(playerid, DIALOG_CARSHOP2, DIALOG_STYLE_MSGBOX, "Restricted Vehicle Shop", string, "Purchase", "Cancel");
 	    }
 	}
-	if(listid == RegiSkins) {
-    	if(response)
-    	 {
-    		if(IsValidSkin(modelid))
-    		{
-    			if(PlayerInfo[playerid][pModel] == modelid) return SendClientMessage(playerid, COLOR_GREY, "You're already wearing those clothes."), CharacterCreation(playerid);
-                PlayerInfo[playerid][pModel] = modelid;
-                AdjustActor(playerid, modelid);
-                SendClientMessage(playerid, COLOR_YELLOW2, "Your clothes have been updated!");
-    		} else 
-    		{
-                SendClientMessage(playerid, COLOR_GREY, "That skin ID is either invalid or restricted to a group!");
-                return ShowModelSelectionMenu(playerid, RegiSkins, "Select your clothes");
-    		}
-    	}
-    	CharacterCreation(playerid);
-    }
 	if(listid == SkinList)
 	{
 		if(response)
@@ -1235,6 +1210,8 @@ public OnPlayerConnect(playerid)
 		MaxPlayersConnected = Iter_Count(Player);
 		getdate(MPYear,MPMonth,MPDay);
 	}
+
+//	RemoveVendingMachines(playerid);
 
 	SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL, 1);
 	SetPlayerSkillLevel(playerid, WEAPONSKILL_MICRO_UZI, 1);
@@ -1605,9 +1582,9 @@ public OnPlayerConnect(playerid)
 	InsideTut{playerid} = 0;
 
 	ShowMainMenuGUI(playerid);
-	SetPlayerJoinCamera(playerid);
+	//SetPlayerJoinCamera(playerid);
 	ClearChatbox(playerid);
-	SetPlayerVirtualWorld(playerid, 0);
+	SetPlayerVirtualWorld(playerid, 1);
 
 	SetPlayerColor(playerid,TEAM_HIT_COLOR);
 	SendClientMessage( playerid, COLOR_WHITE, "SERVER: Welcome to Next Generation Roleplay." );
@@ -1837,8 +1814,8 @@ public OnPlayerDisconnect(playerid, reason)
 		if(GetPVarType(playerid, "DeliveringVehicleTime")) {
 			if(GetPVarType(playerid, "LockPickVehicleSQLId")) {
 				new szQuery[128];
-				format(szQuery, sizeof(szQuery), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d' AND `sqlID` = '%d'", VehicleFuel[GetPVarInt(playerid, "LockPickVehicle")], GetPVarInt(playerid, "LockPickVehicleSQLId"), GetPVarInt(playerid, "LockPickPlayerSQLId"));
-				mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+				mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d' AND `sqlID` = '%d'", VehicleFuel[GetPVarInt(playerid, "LockPickVehicle")], GetPVarInt(playerid, "LockPickVehicleSQLId"), GetPVarInt(playerid, "LockPickPlayerSQLId"));
+				mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 			}
 			else {
 				new slot = GetPlayerVehicle(GetPVarInt(playerid, "LockPickPlayer"), GetPVarInt(playerid, "LockPickVehicle")),
@@ -2940,7 +2917,7 @@ public OnPlayerSpawn(playerid)
 		AdvanceTutorial(playerid);
 	}
 
-//	if(PlayerInfo[playerid][pTut] == -1 && PlayerInfo[playerid][pNation] != 0 && PlayerInfo[playerid][pNation] != 1) ShowPlayerDialogEx(playerid, DIALOG_NATION_CHECK, DIALOG_STYLE_LIST, "Please chose a nation.", "San Andreas\nNew Robada", "Select", "<<");
+	if(PlayerInfo[playerid][pTut] == -1 && PlayerInfo[playerid][pNation] != 0 && PlayerInfo[playerid][pNation] != 1) ShowPlayerDialogEx(playerid, DIALOG_NATION_CHECK, DIALOG_STYLE_LIST, "Please chose a nation.", "San Andreas\nNew Robada", "Select", "<<");
 	return 1;
 }
 
@@ -3015,13 +2992,13 @@ public OnPlayerEnterCheckpoint(playerid)
 				new query[128];
 				if(PlayerInfo[playerid][pRFLTeam] != -1) {
 					RFLInfo[PlayerInfo[playerid][pRFLTeam]][RFLlaps] +=1;
-					format(query, sizeof(query), "UPDATE `rflteams` SET `laps` = %d WHERE `id` = %d;",
+					mysql_format(MainPipeline, query, sizeof(query), "UPDATE `rflteams` SET `laps` = %d WHERE `id` = %d;",
 					RFLInfo[PlayerInfo[playerid][pRFLTeam]][RFLlaps],
 					RFLInfo[PlayerInfo[playerid][pRFLTeam]][RFLsqlid]);
-					mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+					mysql_tquery(MainPipeline, query, "OnQueryFinish", "i", SENDDATA_THREAD);
 				}
-				format(query, sizeof(query), "UPDATE `accounts` SET `RacePlayerLaps` = %d WHERE `id` = %d;", PlayerInfo[playerid][pRacePlayerLaps], GetPlayerSQLId(playerid));
-				mysql_function_query(MainPipeline, query, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+				mysql_format(MainPipeline, query, sizeof(query), "UPDATE `accounts` SET `RacePlayerLaps` = %d WHERE `id` = %d;", PlayerInfo[playerid][pRacePlayerLaps], GetPlayerSQLId(playerid));
+				mysql_tquery(MainPipeline, query, "OnQueryFinish", "i", SENDDATA_THREAD);
 			}
 			new string[128];
 			if(PlayerInfo[playerid][pRFLTeam] != -1) {
@@ -3123,8 +3100,8 @@ public OnPlayerEnterCheckpoint(playerid)
 		new ip[MAX_PLAYER_NAME], ip2[MAX_PLAYER_NAME];
 		GetPlayerIp(playerid, ip, sizeof(ip));
 		if(GetPVarType(playerid, "LockPickVehicleSQLId")) {
-			format(szMessage, sizeof(szMessage), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d' AND `sqlID` = '%d'", VehicleFuel[GetPVarInt(playerid, "LockPickVehicle")], GetPVarInt(playerid, "LockPickVehicleSQLId"), GetPVarInt(playerid, "LockPickPlayerSQLId"));
-			mysql_function_query(MainPipeline, szMessage, false, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
+			mysql_format(MainPipeline, szMessage, sizeof(szMessage), "UPDATE `vehicles` SET `pvFuel` = %0.5f WHERE `id` = '%d' AND `sqlID` = '%d'", VehicleFuel[GetPVarInt(playerid, "LockPickVehicle")], GetPVarInt(playerid, "LockPickVehicleSQLId"), GetPVarInt(playerid, "LockPickPlayerSQLId"));
+			mysql_tquery(MainPipeline, szMessage, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 			GetPVarString(playerid, "LockPickPlayerName", ip2, sizeof(ip2));
 			format(szMessage, sizeof(szMessage), "[LOCK PICK] %s(%d) (IP:%s) delivered a %s(VID:%d SQLId:%d) owned by %s(Offline SQLId %d)", GetPlayerNameEx(playerid), GetPlayerSQLId(playerid), ip, GetVehicleName(GetPVarInt(playerid, "LockPickVehicle")), GetPVarInt(playerid, "LockPickVehicle"), GetPVarInt(playerid, "LockPickVehicleSQLId"), ip2, GetPVarInt(playerid, "LockPickPlayerSQLId"));
 			Log("logs/playervehicle.log", szMessage);
@@ -3188,7 +3165,7 @@ public OnPlayerEnterCheckpoint(playerid)
 	if((0 <= MatDeliver[playerid] < MAX_POINTS)) {
 		new string[128], drugname[8];
 		if(IsPlayerInRangeOfPoint(playerid, 6.0, DynPoints[MatDeliver[playerid]][poPos2][0], DynPoints[MatDeliver[playerid]][poPos2][1], DynPoints[MatDeliver[playerid]][poPos2][2])) {
-			switch(DrugType[playerid]) //
+			switch(DynPoints[MatDeliver[playerid]][poType])
 			{
 				case 1: drugname = "Pot";
 				case 2: drugname = "Crack";
@@ -3203,9 +3180,9 @@ public OnPlayerEnterCheckpoint(playerid)
 				SendClientMessageEx(playerid, COLOR_WHITE, "* The factory gave you %s materials for your materials packages.", number_format(MatsAmount[playerid]));
 				TransferStorage(playerid, -1, -1, -1, 4, MatsAmount[playerid], -1, 2);
 			}
-			if((1 <= DynPoints[MatDeliver[playerid]][poType] > 0)) {
-				SendClientMessageEx(playerid, COLOR_WHITE, "You have delivered the packages an gained %sg of %s", number_format(MatsAmount[playerid]), drugname);
-				PlayerInfo[playerid][pDrugs][DrugType[playerid]] += MatsAmount[playerid];
+			if((1 <= DynPoints[MatDeliver[playerid]][poType] < 5)) {
+				SendClientMessageEx(playerid, COLOR_WHITE, "You have delivered the packages and gained %sg of %s", number_format(MatsAmount[playerid]), drugname);
+				PlayerInfo[playerid][pDrugs][DynPoints[MatDeliver[playerid]][poType]-1] += MatsAmount[playerid];
 				IncreaseSmugglerLevel(playerid);
 			}
 			if(GetPVarInt(playerid, "tpMatRunTimer") != 0)
@@ -3215,7 +3192,6 @@ public OnPlayerEnterCheckpoint(playerid)
 			}
 			MatDeliver[playerid] = -1;
 			MatsAmount[playerid] = 0;
-			DrugType[playerid] = -1;
 			DisablePlayerCheckpoint(playerid);
 		}
 	}
@@ -3290,12 +3266,12 @@ public OnPlayerEnterCheckpoint(playerid)
 		}
 		else
 		{
-			SetPlayerCheckpoint(playerid, -1675.0538,184.0603,-0.4623, 5);
-			GameTextForPlayer(playerid, "~w~Waypoint set ~r~San Fierro Docks", 5000, 1);
-			SendClientMessageEx(playerid, COLOR_WHITE, "HINT: Return to the San Fierro Docks (see checkpoint on radar).");
+			SetPlayerCheckpoint(playerid, 2098.6543,-104.3568,-0.4820, 5);
+			GameTextForPlayer(playerid, "~w~Waypoint set ~r~Palamino Docks", 5000, 1);
+			SendClientMessageEx(playerid, COLOR_WHITE, "HINT: Return to the Palamino Docks (see checkpoint on radar).");
 		}
 
-		SetPVarInt(playerid, "tpTruckRunTimer", 25);
+		SetPVarInt(playerid, "tpTruckRunTimer", 30);
 		SetTimerEx("OtherTimerEx", 1000, false, "ii", playerid, TYPE_TPTRUCKRUNTIMER);
 		return 1;
 	}
@@ -3460,7 +3436,7 @@ public OnPlayerEnterCheckpoint(playerid)
 			}
 			case CHECKPOINT_LOADTRUCK:
 			{
-			    if(IsPlayerInRangeOfPoint(playerid, 6, -1572.767822, 81.137527, 3.554687) || IsPlayerInRangeOfPoint(playerid, 6, -1675.0538,184.0603,-0.4623))
+			    if(IsPlayerInRangeOfPoint(playerid, 6, -1572.767822, 81.137527, 3.554687) || IsPlayerInRangeOfPoint(playerid, 6, 2098.6543,-104.3568,-0.4820))
 			    {
 				    new vehicleid = GetPlayerVehicleID(playerid);
 	   				if(IsATruckerCar(vehicleid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
@@ -3477,7 +3453,7 @@ public OnPlayerEnterCheckpoint(playerid)
 			}
 			case CHECKPOINT_RETURNTRUCK:
 			{
-			    if(!IsPlayerInRangeOfPoint(playerid, 6, -1548.087524, 123.590423, 3.554687) && !IsPlayerInRangeOfPoint(playerid, 6,-1675.0538,184.0603,-0.4623))
+			    if(!IsPlayerInRangeOfPoint(playerid, 6, -1548.087524, 123.590423, 3.554687) && !IsPlayerInRangeOfPoint(playerid, 6, 2098.6543,-104.3568,-0.4820))
 			    {// In the case the person finds a way to exploit the checkpoint to different location
                     CancelTruckDelivery(playerid);
                     SendClientMessageEx(playerid, COLOR_REALRED, "ERROR: Wrong checkpoint entered. Truck delivery canceled completely.");
@@ -3510,17 +3486,17 @@ public OnPlayerEnterCheckpoint(playerid)
    				new string[128], payment;
 				new level = PlayerInfo[playerid][pTruckSkill];
 				switch(level) {
-					case 0 .. 50: payment = 3500;
-					case 51 .. 100: payment = 5250;
-					case 101 .. 200: payment = 7500;
+					case 0 .. 50: payment = 4000;
+					case 51 .. 100: payment = 6250;
+					case 101 .. 200: payment = 8500;
 					case 201 .. 400: payment = 9750;
-					case 401: payment = 12500;
-					default: payment = 12500;
+					case 401: payment = 10500;
+					default: payment = 10500;
 				}
 				new Float:distancepay;
 				if(IsABoat(vehicleid))
 				{
-				    distancepay = floatmul(GetDistanceBetweenPoints(2098.6543,-104.3568,-0.4820, BoatDropoffs[route][PosX], BoatDropoffs[route][PosY], BoatDropoffs[route][PosZ]), 1.0);
+				    distancepay = floatmul(GetDistanceBetweenPoints(2098.6543,-104.3568,-0.4820, BoatDropoffs[route][PosX], BoatDropoffs[route][PosY], BoatDropoffs[route][PosZ]), 1.5);
 				}
 				else
 				{
@@ -3847,7 +3823,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             if(GetPVarInt(playerid, "TackleMode") == 1) {
 		    	return 1;
 			}
-			if(PlayerInfo[GetPlayerTargetPlayer(playerid)][pAdmin] >= 2 && !PlayerInfo[GetPlayerTargetPlayer(playerid)][pTogReports]) return SendClientMessageEx(playerid, COLOR_GREY, "You can't interact with administrators.");
 			Player_InteractMenu(playerid, GetPlayerTargetPlayer(playerid));
         }
     }
@@ -4098,18 +4073,16 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 						if (IsAHitman(playerid))
 						{
 							new string[128];
-							new takemoney = PlayerInfo[GoChase[playerid]][pHeadValue];//(PlayerInfo[GoChase[playerid]][pHeadValue] / 4) * 2;
+							new takemoney = PlayerInfo[GoChase[playerid]][pHeadValue];
 							GivePlayerCash(playerid, floatround(takemoney * 0.9));
 							GivePlayerCash(GoChase[playerid], -takemoney);
 							format(string,sizeof(string),"Hitman %s has fulfilled the contract on %s and collected $%d",GetPlayerNameEx(playerid),GetPlayerNameEx(GoChase[playerid]),takemoney);
-							foreach(new i: Player) if(IsAHitmanLeader(i)) SendClientMessage(i, COLOR_YELLOW, string);
+							foreach(new i: Player) if(IsAHitman(i)) SendClientMessage(i, COLOR_YELLOW, string);
 							format(string,sizeof(string),"You have been critically injured by a Hitman and lost $%d!",takemoney);
 							ResetPlayerWeaponsEx(GoChase[playerid]);
 						    // SpawnPlayer(GoChase[playerid]);
 							SendClientMessageEx(GoChase[playerid], COLOR_YELLOW, string);
 
-							format(szMiscArray, sizeof szMiscArray, "You have completed the hit on %s and collected $%s.", GetPlayerNameEx(GoChase[playerid]), number_format(takemoney));
-							SendClientMessage(playerid, COLOR_YELLOW, szMiscArray);
 							PlayerInfo[GoChase[playerid]][pHeadValue] = 0;
 							PlayerInfo[playerid][pCHits] += 1;
 							SetHealth(GoChase[playerid], 0.0);
@@ -4180,9 +4153,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					GivePlayerCash(GetChased[playerid], floatround(takemoney * 0.9));
 					GivePlayerCash(playerid, -takemoney);
 					format(string,sizeof(string),"Hitman %s has fulfilled the contract on %s and collected $%d.",GetPlayerNameEx(GetChased[playerid]),GetPlayerNameEx(playerid),takemoney);
-					foreach(new i: Player) if(IsAHitmanLeader(i)) SendClientMessage(i, COLOR_YELLOW, string);
-					format(string, sizeof string, "You have completed the hit on %s and collected $%s", GetPlayerNameEx(playerid), number_format(takemoney));
-					SendClientMessage(GetChased[playerid], COLOR_YELLOW, string);
+					foreach(new i: Player) if(IsAHitman(i)) SendClientMessage(i, COLOR_YELLOW, string);
 					format(string,sizeof(string),"You have been critically injured by a hitman and lost $%d!",takemoney);
 					ResetPlayerWeaponsEx(playerid);
 					SendClientMessageEx(playerid, COLOR_YELLOW, string);
@@ -4761,7 +4732,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 
-		if(GetCarBusiness(newcar) != INVALID_BUSINESS_ID && PlayerInfo[playerid][pAdmin] < 2 || PlayerInfo[playerid][pTogReports])
+		if(GetCarBusiness(newcar) != INVALID_BUSINESS_ID && PlayerInfo[playerid][pAdmin] < 1337)
         {
 			if(zombieevent)
 			{
@@ -4902,9 +4873,8 @@ public OnPlayerRequestClass(playerid, classid)
 	else
 	{
 		TogglePlayerSpectating(playerid, 1);
-		SetPlayerJoinCamera(playerid);
+		//SetPlayerJoinCamera(playerid);
 	}
-
 	return 1;
 }
 
@@ -5155,17 +5125,21 @@ public OnPlayerText(playerid, text[])
 					}
 					if(GetPVarInt(playerid, "marriagelastname") == 2)
 					{
+						new escapedName[MAX_PLAYER_NAME];
 						format(string, sizeof(string), "%s_%s", GetFirstName(playerid), GetLastName(ProposedTo[playerid]));
-						SetPVarString(playerid, "NewNameRequest", g_mysql_ReturnEscaped(string, MainPipeline));
-						format(string, sizeof(string), "SELECT `Username` FROM `accounts` WHERE `Username`='%s'", g_mysql_ReturnEscaped(string, MainPipeline));
-						mysql_function_query(MainPipeline, string, true, "OnApproveName", "ii", playerid, playerid);
+						mysql_escape_string(string, escapedName);
+						SetPVarString(playerid, "NewNameRequest", escapedName);
+						mysql_format(MainPipeline, string, sizeof(string), "SELECT `Username` FROM `accounts` WHERE `Username`='%e'", string);
+						mysql_tquery(MainPipeline, string, "OnApproveName", "ii", playerid, playerid);
 					}
 					if(GetPVarInt(ProposedTo[playerid], "marriagelastname") == 2)
 					{
+						new escapedName[MAX_PLAYER_NAME];
 						format(string, sizeof(string), "%s_%s", GetFirstName(ProposedTo[playerid]), GetLastName(playerid));
-						SetPVarString(ProposedTo[playerid], "NewNameRequest", g_mysql_ReturnEscaped(string, MainPipeline));
-						format(string, sizeof(string), "SELECT `Username` FROM `accounts` WHERE `Username`='%s'", g_mysql_ReturnEscaped(string, MainPipeline));
-						mysql_function_query(MainPipeline, string, true, "OnApproveName", "ii", ProposedTo[playerid], ProposedTo[playerid]);
+						mysql_escape_string(string, escapedName);
+						SetPVarString(ProposedTo[playerid], "NewNameRequest", escapedName);
+						mysql_format(MainPipeline, string, sizeof(string), "SELECT `Username` FROM `accounts` WHERE `Username`='%e'", string);
+						mysql_tquery(MainPipeline, string, "OnApproveName", "ii", ProposedTo[playerid], ProposedTo[playerid]);
 					}
 					//MarriageCeremoney[ProposedTo[playerid]] = 1;
 					MarriageCeremoney[ProposedTo[playerid]] = 0;

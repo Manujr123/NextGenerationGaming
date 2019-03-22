@@ -170,12 +170,12 @@ CMD:goto(playerid, params[])
 		 	if (GetPlayerState(playerid) == 2)
 			{
 				new tmpcar = GetPlayerVehicleID(playerid);
-				SetVehiclePos(tmpcar, -1991.0, 137.7, 28.0);
+				SetVehiclePos(tmpcar, -1605.0,720.0,12.0);
 				LinkVehicleToInterior(tmpcar, int);
 				SetVehicleVirtualWorld(tmpcar, vw);
 				fVehSpeed[playerid] = 0.0;
 			}
-			else SetPlayerPos(playerid, -1991.0, 137.7, 28.0);
+			else SetPlayerPos(playerid, -1605.0,720.0,12.0);
 		}
 		else if(strcmp(location,"lv",true) == 0)
 		{
@@ -300,12 +300,12 @@ CMD:goto(playerid, params[])
 		 	if (GetPlayerState(playerid) == 2)
 			{
 				new tmpcar = GetPlayerVehicleID(playerid);
-				SetVehiclePos(tmpcar, -1943.9, 459.7, 34.3);
+				SetVehiclePos(tmpcar, -2433.63, 511.45, 30.38);
 				LinkVehicleToInterior(tmpcar, int);
 				SetVehicleVirtualWorld(tmpcar, vw);
 				fVehSpeed[playerid] = 0.0;
 			}
-			else SetPlayerPos(playerid, -1943.9, 459.7, 34.3);
+			else SetPlayerPos(playerid, -2433.63, 511.45, 30.38);
 		}
        	else if(strcmp(location,"lvvip",true) == 0)
 		{
@@ -898,14 +898,14 @@ CMD:sendto(playerid, params[])
 		 	if (GetPlayerState(giveplayerid) == 2)
 			{
 				new tmpcar = GetPlayerVehicleID(giveplayerid);
-				SetVehiclePos(tmpcar, -1991.0, 137.7, 28.0);
+				SetVehiclePos(tmpcar, -1605.0,720.0,12.0);
 				LinkVehicleToInterior(tmpcar, 0);
 				SetVehicleVirtualWorld(tmpcar, 0);
 				fVehSpeed[giveplayerid] = 0.0;
 			}
 			else
 			{
-				SetPlayerPos(giveplayerid, -1991.0, 137.7, 28.0);
+				SetPlayerPos(giveplayerid, -1605.0,720.0,12.0);
 			}
 			format(string, sizeof(string), " You have sent %s to San Fierro.", GetPlayerNameEx(giveplayerid));
 			SendClientMessageEx(playerid, COLOR_WHITE, string);
@@ -1146,14 +1146,14 @@ CMD:sendto(playerid, params[])
 		 	if (GetPlayerState(giveplayerid) == 2)
 			{
 				new tmpcar = GetPlayerVehicleID(giveplayerid);
-				SetVehiclePos(tmpcar, -1942.0, 468.00, 35.0);
+				SetVehiclePos(tmpcar, -2433.63, 511.45, 30.38);
 				LinkVehicleToInterior(tmpcar, 0);
 				SetVehicleVirtualWorld(tmpcar, 0);
 				fVehSpeed[giveplayerid] = 0.0;
 			}
 			else
 			{
-				SetPlayerPos(giveplayerid, -1942.0, 468.00, 35.0);
+				SetPlayerPos(giveplayerid, -2433.63, 511.45, 30.38);
 			}
 			format(string, sizeof(string), " You have sent %s to SF VIP.", GetPlayerNameEx(giveplayerid));
 			SendClientMessageEx(playerid, COLOR_WHITE, string);

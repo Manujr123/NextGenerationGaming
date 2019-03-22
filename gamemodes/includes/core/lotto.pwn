@@ -43,7 +43,7 @@ public Lotto(number)
 	new JackpotFallen = 0, TotalWinners = 0, string[128];
 
 	format(string, sizeof(string), "Lottery News: Today the winning number has fallen on... %d!.", number);
-	SendClientMessageToAllEx( COLOR_WHITE, string);
+	OOCOff(COLOR_WHITE, string);
 
 	foreach(new i: Player)
 	{
@@ -86,8 +86,7 @@ public Lotto(number)
 				}
 				JackpotFallen = 1;
 				format(string, sizeof(string), "Lottery News: %s has won the Jackpot of $%s with their lottery ticket.", GetPlayerNameEx(i), number_format(Jackpot));
-				SendClientMessageToAllEx( COLOR_WHITE, string);
-				SendDiscordMessage(6, string);
+				OOCOff(COLOR_WHITE, string);
 				format(string, sizeof(string), "* You have won $%s with your lottery ticket - congratulations!", number_format(Jackpot));
 				SendClientMessageEx(i, COLOR_YELLOW, string);
 				GivePlayerCash(i, Jackpot);
@@ -109,7 +108,7 @@ public Lotto(number)
 				}
 				JackpotFallen = 1;
 				format(string, sizeof(string), "Lottery News: %s has won the Jackpot of $%s with their lottery ticket.", GetPlayerNameEx(i), number_format(Jackpot/TotalWinners));
-				SendClientMessageToAllEx( COLOR_WHITE, string);
+				OOCOff(COLOR_WHITE, string);
 				format(string, sizeof(string), "* You have won $%s with your lottery ticket - congratulations!", number_format(Jackpot/TotalWinners));
 				SendClientMessageEx(i, COLOR_YELLOW, string);
 				GivePlayerCash(i, Jackpot/TotalWinners);
@@ -123,13 +122,13 @@ public Lotto(number)
 	{
 		Misc_Save();
 		format(string, sizeof(string), "Lottery News: The Jackpot has been raised to $%s.", number_format(Jackpot));
-		SendClientMessageToAllEx( COLOR_WHITE, string);
+		OOCOff(COLOR_WHITE, string);
 	}
 	else
 	{
 	    Jackpot = 50000;
 	    format(string, sizeof(string), "Lottery News: The new Jackpot has been started with $%s.", number_format(Jackpot));
-		SendClientMessageToAllEx( COLOR_WHITE, string);
+		OOCOff(COLOR_WHITE, string);
 	}
 	return 1;
 }
@@ -151,7 +150,7 @@ public StartLotto(stage)
 	    else if(stage == 2) minutes = 4;
 	    else if(stage == 3) minutes = 2;
 		format(string, sizeof(string), "Lottery News: A Lottery Election is about to start, please get a lottery ticket at any 24/7. %d minutes left.", minutes);
-		SendClientMessageToAllEx( COLOR_WHITE, string);
+		OOCOff(COLOR_WHITE, string);
 		if(stage > 0)
 		{
 			SetTimerEx("StartLotto", 120000, 0, "d", stage+1);
@@ -171,13 +170,13 @@ public EndLotto(secondt)
 	if(secondt != 0)
 	{
 		format(string, sizeof(string), "Lottery News Countdown: %d.", secondt);
-		SendClientMessageToAllEx( COLOR_WHITE, string);
+		OOCOff(COLOR_WHITE, string);
 		SetTimerEx("EndLotto", 1000, 0, "d", secondt-1);
 	}
 	else
 	{
 	    format(string, sizeof(string), "Lottery News: We have started the Lottery Election.");
-		SendClientMessageToAllEx( COLOR_WHITE, string);
+		OOCOff(COLOR_WHITE, string);
 		new rand = Random(1, 300);
 		Lotto(rand);
 	}

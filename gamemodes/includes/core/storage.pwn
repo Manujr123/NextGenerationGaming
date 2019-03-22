@@ -1559,7 +1559,7 @@ stock ShowInventory(playerid,targetid)
 {
 	if(IsPlayerConnected(targetid))
 	{
-		new resultline[1024], header[256], pnumber[20], toolboxstring[30];
+		new resultline[1024], header[64], pnumber[20], toolboxstring[30];
 		if(PlayerInfo[targetid][pPnumber] == 0) pnumber = "None"; else format(pnumber, sizeof(pnumber), "%d", PlayerInfo[targetid][pPnumber]);
 
 		new totalwealth;
@@ -1572,13 +1572,7 @@ stock ShowInventory(playerid,targetid)
 		else format(toolboxstring, 50, "Tool Box: 0");
 		
 		SetPVarInt(playerid, "ShowInventory", targetid);
-
-        new szDate[3], szTime[3];
-        getdate(szDate[0], szDate[1], szDate[2]);
-        gettime(szTime[0], szTime[1], szTime[2]);
-
-		format(header, sizeof(header), "%s's inv | %02d/%d/%02d %02d:%02d:%02d", GetPlayerNameEx(targetid), szDate[1], szDate[2], szDate[0], szTime[0], szTime[1], szTime[2]);
-
+		format(header, sizeof(header), "%s's Inventory", GetPlayerNameEx(targetid));
 		format(resultline, sizeof(resultline),"{FFFFFF}Total Wealth: $%s\n\
 		Cash: $%s\n\
 		Bank: $%s\n\
@@ -2901,8 +2895,8 @@ CMD:closetremove(playerid, params[])
 					if(IsPlayerInRangeOfPoint(playerid, 3.0, HouseInfo[i][hClosetX], HouseInfo[i][hClosetY], HouseInfo[i][hClosetZ]))
 					{
 						new query[128];
-						format(query, sizeof(query), "SELECT `skinid` FROM `house_closet` WHERE playerid = %d ORDER BY `skinid` ASC", GetPlayerSQLId(playerid));
-						mysql_function_query(MainPipeline, query, true, "SkinQueryFinish", "ii", playerid, Skin_Query_Delete);
+						mysql_format(MainPipeline, query, sizeof(query), "SELECT `skinid` FROM `house_closet` WHERE playerid = %d ORDER BY `skinid` ASC", GetPlayerSQLId(playerid));
+						mysql_tquery(MainPipeline, query, "SkinQueryFinish", "ii", playerid, Skin_Query_Delete);
 						return 1;
 					}
 					else return SendClientMessageEx(playerid, COLOR_GREY, "You aren't near your closet!");

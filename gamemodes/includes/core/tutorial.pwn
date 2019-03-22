@@ -1,7 +1,3 @@
-//Removed choose nation and it's check on regis
-// Instead of dialog it calls a model selction for skins
-
-
 /*
 
 	 /$$   /$$  /$$$$$$          /$$$$$$$  /$$$$$$$
@@ -50,24 +46,14 @@ AdvanceTutorial(playerid)
 	{
 		case -1:
 		{
-			PlayerInfo[playerid][pAccount] = 0;
-			PlayerInfo[playerid][pInsurance] = 2;
-			PlayerInfo[playerid][pConnectHours] = 2; // remove after launch
-		   	ResetPlayerCash(playerid);
-			Streamer_UpdateEx(playerid, 1715.0687, -1899.5597, 13.5665);
-			SetPlayerPos(playerid,  1715.0687, -1899.5597, 13.5665);
-			SetPlayerFacingAngle(playerid, 0.0000);
 			TogglePlayerSpectating(playerid, false);
-
-			SendClientMessageEx(playerid, COLOR_GREEN, "Welcome back to Next Generation Gaming!");
-			SendClientMessageEx(playerid, COLOR_WHITE, "If you need any assistance type /newb!");
-			SendClientMessageEx(playerid, COLOR_WHITE, "If you need any admin assistance type /report!");
-			SendClientMessageEx(playerid, COLOR_WHITE, "For a list of server commands type /help!"); 
-
-			new string[128];
-			format(string, sizeof(string), "* %s steps out of the train with a duffel bag filled with cash.", GetPlayerNameEx(playerid));
-			ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
-			TogglePlayerSpectating(playerid, false);
+			SetPlayerPos(playerid, 1715.0687, -1899.5597, 13.5665);
+			SetPlayerFacingAngle(playerid, 0);
+			SetPlayerSkin(playerid, PlayerInfo[playerid][pModel]);
+			SetPlayerInterior(playerid, 0);
+			SetPlayerVirtualWorld(playerid, 0);
+			SetHealth(playerid, 100);
+			ClearChatbox(playerid);
 		}
 		case 0:
 		{
@@ -78,85 +64,85 @@ AdvanceTutorial(playerid)
 			SetPlayerInterior(playerid, 0);
 			SetPlayerVirtualWorld(playerid, playerid + 1);
 
-			InterpolateCameraPos(playerid, -1122.733520, 566.428039, 74.477111, -1510.870727, 756.345947, 63.822765, 5000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, -1127.130615, 568.792968, 74.746513, -1515.371093, 758.518188, 63.654830, 5000, CAMERA_MOVE);
+			InterpolateCameraPos(playerid, 1333.5521, -1388.1493, 67.2808, 1387.4829, -923.4698, 90.6020, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 1333.5950, -1387.1521, 67.3258, 1387.7191, -922.5004, 90.4920, 15000, CAMERA_MOVE);
 
 			KillTimer(TutorialTime[playerid]);
-			SetPVarInt(playerid, "pTutorialTimer", 5);
+			SetPVarInt(playerid, "pTutorialTimer", 15);
 			TutorialTime[playerid] = SetTimerEx("TutorialTimer", 1000, true, "i", playerid);
 			ShowTutorialDialog(playerid, 0);
 		}
 		case 1:
 		{
-
-			InterpolateCameraPos(playerid, -2143.447509, 731.122680, 72.378211, -2238.905761, 731.552978, 58.697544, 5000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, -2148.427001, 731.456237, 72.073715, -2243.650390, 731.766723, 57.134353, 5000, CAMERA_MOVE);
+			InterpolateCameraPos(playerid, 725.9147, -1610.8770, 3.0359, 734.8999, -1962.6320, -6.3299, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 725.9500, -1611.8734, 3.0057, 734.9311, -1963.6292, -6.5201, 15000, CAMERA_MOVE);
 
 			KillTimer(TutorialTime[playerid]);
-			SetPVarInt(playerid, "pTutorialTimer", 5);
+			SetPVarInt(playerid, "pTutorialTimer", 15);
 			TutorialTime[playerid] = SetTimerEx("TutorialTimer", 1000, true, "i", playerid);
 			ShowTutorialDialog(playerid, 1);
 		}
 		case 2:
 		{
-			InterpolateCameraPos(playerid, -2322.297851, -440.815429, 97.357841, -2664.391113, -267.085327, 97.357841, 5000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, -2320.356445, -436.208374, 97.435958, -2662.128173, -262.629547, 97.517967, 5000, CAMERA_MOVE);
+			InterpolateCameraPos(playerid, 1104.7491, -1401.8911, 14.6202, 1145.8008, -1471.2203, 27.1695, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 1105.5040, -1402.5443, 14.5450, 1145.2341, -1470.3988, 26.7043, 15000, CAMERA_MOVE);
 
 			KillTimer(TutorialTime[playerid]);
-			SetPVarInt(playerid, "pTutorialTimer", 5);
+			SetPVarInt(playerid, "pTutorialTimer", 15);
 			TutorialTime[playerid] = SetTimerEx("TutorialTimer", 1000, true, "i", playerid);
 			ShowTutorialDialog(playerid, 2);
 		}
 		case 3:
 		{
-			InterpolateCameraPos(playerid, -1684.865722, 743.033691, 29.850921, -1574.499145, 745.213928, 29.850921, 5000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, -1684.767089, 738.038757, 29.649061, -1574.400512, 740.218994, 29.649061, 5000, CAMERA_MOVE);
+			InterpolateCameraPos(playerid, 1517.0358, -1616.2576, 17.8788, 1520.4496, -1715.3738, 18.1261, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 1517.4991, -1617.1411, 17.8737, 1521.0973, -1714.6147, 18.0459, 15000, CAMERA_MOVE);
 
 			KillTimer(TutorialTime[playerid]);
-			SetPVarInt(playerid, "pTutorialTimer", 5);
+			SetPVarInt(playerid, "pTutorialTimer", 15);
 			TutorialTime[playerid] = SetTimerEx("TutorialTimer", 1000, true, "i", playerid);
 			ShowTutorialDialog(playerid, 3);
 		}
 		case 4:
 		{
-			InterpolateCameraPos(playerid, -2595.721923, 33.659851, 24.744461, -2607.914062, 119.301635, 16.830526, 5000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, -2599.516113, 36.653709, 23.463247, -2611.972167, 122.158187, 16.219982, 5000, CAMERA_MOVE);
+			InterpolateCameraPos(playerid, 938.9750, -1324.3108, 14.0205, 1039.5808, -1324.3224, 14.4793, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 939.9739, -1324.3015, 14.0254, 1040.5797, -1324.3134, 14.4891, 15000, CAMERA_MOVE);
 
 			KillTimer(TutorialTime[playerid]);
-			SetPVarInt(playerid, "pTutorialTimer", 5);
+			SetPVarInt(playerid, "pTutorialTimer", 15);
 			TutorialTime[playerid] = SetTimerEx("TutorialTimer", 1000, true, "i", playerid);
 			ShowTutorialDialog(playerid, 4);
 		}
 		case 5:
 		{
-			InterpolateCameraPos(playerid, -1737.198974, 1304.578002, 35.935195, -1710.052124, 1332.307250, 18.017002, 5000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, -1733.976440, 1307.685913, 33.708843, -1706.902221, 1335.733886, 16.190401, 5000, CAMERA_MOVE);
+			InterpolateCameraPos(playerid, 366.2238, -1798.2668, 9.5036, 369.1093, -2030.7736, 8.7837, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 366.3326, -1799.2593, 9.5184, 369.2533, -2031.7618, 8.7687, 15000, CAMERA_MOVE);
 
 			ShowTutorialDialog(playerid, 5);
 		}
 		case 6 .. 10: ShowTutorialDialog(playerid, PlayerInfo[playerid][pTut]);
 		case 11:
 		{
-			InterpolateCameraPos(playerid, -1604.001464, 1212.186523, 23.727670, -1626.802612, 1254.686767, 23.727670, 5000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, -1608.997558, 1212.001586, 23.799192, -1630.290405, 1251.115844, 24.017780, 5000, CAMERA_MOVE);
+			InterpolateCameraPos(playerid, 1457.7699, -870.9628, 63.1767, 1525.9520, -805.8469, 72.9416, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 1458.4862, -870.2654, 63.1212, 1526.6012, -805.0862, 72.9162, 15000, CAMERA_MOVE);
 
 			ShowTutorialDialog(playerid, 11);
 			SetPlayerInterior(playerid, 0);
 		}
 		case 12:
 		{
-			InterpolateCameraPos(playerid, -2013.200073, 322.930023, 58.875057, -2001.977294, 164.362823, 31.042732, 5000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, -2009.534423, 319.748992, 57.673305, -1998.311645, 161.181793, 29.840980, 5000, CAMERA_MOVE);
+			InterpolateCameraPos(playerid, 1569.0149, -1812.5513, 16.1676, 1568.5962, -1889.8837, 13.8242, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 1569.0370, -1813.5509, 16.1273, 1568.5488, -1890.8818, 13.7888, 15000, CAMERA_MOVE);
 
 			ShowTutorialDialog(playerid, 12);
 		}
 		case 13:
 		{
+			AdjustActor(playerid, 2);
 			CharacterCreation(playerid);
-	 		SetPlayerSkin(playerid, 75);
-	 		AdjustActor(playerid, 75);
-            InterpolateCameraPos(playerid, -2019.664062, 152.377548, 59.839912, -1986.805541, 138.156478, 29.130123, 5000, CAMERA_MOVE);
-            InterpolateCameraLookAt(playerid, -2016.082519, 154.167465, 56.845172, -1982.372680, 138.933883, 26.951782, 5000, CAMERA_MOVE);
+
+			InterpolateCameraPos(playerid, 237.6108, 1822.9670, 7.8454, 224.6772, 1820.0587, 7.6625, 5000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, 236.6068, 1822.9495, 7.7454, 223.7760, 1820.5018, 7.6224, 5000, CAMERA_MOVE);
+			SetPlayerInterior(playerid, 0);
 		}
 		case 14: CharacterCreation(playerid);
 		case 15:
@@ -167,7 +153,7 @@ AdvanceTutorial(playerid)
 			SendClientMessageEx(playerid, COLOR_WHITE, "Head the checkpoint on your map to purchase a vehicle.");
 			SendClientMessageEx(playerid, COLOR_GREY, "-----------------------------");
 
-			SetPlayerCheckpoint(playerid, -1968.2156,293.7960,35.1719, 5.0);
+			SetPlayerCheckpoint(playerid, 1645.9091,-1897.6914,13.5521, 5.0);
 
 		}
 		case 16:
@@ -177,7 +163,7 @@ AdvanceTutorial(playerid)
 			SendClientMessageEx(playerid, COLOR_WHITE, "Objective: Withdraw money from the bank.");
 			SendClientMessageEx(playerid, COLOR_WHITE, "Head the checkpoint on your map to withdraw money.");
 			SendClientMessageEx(playerid, COLOR_GREY, "-----------------------------");
-			SetPlayerCheckpoint(playerid, -1580.9592,866.6301,7.6953, 5.0);
+			SetPlayerCheckpoint(playerid, 1457.0022,-1011.3710,26.8438, 5.0);
 		}
 		case 17:
 		{
@@ -187,7 +173,7 @@ AdvanceTutorial(playerid)
 			SendClientMessageEx(playerid, COLOR_WHITE, "Head the checkpoint on your map to purchase a phone.");
 			SendClientMessageEx(playerid, COLOR_GREY, "-----------------------------");
 
-			SetPlayerCheckpoint(playerid, -1989.1060,884.8534,46.5406, 5.0);
+			SetPlayerCheckpoint(playerid, 999.6548,-919.9871,42.3281, 5.0);
 		}
 		case 18:
 		{
@@ -221,39 +207,30 @@ CharacterCreation(playerid)
 			format(szMiscArray, sizeof(szMiscArray), "Name:\t%s\n\
 				Gender:\t%s\n\
 				Date of Birth\t%s\n\
+				Nation\t%s\n\
 				Accent:\t%s\n\
 				Skin ID:\t%i\n\
 				Complete",
 				GetPlayerNameEx(playerid),
 				genderstring,
 				PlayerInfo[playerid][pBirthDate],
+				GetPlayerNation(playerid),
 				GetPlayerAccent(playerid),
 				PlayerInfo[playerid][pModel]);
 			return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_CREATION, DIALOG_STYLE_TABLIST, "NG:RP | Character Creation", szMiscArray, "Select", "");
 		}
-		case 14: 
-		{
+		case 14: {
 
-			ClearChatbox(playerid);
-			SendClientMessageEx(playerid, COLOR_GREEN, "Welcome back to Next Generation Gaming!");
-			SendClientMessageEx(playerid, COLOR_WHITE, "If you need any assistance type /newb!");
-			SendClientMessageEx(playerid, COLOR_WHITE, "If you need any admin assistance type /report!");
-			SendClientMessageEx(playerid, COLOR_WHITE, "For a list of server commands type /help!"); 
-
-			new string[128];
-			format(string, sizeof(string), "* %s steps out of the train with a duffel bag filled with cash.", GetPlayerNameEx(playerid));
-			ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
-			TogglePlayerSpectating(playerid, false);
 			DestroyActor(GetPVarInt(playerid, "pActor"));
 			TogglePlayerSpectating(playerid, false);
-			Streamer_UpdateEx(playerid, 1715.0687, -1899.5597, 13.5665);
-			SetPlayerPos(playerid,  1715.0687, -1899.5597, 13.5665);
-			SetPlayerFacingAngle(playerid, 0.0000);				
+			SetPlayerPos(playerid, 1715.0687, -1899.5597, 13.5665);
+			SetPlayerFacingAngle(playerid, 0);
 			SetPlayerSkin(playerid, PlayerInfo[playerid][pModel]);
 			SetPlayerInterior(playerid, 0);
 			SetPlayerVirtualWorld(playerid, 0);
 			SetHealth(playerid, 100);
-		
+			ClearChatbox(playerid);
+
 			ShowPlayerDialogEx(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "NG:RP Tutorial - Welcome", "Would you like to have the server provide you with objectives to guide you around the server?", "Yes, please!", "No, thanks.");
 		}
 	}
@@ -278,11 +255,11 @@ ShowTutorialDialog(playerid, stage)
 				strcat(szMiscArray, "as you would in real life. Along the way your character learns new information and allows them to develop.\n\n");
 				strcat(szMiscArray, "As a community, we've been around since 2010 and have grown significantly since then.\n\n");
 				strcat(szMiscArray, "{FF0000}NG:RP Related Services{FFFFFF}:\n");
-				strcat(szMiscArray, "\t{F69500}Website{FFFFFF}: ng-gaming.com - Sign up on our forums and interact with the community!\n");
-				strcat(szMiscArray, "\t{F69500}User Control Panel{FFFFFF}: cp.ng-gaming.com - Control your account and take measures to ensure your account's security!\n");
-			//	strcat(szMiscArray, "\t{F69500}Shop{FFFFFF}: shop.ng-gaming.com - Purchase credits from the shop and purchase items in game!\n");
-				strcat(szMiscArray, "\t{F69500}TeamSpeak{FFFFFF}: ts.ng-gaming.com - Connect and speak to different members of the community!\n");
-		//		strcat(szMiscArray, "\t{F69500}Image Sharing{FFFFFF}: ngg.up - Share your favourite images with your friends, with the press of a button.\n\n");
+				strcat(szMiscArray, "\t{F69500}Website{FFFFFF}: ng-gaming.net - Sign up on our forums and interact with the community!\n");
+				strcat(szMiscArray, "\t{F69500}User Control Panel{FFFFFF}: cp.ng-gaming.net - Control your account and take measures to ensure your account's security!\n");
+				strcat(szMiscArray, "\t{F69500}Shop{FFFFFF}: shop.ng-gaming.net - Purchase credits from the shop and purchase items in game!\n");
+				strcat(szMiscArray, "\t{F69500}TeamSpeak{FFFFFF}: ts.ng-gaming.net - Connect and speak to different members of the community!\n");
+				strcat(szMiscArray, "\t{F69500}Image Sharing{FFFFFF}: ngg.up - Share your favourite images with your friends, with the press of a button.\n\n");
 				strcat(szMiscArray, "Please make sure you read this tutorial as you will be asked questions at the end.");
 				strcat(szMiscArray, "\n\n\n{FFFFFF}_______________________________________________________________________________________________________________________________________________________");
 				ShowPlayerDialogEx(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "NG:RP Tutorial - Welcome", szMiscArray, countstring, "");
@@ -353,7 +330,7 @@ ShowTutorialDialog(playerid, stage)
 			strcat(szMiscArray, "\t{FF0000}Transportation{FFFFFF}: They taxi around individuals who service them in exchange for a small fee.\n");
 			strcat(szMiscArray, "\t{FF0000}Contract Agency{FFFFFF}: They perform illegal contract hits on those who have them.\n");
 			strcat(szMiscArray, "\t{FF0000}Criminal{FFFFFF}: A group of criminals who do illegal things.\n\n");
-			strcat(szMiscArray, "Some groups allow you to apply to join them once you meet certain requirements! Check out all the groups at ng-gaming.com.");
+			strcat(szMiscArray, "Some groups allow you to apply to join them once you meet certain requirements! Check out all the groups at ng-gaming.net.");
 			strcat(szMiscArray, "\n\n\n{FFFFFF}_______________________________________________________________________________________________________________________________________________________");
 			ShowPlayerDialogEx(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "NG:RP Tutorial - Groups", szMiscArray, countstring, "");
 		}
@@ -420,6 +397,8 @@ ShowTutorialDialog(playerid, stage)
 			strcat(szMiscArray, "\t\t{F69521}Developers{FFFFFF}:\n\
 				\t\t\tMiguel\n\
 				\t\t\tFarva\n\
+				\t\t\tHector\n\
+				\t\t\tThomas\n\
 				\t\t{F69500}Past Developers{FFFFFF}:\n\
 				\t\t\tAkatony\tJohn\t\tBrendan\n\
 				\t\t\tBrian\t\tScott\t\tGhoulSlayer\n\
@@ -428,7 +407,8 @@ ShowTutorialDialog(playerid, stage)
 				\t\t\tBeren\t\tKareemtastic\tSew Sumi\n\
 				\t\t\tRazbit\t\tAlexR\t\tAustin\n\
 				\t\t\tDom\t\tRothschild\tWinterfield\n\
-				\t\t\tJingles\tBehemoth\tWesten\n");
+				\t\t\tJingles\tBehemoth\tWesten\n\
+				\t\t\tConnolly\n");
 			strcat(szMiscArray, "\n\n{FFFFFF}_______________________________________________________________________________________________________________________________________________________");
 			ShowPlayerDialogEx(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "NG:RP - Developers", szMiscArray, "Continue", "");
 		}
@@ -600,8 +580,8 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				case 0: return CharacterCreation(playerid);
 				case 1: return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_SEX, DIALOG_STYLE_LIST, "NG:RP Character Creation | Select Gender", "Male\nFemale", "Select", "<<");
 				case 2: return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_MONTH, DIALOG_STYLE_LIST, "{FF0000}Which month was your character born?", "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember", "Select", "<<");
-		//		case 3: return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_NATION, DIALOG_STYLE_LIST, "NG:RP Character Creation | Nation", "San Andreas\nNew Robada", "Select", "<<");
-				case 3:
+				case 3: return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_NATION, DIALOG_STYLE_LIST, "NG:RP Character Creation | Nation", "San Andreas\nNew Robada", "Select", "<<");
+				case 4:
 				{
 					szMiscArray[0] = 0;
 					szMiscArray = "No accent\n\
@@ -634,17 +614,17 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					Thai accent";
 					return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_ACCENT, DIALOG_STYLE_LIST, "NG:RP Character Creation | Accent", szMiscArray, "Select", "<<");
 				}
-				case 4:
+				case 5:
 				{
 					if(PlayerInfo[playerid][pSex] == 0) { 
 						SendClientMessage(playerid, COLOR_YELLOW, "Please select your gender first.");
-						return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_SEX, DIALOG_STYLE_LIST, "NG:RP Character Creation | Gender", "Male\nFemale", "Select", "<<");
+						return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_SEX, DIALOG_STYLE_LIST, "NG:RP Character Creation | Skin Model", "Male\nFemale", "Select", "<<");
 					}
 
-               		ShowModelSelectionMenu(playerid, RegiSkins, "Select your clothes");
+               		ShowPlayerDialogEx(playerid, DIALOG_REGISTER_SKIN, DIALOG_STYLE_INPUT, "NG:RP Character Creation | Skin Model", "Please enter a skin ID for your character.", "Select", "<<");
                	}
 				
-				case 5:
+				case 6:
 				{
 					if(PlayerInfo[playerid][pSex] == 0)
 					{
@@ -658,12 +638,21 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 						return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_MONTH, DIALOG_STYLE_LIST, "{FF0000}Which month was your character born?", "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember", "Select", "<<");
 					}
 
-//					if(PlayerInfo[playerid][pNation] != 0 && PlayerInfo[playerid][pNation] != 1) return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_NATION, DIALOG_STYLE_LIST, "NG:RP Character Creation | Nation", "San Andreas\nNew Robada", "Select", "<<");
+					if(PlayerInfo[playerid][pNation] != 0 && PlayerInfo[playerid][pNation] != 1) return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_NATION, DIALOG_STYLE_LIST, "NG:RP Character Creation | Nation", "San Andreas\nNew Robada", "Select", "<<");
 
 					ShowPlayerDialogEx(playerid, DIALOG_REGISTER_REFERRED, DIALOG_STYLE_INPUT, "{FF0000}Referral System", "Have you been referred to our server by one of our players?\nIf so, please enter the player name below.\n\nIf you haven't been referred by anyone, you may press the skip button.\n\n{FF0000}Note: You must enter the player name with a underscore (Example: FirstName_LastName)", "Enter", "Skip");
 					return 1;
 				}
 			}
+		}
+		case DIALOG_REGISTER_SKIN: {
+
+			if(response && !isnull(inputtext) && IsNumeric(inputtext) && IsValidSkin(strval(inputtext))) {
+
+			    PlayerInfo[playerid][pModel] = strval(inputtext);
+				AdjustActor(playerid, strval(inputtext));
+			}
+			CharacterCreation(playerid);
 		}
 		case DIALOG_REGISTER_SEX:
 	    {
@@ -686,7 +675,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			}
 			else ShowPlayerDialogEx(playerid, DIALOG_REGISTER_SEX, DIALOG_STYLE_LIST, "{FF0000}Is your character male or female?", "Male\nFemale", "Submit", "");
 		}
-/*		case DIALOG_REGISTER_NATION: 
+		case DIALOG_REGISTER_NATION: 
 		{
 			if(response) 
 			{
@@ -699,7 +688,6 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			}
 			CharacterCreation(playerid);
 		}
-*/
 		case DIALOG_REGISTER_MONTH:
 	    {
 			if(response)
@@ -807,7 +795,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 			  	mysql_escape_string(inputtext, szMiscArray);
                 format(PlayerInfo[playerid][pReferredBy], MAX_PLAYER_NAME, "%s", szMiscArray);
                 mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "SELECT `Username` FROM `accounts` WHERE `Username` = '%e'", inputtext);
-         		mysql_function_query(MainPipeline, szMiscArray, true, "OnQueryFinish", "iii", MAIN_REFERRAL_THREAD, playerid, g_arrQueryHandle{playerid});
+         		mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "iii", MAIN_REFERRAL_THREAD, playerid, g_arrQueryHandle{playerid});
 			}
 			else
 			{
@@ -843,7 +831,6 @@ hook OnPlayerEnterCheckpoint(playerid)
 				DisablePlayerCheckpoint(playerid);
 				SendClientMessage(playerid, COLOR_WHITE, "Enter the building and type /buy to purchase a phone.");
 			}
-			default: DisablePlayerCheckpoint(playerid);
 		}
 	}
 }
@@ -858,7 +845,7 @@ public AdjustActor(playerid, skinid)
 		if(IsValidActor(id)) DestroyActor(id);
 	}
 
-	id = CreateActor(skinid,-1983.4526, 137.5305, 27.6875, 89.7287);
+	id = CreateActor(skinid, 221.1730, 1823.6620, 7.5124, 270.0);
 	SetPVarInt(playerid, "pActor", id);
 	SetActorVirtualWorld(id, playerid + 1);
 	SetPlayerSkin(playerid, skinid);

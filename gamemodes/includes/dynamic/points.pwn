@@ -78,7 +78,6 @@ CMD:getmats(playerid, params[])
 	return 1;
 }
 
-/*
 CMD:getdrugs(playerid, params[]) {
 
 	if(PlayerInfo[playerid][pJob] != 14 && PlayerInfo[playerid][pJob2] != 14 && PlayerInfo[playerid][pJob3] != 14 && !IsACriminal(playerid)) return SendClientMessageEx(playerid,COLOR_GREY,"  You are not a drug smuggler or in a family!");
@@ -105,19 +104,19 @@ CMD:getdrugs(playerid, params[]) {
 		SendClientMessageEx(playerid, COLOR_WHITE, "You have purchased %sg of pot packages for $2,000", number_format(DynPoints[point][poAmount][vip]));
 	}
 	if(DynPoints[point][poType] == 2) { // Crack
-//		if(PlayerInfo[playerid][pDrugSmuggler] < 50) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need to be at least level two drug smuggler to do this run!");
+		if(PlayerInfo[playerid][pDrugSmuggler] < 50) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need to be at least level two drug smuggler to do this run!");
 		if(GetPlayerMoney(playerid) < 10000) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot afford the $10,000!");
 		GivePlayerCashEx(playerid, TYPE_ONHAND, -10000);
 		SendClientMessageEx(playerid, COLOR_WHITE, "You have purchased %sg of crack packages for $10,000!", number_format(DynPoints[point][poAmount][vip]));
 	}
 	if(DynPoints[point][poType] == 3) { // Meth
-//		if(PlayerInfo[playerid][pDrugSmuggler] < 200) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need to be at least level four drug smuggler to do this run!");
+		if(PlayerInfo[playerid][pDrugSmuggler] < 200) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need to be at least level four drug smuggler to do this run!");
 		if(GetPlayerMoney(playerid) < 25000) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot afford the $25,000!");
 		GivePlayerCashEx(playerid, TYPE_ONHAND, -25000);
 		SendClientMessageEx(playerid, COLOR_WHITE, "You have purchased %sg of meth packages for $25,000!", number_format(DynPoints[point][poAmount][vip]));
 	}
 	if(DynPoints[point][poType] == 4) { // Ecstasy
-//		if(PlayerInfo[playerid][pDrugSmuggler] < 400) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need to be at least level five drug smuggler to do this run!");
+		if(PlayerInfo[playerid][pDrugSmuggler] < 400) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need to be at least level five drug smuggler to do this run!");
 		if(GetPlayerMoney(playerid) < 50000) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot afford the $50,000!");
 		GivePlayerCashEx(playerid, TYPE_ONHAND, -50000);
 		SendClientMessageEx(playerid, COLOR_WHITE, "You have purchased %sg of ecstasy packages for $50,000!", number_format(DynPoints[point][poAmount][vip]));
@@ -130,84 +129,6 @@ CMD:getdrugs(playerid, params[]) {
 	SetPlayerCheckpoint(playerid, DynPoints[point][poPos2][0], DynPoints[point][poPos2][1], DynPoints[point][poPos2][2], 5);
 	SetPVarInt(playerid, "tpMatRunTimer", 10);
 	SetTimerEx("OtherTimerEx", 1000, false, "ii", playerid, TYPE_TPMATRUNTIMER);
-	return 1;
-}
-*/
-
-CMD:getdrugs(playerid, params[]) {
-
-	if(PlayerInfo[playerid][pJob] != 14 && PlayerInfo[playerid][pJob2] != 14 && PlayerInfo[playerid][pJob3] != 14 && !IsACriminal(playerid)) return SendClientMessageEx(playerid,COLOR_GREY,"  You are not a drug smuggler or in a family!");
-	if(CheckPointCheck(playerid)) return SendClientMessageEx(playerid, COLOR_WHITE, "Please ensure that your current checkpoint is destroyed first (you either have material packages, or another existing checkpoint).");
-	new point, drank[64], vip = ((0 <= PlayerInfo[playerid][pDonateRank] < 5) ? PlayerInfo[playerid][pDonateRank] : 0);
-	FetchPoint(playerid, point, (IsABoat(GetPlayerVehicleID(playerid)) ? 15.0 : 3.0));
-	if(point == -1) return SendClientMessageEx(playerid, COLOR_GRAD1, "You are not at a drug point!");
-	if(DynPoints[point][poType] < 1 || DynPoints[point][poType] > 4) return SendClientMessageEx(playerid, COLOR_GRAD1, "This point doesn't offer any drug runs! (TYPE: %d)", DynPoints[point][poType]);
-	if(DynPoints[point][poAmount][vip] < 1) return SendClientMessageEx(playerid, COLOR_GRAD1, "There is no material amount set up for %s for this point!", drank);
-	if(DynPoints[point][poPos2][0] == 0.0 || DynPoints[point][poPos2][1] == 0.0) return SendClientMessageEx(playerid, COLOR_GRAD1, "The end delivery point hasn't been setup yet!");
-	if(DynPoints[point][poBoat] && !IsABoat(GetPlayerVehicleID(playerid))) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need to be in a boat!");
-
-	Dialog_Show(playerid, point_drugs, DIALOG_STYLE_LIST, "What drugs do you want to smuggle?", "Pot\nCrack\nMeth\nEcstasy\nHeroin", "Select", "Exit");
-	return 1;
-}
-
-Dialog:point_drugs(playerid, response, listitem, inputtext[]) {
-	if(!response) return 1;
-	if(response) 
-	{
-		if(PlayerInfo[playerid][pJob] != 14 && PlayerInfo[playerid][pJob2] != 14 && PlayerInfo[playerid][pJob3] != 14 && !IsACriminal(playerid)) return SendClientMessageEx(playerid,COLOR_GREY,"  You are not a drug smuggler or in a family!");
-		if(CheckPointCheck(playerid)) return SendClientMessageEx(playerid, COLOR_WHITE, "Please ensure that your current checkpoint is destroyed first (you either have material packages, or another existing checkpoint).");
-		new point, drank[64], vip = ((0 <= PlayerInfo[playerid][pDonateRank] < 5) ? PlayerInfo[playerid][pDonateRank] : 0), string[128];
-		switch(vip)
-		{
-			case 0: drank = "Non-VIP";
-			case 1: drank = "Bronze VIP";
-			case 2: drank = "Silver VIP";
-			case 3: drank = "Gold VIP";
-			case 4: drank = "Platinum VIP";
-		}
-		FetchPoint(playerid, point, (IsABoat(GetPlayerVehicleID(playerid)) ? 15.0 : 3.0));
-		if(point == -1) return SendClientMessageEx(playerid, COLOR_GRAD1, "You are not at a drug point!");
-		if(DynPoints[point][poType] < 1 || DynPoints[point][poType] > 4) return SendClientMessageEx(playerid, COLOR_GRAD1, "This point doesn't offer any drug runs! (TYPE: %d)", DynPoints[point][poType]);
-		if(DynPoints[point][poAmount][vip] < 1) return SendClientMessageEx(playerid, COLOR_GRAD1, "There is no material amount set up for %s for this point!", drank);
-		if(DynPoints[point][poPos2][0] == 0.0 || DynPoints[point][poPos2][1] == 0.0) return SendClientMessageEx(playerid, COLOR_GRAD1, "The end delivery point hasn't been setup yet!");
-		if(DynPoints[point][poBoat] && !IsABoat(GetPlayerVehicleID(playerid))) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need to be in a boat!");
-
-		switch(listitem) {
-			case 0: 
-			{
-				if(GetPlayerMoney(playerid) < 2000) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot afford the $2,000!");
-				GivePlayerCashEx(playerid, TYPE_ONHAND, -2000);
-				SendClientMessageEx(playerid, COLOR_WHITE, "You have purchased %sg of pot packages for $2,000", number_format(DynPoints[point][poAmount][vip]));
-			}
-			case 1: 
-			{
-				if(GetPlayerMoney(playerid) < 10000) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot afford the $10,000!");
-				GivePlayerCashEx(playerid, TYPE_ONHAND, -10000);
-				SendClientMessageEx(playerid, COLOR_WHITE, "You have purchased %sg of crack packages for $10,000!", number_format(DynPoints[point][poAmount][vip]));
-			}
-			case 2: 
-			{
-				if(GetPlayerMoney(playerid) < 25000) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot afford the $25,000!");
-				GivePlayerCashEx(playerid, TYPE_ONHAND, -25000);
-				SendClientMessageEx(playerid, COLOR_WHITE, "You have purchased %sg of meth packages for $25,000!", number_format(DynPoints[point][poAmount][vip]));
-			}
-			case 3: 
-			{
-				if(GetPlayerMoney(playerid) < 50000) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot afford the $50,000!");
-				GivePlayerCashEx(playerid, TYPE_ONHAND, -50000);
-				SendClientMessageEx(playerid, COLOR_WHITE, "You have purchased %sg of ecstasy packages for $50,000!", number_format(DynPoints[point][poAmount][vip]));
-			}
-		}
-		DrugType[playerid] = listitem;
-		format(string, sizeof(string), "* %s takes a drug package.", GetPlayerNameEx(playerid));
-		ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
-		MatsAmount[playerid] = DynPoints[point][poAmount][vip];
-		MatDeliver[playerid] = point;
-		if(vip > 0) SendClientMessageEx(playerid, COLOR_LIGHTBLUE, "VIP: You have recieved more packages because of your %s.", drank);
-		SetPlayerCheckpoint(playerid, DynPoints[point][poPos2][0], DynPoints[point][poPos2][1], DynPoints[point][poPos2][2], 5);
-		SetPVarInt(playerid, "tpMatRunTimer", 10);
-		SetTimerEx("OtherTimerEx", 1000, false, "ii", playerid, TYPE_TPMATRUNTIMER);
-	}
 	return 1;
 }
 
@@ -363,7 +284,7 @@ public CaptureTimer(id)
 		strmid(DynPoints[id][poCaptureName], DynPoints[id][poPName], 0, 32, 32);
 		DynPoints[id][poTimeLeft] = 0;
 		DynPoints[id][poCapturable] = 0;
-		DynPoints[id][poTimer] = 6;
+		DynPoints[id][poTimer] = 25;
 		KillTimer(DynPoints[id][CapTimer]);
 		DynPoints[id][CapTimer] = 0;
 		UpdatePoint(id);
@@ -779,8 +700,8 @@ PointTypeToName(id)
 
 stock SavePoint(point) {
 	new szQuery[2048];
-	format(szQuery, sizeof(szQuery), "UPDATE `dynpoints` SET \
-	`pointname` = '%s', \
+	mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `dynpoints` SET \
+	`pointname` = '%e', \
 	`type` = %d, \
 	`posx` = %f, \
 	`posy` = %f, \
@@ -793,7 +714,7 @@ stock SavePoint(point) {
 	`vw2` = %d, \
 	`int2` = %d, \
 	`boatonly` = %d, \
-	`capturename` = '%s', \
+	`capturename` = '%e', \
 	`capturegroup` = %d, \
 	`ready` = %d, \
 	`timer` = %d, \
@@ -804,7 +725,7 @@ stock SavePoint(point) {
 	`amount3` = %d, \
 	`amount4` = %d, \
 	`locked` = %d WHERE `id` = %d",
-	g_mysql_ReturnEscaped(DynPoints[point][poName], MainPipeline),
+	DynPoints[point][poName],
 	DynPoints[point][poType],
 	DynPoints[point][poPos][0],
 	DynPoints[point][poPos][1],
@@ -817,7 +738,7 @@ stock SavePoint(point) {
 	DynPoints[point][po2VW],
 	DynPoints[point][po2Int],
 	DynPoints[point][poBoat],
-	g_mysql_ReturnEscaped(DynPoints[point][poCaptureName], MainPipeline),
+	DynPoints[point][poCaptureName],
 	DynPoints[point][poCaptureGroup],
 	DynPoints[point][poCapturable],
 	DynPoints[point][poTimer],
@@ -829,7 +750,7 @@ stock SavePoint(point) {
 	DynPoints[point][poAmount][4],
 	DynPoints[point][poLocked],
 	point + 1);
-	mysql_function_query(MainPipeline, szQuery, false, "OnQueryFinish", "i", SENDDATA_THREAD);
+	mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
 }
 
 stock UpdatePoint(id)
@@ -858,42 +779,42 @@ stock UpdatePoint(id)
 stock LoadPoints()
 {
 	printf("[Dynamic Points] Loading Dynamic Points from the database, please wait...");
-	mysql_function_query(MainPipeline, "SELECT * FROM `dynpoints`", true, "OnLoadPoints", "");
+	mysql_tquery(MainPipeline, "SELECT * FROM `dynpoints`", "OnLoadPoints", "");
 }
 
 forward OnLoadPoints();
 public OnLoadPoints()
 {
-	new i, rows, fields, szField[24];
-	cache_get_data(rows, fields, MainPipeline);
+	new i, rows, szField[24];
+	cache_get_row_count(rows);
 
 	while(i < rows)
 	{
-		cache_get_field_content(i, "pointname", DynPoints[i][poName], MainPipeline, MAX_PLAYER_NAME);
-		DynPoints[i][poType] = cache_get_field_content_int(i, "type", MainPipeline);
-		DynPoints[i][poID] = cache_get_field_content_int(i, "id", MainPipeline);
-		DynPoints[i][poPos][0] = cache_get_field_content_float(i, "posx", MainPipeline);
-		DynPoints[i][poPos][1] = cache_get_field_content_float(i, "posy", MainPipeline);
-		DynPoints[i][poPos][2] = cache_get_field_content_float(i, "posz", MainPipeline);
-		DynPoints[i][poPos2][0] = cache_get_field_content_float(i, "pos2x", MainPipeline);
-		DynPoints[i][poPos2][1] = cache_get_field_content_float(i, "pos2y", MainPipeline);
-		DynPoints[i][poPos2][2] = cache_get_field_content_float(i, "pos2z", MainPipeline);
-		DynPoints[i][poVW] = cache_get_field_content_int(i, "vw", MainPipeline);
-		DynPoints[i][poInt] = cache_get_field_content_int(i, "int", MainPipeline);
-		DynPoints[i][po2VW] = cache_get_field_content_int(i, "vw2", MainPipeline);
-		DynPoints[i][po2Int] = cache_get_field_content_int(i, "int2", MainPipeline);
-		DynPoints[i][poBoat] = cache_get_field_content_int(i, "boatonly", MainPipeline);
-		cache_get_field_content(i, "capturename", DynPoints[i][poCaptureName], MainPipeline, MAX_PLAYER_NAME);
-		DynPoints[i][poCaptureGroup] = cache_get_field_content_int(i, "capturegroup", MainPipeline);
-		DynPoints[i][poCapturable] = cache_get_field_content_int(i, "ready", MainPipeline);
-		DynPoints[i][poTimer] = cache_get_field_content_int(i, "timer", MainPipeline);
-		DynPoints[i][poAmountHour] = cache_get_field_content_int(i, "amounthour", MainPipeline);
+		cache_get_value_name(i, "pointname", DynPoints[i][poName], MAX_PLAYER_NAME);
+		cache_get_value_name_int(i, "type", DynPoints[i][poType]);
+		cache_get_value_name_int(i, "id", DynPoints[i][poID]);
+		cache_get_value_name_float(i, "posx", DynPoints[i][poPos][0]);
+		cache_get_value_name_float(i, "posy", DynPoints[i][poPos][1]);
+		cache_get_value_name_float(i, "posz", DynPoints[i][poPos][2]);
+		cache_get_value_name_float(i, "pos2x", DynPoints[i][poPos2][0]);
+		cache_get_value_name_float(i, "pos2y", DynPoints[i][poPos2][1]);
+		cache_get_value_name_float(i, "pos2z", DynPoints[i][poPos2][2]);
+		cache_get_value_name_int(i, "vw", DynPoints[i][poVW]);
+		cache_get_value_name_int(i, "int", DynPoints[i][poInt]);
+		cache_get_value_name_int(i, "vw2", DynPoints[i][po2VW]);
+		cache_get_value_name_int(i, "int2", DynPoints[i][po2Int]);
+		cache_get_value_name_int(i, "boatonly", DynPoints[i][poBoat]);
+		cache_get_value_name(i, "capturename", DynPoints[i][poCaptureName], MAX_PLAYER_NAME);
+		cache_get_value_name_int(i, "capturegroup", DynPoints[i][poCaptureGroup]);
+		cache_get_value_name_int(i, "ready", DynPoints[i][poCapturable]);
+		cache_get_value_name_int(i, "timer", DynPoints[i][poTimer]);
+		cache_get_value_name_int(i, "amounthour", DynPoints[i][poAmountHour]);
 		for(new m; m < 5; m++)
 		{
 			format(szField, sizeof(szField), "amount%d", m);
-			DynPoints[i][poAmount][m] = cache_get_field_content_int(i, szField, MainPipeline);
+			cache_get_value_name_int(i, szField, DynPoints[i][poAmount][m]);
 		}
-		DynPoints[i][poLocked] = cache_get_field_content_int(i, "locked", MainPipeline);
+		cache_get_value_name_int(i, "locked", DynPoints[i][poLocked]);
 		// Ensure our non-loaded data has something.
 		DynPoints[i][poTimeLeft] = 0; // 10 minute timer
 		DynPoints[i][poTimeCapLeft] = 0; // 10 second timer

@@ -1403,12 +1403,7 @@ CMD:announceevent(playerid, params[])
 			EventKernel[ EventStatus ] = 2;
 			SendClientMessageEx(playerid, COLOR_GRAD2, "To lock the event use /lockevent");
 			if(EventKernel[VipOnly] == 1) SendClientMessageToAllEx( COLOR_LIGHTBLUE, "* A VIP only event has been started by an Administrator, VIP's type /joinevent to participate." );
-			else
-			{ 
-				SendClientMessageToAllEx( COLOR_LIGHTBLUE, "* An event has been started by an Administrator, type /joinevent to participate." );
-				format(szMiscArray, sizeof(szMiscArray), "* An event has been started by an Administrator, hop in game and type /joinevent");
-				SendDiscordMessage(6, szMiscArray);
-			}
+			else SendClientMessageToAllEx( COLOR_LIGHTBLUE, "* An event has been started by an Administrator, type /joinevent to participate." );
 		}
 		else
 		{
