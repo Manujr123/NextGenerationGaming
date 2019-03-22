@@ -6,8 +6,8 @@ hook OnGameModeInit() {
 	
     // Pickups
 	CreateDynamicPickup(1239, 23, -4429.944824, 905.032470, 987.078186, -1); // VIP Garage Travel
-	CreateDynamicPickup(1239, 23, -1713.961425, 1348.545166, 7.180452, -1); //getpizza
-	CreateDynamicPickup(1239, 23,  -2764.6250,375.4634,6.3418, -1); // Name change sf
+	CreateDynamicPickup(1239, 23, 2103.6714, -1785.5222, 12.9849, -1); //getpizza
+	CreateDynamicPickup(1239, 23, 1154.7295, -1440.2323, 15.7969, -1); // Name change LS
 	/*CreateDynamicPickup(1239, 23, -1872.879760, 1416.312500, 7.180089, -1);*/ // Matrun 4 (dropoff)
   	//CreateDynamicPickup(1239, 23, 2565.346191, 1403.409790, 7699.584472, -1);// VIP ph changing station.
   	CreateDynamicPickup(1239, 23, 701.7953,-519.8322,16.3348, -1); //Rental Icon

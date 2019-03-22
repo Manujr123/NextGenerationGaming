@@ -48,7 +48,7 @@ CMD:getpizza(playerid, params[]) { //
 	else if(GetPVarType(playerid, "Pizza")) {
 		SendClientMessageEx(playerid, COLOR_GREY, "   You are already delivering pizzas!");
 	}
-	else if(!IsPlayerInRangeOfPoint(playerid, 3.0, -1713.961425, 1348.545166, 7.180452)) {
+	else if(!IsPlayerInRangeOfPoint(playerid, 5.0, 2103.6714, -1785.5222, 12.9849)) {
 		SendClientMessageEx(playerid,COLOR_GREY,"   You are not at the Pizza Stack pickup!");
 	}
 	else if(gettime() < GetPVarInt(playerid, "PizzaCoolDown")) {
@@ -56,7 +56,7 @@ CMD:getpizza(playerid, params[]) { //
 		format(str, sizeof(str), "Please wait %d seconds before getting another pizza!", GetPVarInt(playerid, "PizzaCoolDown")-gettime());
 		SendClientMessageEx(playerid,COLOR_GREY, str);
 	}
-	else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1713.961425, 1348.545166, 7.180452)) { // Pier 69
+	else if(IsPlayerInRangeOfPoint(playerid, 5.0, 2103.6714, -1785.5222, 12.9849)) {
 		
 		new rand = random(MAX_HOUSES - 1), i;
 		while(!(HouseInfo[rand][hOwned] && HouseInfo[rand][hExteriorZ] <= 100 && HouseInfo[rand][hExteriorX] > -2802.389648 && HouseInfo[rand][hExteriorX] < -1400.710327 && HouseInfo[rand][hExteriorY] < 2800 && HouseInfo[rand][hExteriorY] > -216.298019 && HouseInfo[rand][hExtIW] == PlayerInfo[playerid][pInt] && HouseInfo[rand][hExtVW] == PlayerInfo[playerid][pVW])) {

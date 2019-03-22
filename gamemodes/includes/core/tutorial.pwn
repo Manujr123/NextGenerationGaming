@@ -54,9 +54,9 @@ AdvanceTutorial(playerid)
 			PlayerInfo[playerid][pInsurance] = 2;
 			PlayerInfo[playerid][pConnectHours] = 2; // remove after launch
 		   	ResetPlayerCash(playerid);
-			Streamer_UpdateEx(playerid, -1983.4526, 137.5305, 27.6875);
-			SetPlayerPos(playerid,  -1983.4526, 137.5305, 27.6875);
-			SetPlayerFacingAngle(playerid, 88.3608);
+			Streamer_UpdateEx(playerid, 1715.0687, -1899.5597, 13.5665);
+			SetPlayerPos(playerid,  1715.0687, -1899.5597, 13.5665);
+			SetPlayerFacingAngle(playerid, 0.0000);
 			TogglePlayerSpectating(playerid, false);
 
 			SendClientMessageEx(playerid, COLOR_GREEN, "Welcome back to Next Generation Gaming!");
@@ -246,9 +246,9 @@ CharacterCreation(playerid)
 			TogglePlayerSpectating(playerid, false);
 			DestroyActor(GetPVarInt(playerid, "pActor"));
 			TogglePlayerSpectating(playerid, false);
-			Streamer_UpdateEx(playerid, -1983.4526, 137.5305, 27.6875);
-			SetPlayerPos(playerid,  -1983.4526, 137.5305, 27.6875);
-			SetPlayerFacingAngle(playerid, 88.3608);			
+			Streamer_UpdateEx(playerid, 1715.0687, -1899.5597, 13.5665);
+			SetPlayerPos(playerid,  1715.0687, -1899.5597, 13.5665);
+			SetPlayerFacingAngle(playerid, 0.0000);				
 			SetPlayerSkin(playerid, PlayerInfo[playerid][pModel]);
 			SetPlayerInterior(playerid, 0);
 			SetPlayerVirtualWorld(playerid, 0);

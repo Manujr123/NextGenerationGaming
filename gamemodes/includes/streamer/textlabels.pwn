@@ -33,7 +33,7 @@ hook OnGameModeInit() {
 	CreateDynamic3DTextLabel("/dplocker\nTo open the Dedicated locker.",COLOR_YELLOW,166.6540, -2001.0413, 3499.6482+0.6,4.0);/// Dedicated Locker
 	
 	//CreateDynamic3DTextLabel("Type /getmats from a boat \nto obtain Materials Packages",COLOR_YELLOW,2102.71,-103.97,2.28+0.5,8.0);// Deliver
-    CreateDynamic3DTextLabel("Type /getpizza from a Pizzaboy \nto get pizzas for delivery!",COLOR_YELLOW,-1713.961425, 1348.545166, 7.180452, 4.0); //getpizza
+    CreateDynamic3DTextLabel("Type /getpizza from a Pizzaboy \nto get pizzas for delivery!",COLOR_YELLOW, 2103.6714, -1785.5222, 12.9849, 4.0); //getpizza
 	//CreateDynamic3DTextLabel("Type /registerplate to\nchange your license plate.",COLOR_YELLOW,366.54,159.09,1008.38+1,8.0);// Licenses.
     CreateDynamic3DTextLabel("/buyclothes\n To change your skin.",COLOR_YELLOW,208.8970,-100.3289,1005.2578,8.0);
     CreateDynamic3DTextLabel("/buyclothes\n To change your skin.",COLOR_YELLOW,206.5429,-41.2313,1001.8047,8.0);
@@ -63,7 +63,7 @@ hook OnGameModeInit() {
 	*/
 
     //CreateDynamic3DTextLabel("Type /getmats to purchase material packages",COLOR_YELLOW,-1816.528686, -179.502624, 9.398437+0.6,5.0);
-	CreateDynamic3DTextLabel("Name Change Point \nType /changename to change your name",COLOR_YELLOW,-2764.6250,375.4634,6.3418+0.6,18.0); // Namechange at mall
+	CreateDynamic3DTextLabel("Name Change Point \nType /changename to change your name",COLOR_YELLOW,1154.7295,-1440.2323,15.7969+0.6,18.0); // Namechange at mall
 
 	CreateDynamic3DTextLabel("Famed Locker \nType /famedlocker to access the locker", COLOR_YELLOW,901.4825,1429.7404,-82.3235+0.6,4.0); //Famed Locker
 	
