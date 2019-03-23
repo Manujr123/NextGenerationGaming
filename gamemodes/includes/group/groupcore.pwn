@@ -81,7 +81,7 @@ Group_DisbandGroup(iGroupID) {
 	szMiscArray[0] = 0;
 	format(szMiscArray, sizeof(szMiscArray), "UPDATE `gweaponsnew` SET `1` = '0'");
 	for(new x = 2; x < 47; x++) format(szMiscArray, sizeof(szMiscArray), "%s, `%d` = '0'", szMiscArray, x);
-	mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "%s WHERE `id` = '%d'", szMiscArray, iGroupID + 1);
+	mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "%s WHERE `Group_ID` = '%d'", szMiscArray, iGroupID + 1);
 	mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "ii", SENDDATA_THREAD, iGroupID);
 
 
@@ -6540,7 +6540,7 @@ WithdrawGroupSafeWeapon(playerid, iGroupID, iWeaponID, iAmount = 1) {
 
 	if(PlayerInfo[playerid][pRank] < arrGroupData[iGroupID][g_iWithdrawRank][3] && playerid != INVALID_PLAYER_ID) return SendClientMessageEx(playerid, COLOR_WHITE, "You are not authorized to withdraw weapons from the locker!");
 
-	mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `gweaponsnew` SET `%d` = `%d` - %d WHERE `id` = '%d'", iWeaponID, iWeaponID, iAmount, iGroupID+1);
+	mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `gweaponsnew` SET `%d` = `%d` - %d WHERE `Group_ID` = '%d'", iWeaponID, iWeaponID, iAmount, iGroupID+1);
 
 	//format(szMiscArray, sizeof(szMiscArray), "DELETE FROM `gWeapons` WHERE `Group_ID` = '%d' AND `Weapon_ID` = '%d' LIMIT 1", iGroupID, iWeaponID);
 	mysql_tquery(MainPipeline, szMiscArray, "OnWithdrawGroupWeapons", "iiii", playerid, iGroupID+1, iWeaponID, iAmount);
@@ -6579,7 +6579,7 @@ AddGroupSafeWeapon(playerid, iGroupID, iWeaponID, iAmount = 1) {
 
 	if(playerid != INVALID_PLAYER_ID && PlayerInfo[playerid][pGuns][GetWeaponSlot(iWeaponID)] == 0) return 1;
 
-	mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `gweaponsnew` SET `%d` = `%d` + %d WHERE `id` = '%d'", iWeaponID, iWeaponID, iAmount, iGroupID+1);
+	mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `gweaponsnew` SET `%d` = `%d` + %d WHERE `Group_ID` = '%d'", iWeaponID, iWeaponID, iAmount, iGroupID+1);
 	//mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "INSERT INTO `gWeapons` (`Group_ID`, `Weapon_ID`) VALUES ('%d', '%d') ", iGroupID, iWeaponID);
 	mysql_tquery(MainPipeline, szMiscArray, "OnAddGroupSafeWeapon", "iiii", playerid, iGroupID+1, iWeaponID, iAmount);
 	return 1;

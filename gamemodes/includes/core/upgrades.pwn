@@ -126,10 +126,10 @@ LevelCheck(playerid)
 					{
 					    if(IsPlayerConnected(szReferrer))
 					    {
+							PlayerInfo[szReferrer][pRefers]++;
 					        if(PlayerInfo[szReferrer][pRefers] < 5 && PlayerInfo[szReferrer][pRefers] > 0)
 					        {
 					            PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL);
@@ -140,7 +140,6 @@ LevelCheck(playerid)
 					        else if(PlayerInfo[szReferrer][pRefers] == 5)
 					        {
 	            				PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL*5;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL*5);
@@ -151,7 +150,6 @@ LevelCheck(playerid)
 							else if(PlayerInfo[szReferrer][pRefers] < 10 && PlayerInfo[szReferrer][pRefers] > 5)
 					        {
 					            PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL);
@@ -162,7 +160,6 @@ LevelCheck(playerid)
 							else if(PlayerInfo[szReferrer][pRefers] == 10)
 							{
 							    PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL*10;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL*10);
@@ -173,7 +170,6 @@ LevelCheck(playerid)
 							else if(PlayerInfo[szReferrer][pRefers] < 15 && PlayerInfo[szReferrer][pRefers] > 10)
 					        {
 					            PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL);
@@ -184,7 +180,6 @@ LevelCheck(playerid)
 							else if(PlayerInfo[szReferrer][pRefers] == 15)
 							{
 							    PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL*15;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL*15);
@@ -195,7 +190,6 @@ LevelCheck(playerid)
 							else if(PlayerInfo[szReferrer][pRefers] < 20 && PlayerInfo[szReferrer][pRefers] > 15)
 					        {
 					            PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL);
@@ -206,7 +200,6 @@ LevelCheck(playerid)
 							else if(PlayerInfo[szReferrer][pRefers] == 20)
 							{
 							    PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL*20;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL*20);
@@ -217,7 +210,6 @@ LevelCheck(playerid)
 							else if(PlayerInfo[szReferrer][pRefers] < 25 && PlayerInfo[szReferrer][pRefers] > 20)
 					        {
 					            PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL);
@@ -228,7 +220,6 @@ LevelCheck(playerid)
 							else if(PlayerInfo[szReferrer][pRefers] >= 25)
 							{
 							    PlayerInfo[szReferrer][pCredits] += CREDITS_AMOUNT_REFERRAL*25;
-	            				PlayerInfo[szReferrer][pRefers] ++;
 								mysql_format(MainPipeline, szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Credits`=%d WHERE `Username` = '%s'", PlayerInfo[szReferrer][pCredits], GetPlayerNameExt(szReferrer));
 								mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "ii", SENDDATA_THREAD, playerid);
 								format(szString, sizeof(szString), "%s(%d) has received %d credits for referring a player (The player reached level 3)", GetPlayerNameEx(szReferrer), GetPlayerSQLId(szReferrer), CREDITS_AMOUNT_REFERRAL*25);

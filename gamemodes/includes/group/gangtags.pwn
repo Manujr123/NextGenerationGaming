@@ -399,10 +399,16 @@ CMD:edittagpoint(playerid, params[])
 	{
 		new i;
 		if(sscanf(params, "d", i)) return SendClientMessage(playerid, COLOR_GRAD1, "Usage: /edittag [ID]");
-		SetPVarInt(playerid, PVAR_GANGTAGEDITING, i);
-		EditDynamicObject(playerid, arrGangTags[i][gt_iObjectID]);
+		new Float:pos[3];
+		GetDynamicObjectPos(arrGangTags[i][gt_iObjectID], pos[0], pos[1], pos[2]);
+		if(IsPlayerInRangeOfPoint(playerid, 25.0, pos[0], pos[1], pos[2]))
+		{
+			SetPVarInt(playerid, PVAR_GANGTAGEDITING, i);
+			EditDynamicObject(playerid, arrGangTags[i][gt_iObjectID]);
+		}
+		else return SendClientMessage(playerid, COLOR_GRAD1, "You are too far away from the object to use this command.");
 	}
-	else SendClientMessage(playerid, COLOR_GRAD1, "You are not authorized to use this command.");
+	else return SendClientMessage(playerid, COLOR_GRAD1, "You are not authorized to use this command.");
 	return 1;
 }
 
