@@ -69,10 +69,10 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         }
         if(response)
         {
-            new pwdBuffer[129], usrBuffer[MAX_PLAYER_NAME], szQuery[256];
-            WP_Hash(pwdBuffer, sizeof(pwdBuffer), inputtext);
+            new usrBuffer[MAX_PLAYER_NAME], szQuery[256];
+            SetPVarString(playerid, "Admin_RefundPassword", inputtext);
             GetPVarString(playerid, "RefundUsername", usrBuffer, MAX_PLAYER_NAME);
-            format(szQuery, sizeof(szQuery), "SELECT * FROM `accounts_old` WHERE `Username` = '%s' AND `Key` = '%s'", usrBuffer, pwdBuffer);
+            format(szQuery, sizeof(szQuery), "SELECT * FROM `accounts_old` WHERE `Username` = '%s'", usrBuffer);
             mysql_tquery(MainPipeline, szQuery, "OnRefundLookup", "d", playerid);
         }
     }
@@ -109,6 +109,69 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     }
     return 1;
 }
+
+forward OnRefundLookup(playerid);
+public OnRefundLookup(playerid)
+{
+    new rows;
+    cache_get_row_count(rows);
+    printf("%d", rows);
+    if(rows)
+    {
+        new salt[11], pwdBuffer[129], pwdResult[129], szQuery[256], usrBuffer[MAX_PLAYER_NAME];
+        GetPVarString(playerid, "RefundUsername", usrBuffer, MAX_PLAYER_NAME);
+        cache_get_value_name(0, "Salt", salt, sizeof(salt));
+        GetPVarString(playerid, "Admin_RefundPassword", pwdBuffer, sizeof(pwdBuffer));
+        format(pwdResult, sizeof(pwdResult), "%s%s", pwdBuffer, salt);
+        WP_Hash(pwdBuffer, sizeof(pwdBuffer), pwdResult);
+        format(szQuery, sizeof(szQuery), "SELECT * FROM `accounts_old` WHERE `Username` = '%s' AND `Key` = '%s'", usrBuffer, pwdBuffer);
+        mysql_tquery(MainPipeline, szQuery, "OnRefundPassLookup", "d", playerid);
+    }
+    else 
+    {
+        DeletePVar(playerid, "RefundUsername");
+        ShowPlayerDialogEx(playerid, DIALOG_REFUNDPROCESS_2, DIALOG_STYLE_INPUT, "Refund - Username", 
+        "Please enter the username of the account.\
+        \n\n{FF0000}NOTE: You will need to include the '_' character in between the first and last name.\
+        \n\nERROR: Account does not exist.", 
+        "Continue", "Cancel");
+    }
+    return 1;
+}
+
+forward OnRefundPassLookup(playerid);
+public OnRefundPassLookup(playerid)
+{
+    new rows;
+    cache_get_row_count(rows);
+    printf("%d", rows);
+    if(rows)
+    {
+        new redeemed, szQuery[128];
+        cache_get_value_name_int(0, "Redeemed", redeemed);
+        if(redeemed == 1) return SendClientMessageEx(playerid, COLOR_GRAD2, "This account has already been issued as a refund, if this is your account contact a member of tech/security.");
+        new usrBuffer[MAX_PLAYER_NAME];
+        GetPVarString(playerid, "RefundUsername", usrBuffer, MAX_PLAYER_NAME);
+        PlayerInfo[playerid][pRefund] = 1;
+        format(PlayerInfo[playerid][pRefundAccount], MAX_PLAYER_NAME, "%s", usrBuffer);
+        SendClientMessageEx(playerid, COLOR_GRAD2, "Your refund request has been successfully processed, an administrator will review it soon.");
+        format(szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Refund` = '1', `RefundName` = '%s' WHERE `Username` = '%s'", GetPlayerNameExt(playerid), PlayerInfo[playerid][pRefundAccount]); //manually set it on the database so /refunds updates w/o having to relog
+        mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
+        DeletePVar(playerid, "RefundUsername");
+    }
+    else
+    {
+        PlayerInfo[playerid][pRefundAttempts]++;
+        DeletePVar(playerid, "RefundUsername");
+        ShowPlayerDialogEx(playerid, DIALOG_REFUNDPROCESS_2, DIALOG_STYLE_INPUT, "Refund - Username", 
+        "Please enter the username of the account.\
+        \n\n{FF0000}NOTE: You will need to include the '_' character in between the first and last name.\
+        \n\nERROR: Invalid login credentials, a total of 5 invalid logins will lock you from refunding.", 
+        "Continue", "Cancel");
+    }
+    return 1;
+}
+
 
 CMD:requestrefund(playerid, params[])
 {
@@ -202,8 +265,11 @@ public OnRefundApproved(playerid)
         {
             szMiscArray[0] = 0;
             format(szMiscArray, sizeof(szMiscArray), 
-            "UPDATE `accounts` SET `Level` += '%d', `ConnectedTime` += '%d', `Bank` += '%d', `DetSkill` += '%d', `SexSkill` += '%d', `BoxSkill` += '%d', \
-            `LawSkill` += '%d', `MechSkill` += '%d', `TruckSkill` += '%d', `DrugSmuggler` += '%d', `ArmsSkill` += '%d', `FishSkill` += '%d', `PhoneNr` = '%d', `Respect` = '%d', `Refund` = '2' WHERE `Username` = '%s'", 
+            "UPDATE `accounts` SET `Level` = `Level` + '%d', `ConnectedTime` = `ConnectedTime` + '%d', \
+             `Bank` = `Bank` + '%d', `DetSkill` = `DetSkill` + '%d', `SexSkill` = `SexSkill` + '%d', `BoxSkill` = `BoxSkill` + '%d', \
+            `LawSkill` = `LawSkill` + '%d', `MechSkill` = `MechSkill` + '%d', `TruckSkill` = `TruckSkill` + '%d', `DrugSmuggler` = `DrugSmuggler` + '%d', \
+            `ArmsSkill` = `ArmsSkill` + '%d', `FishingSkill` = `FishingSkill` + '%d', `PhoneNr` = '%d', `Respect` = '%d', `Refund` = '2' \
+            WHERE `Username` = '%s'", 
             tmpLevel-1, tmpHours, tmpCash + tmpBalance, tmpDetSkill, tmpSexSkill, tmpBoxSkill, tmpLawSkill, tmpMechSkill, tmpTruckSkill, tmpSmugglerSkill, tmpArmsSkill, tmpFishSkill, tmpPhoneNr, tmpRespect, usrBuffer);
             mysql_tquery(MainPipeline, szMiscArray, "OnIssueRefund", "d", playerid);
         }
@@ -291,39 +357,6 @@ public OnRefundFinish(playerid)
         DeletePVar(playerid, "RefundIP");
     }
     else return SendClientMessageEx(playerid, COLOR_GRAD2, "Refund failed to finish properly, contact tech.");
-    return 1;
-}
-
-forward OnRefundLookup(playerid);
-public OnRefundLookup(playerid)
-{
-    new rows;
-    cache_get_row_count(rows);
-    printf("%d", rows);
-    if(rows)
-    {
-        new redeemed, szQuery[128];
-        cache_get_value_name_int(0, "Redeemed", redeemed);
-        if(redeemed == 1) return SendClientMessageEx(playerid, COLOR_GRAD2, "This account has already been issued as a refund, if this is your account contact a member of tech/security.");
-        new usrBuffer[MAX_PLAYER_NAME];
-        GetPVarString(playerid, "RefundUsername", usrBuffer, MAX_PLAYER_NAME);
-        PlayerInfo[playerid][pRefund] = 1;
-        format(PlayerInfo[playerid][pRefundAccount], MAX_PLAYER_NAME, "%s", usrBuffer);
-        SendClientMessageEx(playerid, COLOR_GRAD2, "Your refund request has been successfully processed, an administrator will review it soon.");
-        format(szQuery, sizeof(szQuery), "UPDATE `accounts` SET `Refund` = '1', `RefundName` = '%s' WHERE `Username` = '%s'", GetPlayerNameExt(playerid), PlayerInfo[playerid][pRefundAccount]); //manually set it on the database so /refunds updates w/o having to relog
-        mysql_tquery(MainPipeline, szQuery, "OnQueryFinish", "i", SENDDATA_THREAD);
-        DeletePVar(playerid, "RefundUsername");
-    }
-    else
-    {
-        PlayerInfo[playerid][pRefundAttempts]++;
-        DeletePVar(playerid, "RefundUsername");
-        ShowPlayerDialogEx(playerid, DIALOG_REFUNDPROCESS_2, DIALOG_STYLE_INPUT, "Refund - Username", 
-        "Please enter the username of the account.\
-        \n\n{FF0000}NOTE: You will need to include the '_' character in between the first and last name.\
-        \n\nERROR: Invalid login credentials, a total of 5 invalid logins will lock you from refunding.", 
-        "Continue", "Cancel");
-    }
     return 1;
 }
 
