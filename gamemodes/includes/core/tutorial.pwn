@@ -257,9 +257,9 @@ ShowTutorialDialog(playerid, stage)
 				strcat(szMiscArray, "{FF0000}NG:RP Related Services{FFFFFF}:\n");
 				strcat(szMiscArray, "\t{F69500}Website{FFFFFF}: ng-gaming.com - Sign up on our forums and interact with the community!\n");
 				strcat(szMiscArray, "\t{F69500}User Control Panel{FFFFFF}: cp.ng-gaming.com - Control your account and take measures to ensure your account's security!\n");
-				strcat(szMiscArray, "\t{F69500}Shop{FFFFFF}: shop.ng-gaming.com - Purchase credits from the shop and purchase items in game!\n");
+				//strcat(szMiscArray, "\t{F69500}Shop{FFFFFF}: shop.ng-gaming.com - Purchase credits from the shop and purchase items in game!\n");
 				strcat(szMiscArray, "\t{F69500}TeamSpeak{FFFFFF}: ts.ng-gaming.com - Connect and speak to different members of the community!\n");
-				strcat(szMiscArray, "\t{F69500}Image Sharing{FFFFFF}: ngg.up - Share your favourite images with your friends, with the press of a button.\n\n");
+				strcat(szMiscArray, "\t{F69500}Discord{FFFFFF}: discord.gg/Uf8xuvu - Connect and speak to different members of the community!\n\n");
 				strcat(szMiscArray, "Please make sure you read this tutorial as you will be asked questions at the end.");
 				strcat(szMiscArray, "\n\n\n{FFFFFF}_______________________________________________________________________________________________________________________________________________________");
 				ShowPlayerDialogEx(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "NG:RP Tutorial - Welcome", szMiscArray, countstring, "");
@@ -393,12 +393,10 @@ ShowTutorialDialog(playerid, stage)
 			szMiscArray = "{FFFFFF}_______________________________________________________________________________________________________________________________________________________\n\n\n";
 			strcat(szMiscArray, "You are now completely finished with the tutorial. Press the next button to be taken to the character creation menu.\n\n");
 			strcat(szMiscArray, "\t{F69521}Developers\n");
-			strcat(szMiscArray, "\t\t{F69521}Director of Development{FFFFFF}:\n\t\t\tShane\n\n");
+			strcat(szMiscArray, "\t\t{F69521}Lead Developer{FFFFFF}:\n\t\t\tJohn\n\n");
 			strcat(szMiscArray, "\t\t{F69521}Developers{FFFFFF}:\n\
-				\t\t\tMiguel\n\
-				\t\t\tFarva\n\
-				\t\t\tHector\n\
-				\t\t\tThomas\n\
+				\t\t\tHannes\n\
+
 				\t\t{F69500}Past Developers{FFFFFF}:\n\
 				\t\t\tAkatony\tJohn\t\tBrendan\n\
 				\t\t\tBrian\t\tScott\t\tGhoulSlayer\n\
@@ -408,7 +406,8 @@ ShowTutorialDialog(playerid, stage)
 				\t\t\tRazbit\t\tAlexR\t\tAustin\n\
 				\t\t\tDom\t\tRothschild\tWinterfield\n\
 				\t\t\tJingles\tBehemoth\tWesten\n\
-				\t\t\tConnolly\n");
+				\t\t\tConnolly\tShane\tMiguel\n\
+				\t\t\tFarva\tHector\tThomas\n");
 			strcat(szMiscArray, "\n\n{FFFFFF}_______________________________________________________________________________________________________________________________________________________");
 			ShowPlayerDialogEx(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "NG:RP - Developers", szMiscArray, "Continue", "");
 		}
