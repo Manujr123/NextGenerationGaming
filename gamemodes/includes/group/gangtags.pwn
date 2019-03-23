@@ -384,6 +384,8 @@ CMD:createtagpoint(playerid)
 {
 	if(PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pASM] >= 1 || PlayerInfo[playerid][pGangModerator] > 0)
 	{
+		if(PlayerInfo[playerid][pMember] == INVALID_GROUP_ID) return SendClientMessage(playerid, COLOR_GRAD1, "You need to be in a group to use this command, use /switchgroup.");
+		
 		if(Iter_Count(GangTags) == MAX_GANGTAGS) return SendClientMessage(playerid, COLOR_GRAD1, "You cannot create more gang tag points.");
 		GangTag_Create(playerid);
 	}
