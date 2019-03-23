@@ -100,11 +100,12 @@
 #include <mSelection>
 #include <gvar>
 #include <discord-connector>
-#include <geo_ip>
+//#include <geo_ip>
 #include <easyDialog>
 #include <callbacks>
 #include <attachments>
 #include <bcrypt>
+#include <geolocation>
 //#include <profiler>
 
 #if defined SOCKET_ENABLED
@@ -206,6 +207,7 @@
 #include "./includes/core/streamprep.pwn"
 #include "./includes/core/emailcheck.pwn"
 #include "./includes/core/AccountSettings.pwn"
+#include "./includes/core/refund.pwn"
 //#include "./includes/core/tutorial_new.pwn"
 #include "./includes/core/deluxegps.pwn"
 //#include "./includes/core/nametags.pwn"

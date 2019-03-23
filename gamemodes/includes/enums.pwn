@@ -1291,7 +1291,10 @@ enum pInfo
 	pDedicatedDaymarker[11],
 	pDedicatedTimestamp[11],
 	pWalkStyle,
-	pHorse
+	pHorse,
+	pRefund,
+	pRefundAttempts,
+	pRefundAccount[MAX_PLAYER_NAME]
 };
 
 enum pvInfo

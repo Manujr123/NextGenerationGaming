@@ -1108,6 +1108,12 @@ public OnPlayerLoad(playerid)
 	}
 	//if(PlayerInfo[playerid][pChatbox][19] == 0) PlayerTextDrawShow(playerid, TD_ChatBox[0]);
 
+	if(PlayerInfo[playerid][pRefund] == 2)
+	{
+		SendClientMessageEx(playerid, COLOR_PINK, "Your refund has been issued while you were offline, please confirm it's successfully applied on /stats!");
+		PlayerInfo[playerid][pRefund] = 3;
+	}
+
 	if(PlayerInfo[playerid][pToggledChats][7]) PhoneOnline[playerid] = 1;
 
 	if(PlayerInfo[playerid][pTut] == -1 && PlayerInfo[playerid][pNation] != 0 && PlayerInfo[playerid][pNation] != 1) return ShowPlayerDialogEx(playerid, DIALOG_REGISTER_NATION, DIALOG_STYLE_LIST, "You currently do not have a nation. Please chose one.", "San Andreas\nNew Robada", "Select", "<<");

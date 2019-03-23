@@ -319,6 +319,9 @@ public OnQueryFinish(resultid, extraid, handleid)
 					cache_get_value_name_int(row,  "Warnings", PlayerInfo[extraid][pWarns]);
 					cache_get_value_name_int(row,  "Disabled", PlayerInfo[extraid][pDisabled]);
 					cache_get_value_name_int(row,  "Level", PlayerInfo[extraid][pLevel]);
+					cache_get_value_name_int(row, "Refund", PlayerInfo[extraid][pRefund]);
+					cache_get_value_name_int(row, "RefundAttempts", PlayerInfo[extraid][pRefundAttempts]);
+					cache_get_value_name(row, "RefundName", PlayerInfo[extraid][pRefundAccount], MAX_PLAYER_NAME);
 					cache_get_value_name_int(row,  "AdminLevel", PlayerInfo[extraid][pAdmin]);
 					cache_get_value_name_int(row,  "SeniorModerator", PlayerInfo[extraid][pSMod]);
 					cache_get_value_name_int(row,  "DonateRank", PlayerInfo[extraid][pDonateRank]);
@@ -857,9 +860,11 @@ public OnQueryFinish(resultid, extraid, handleid)
 		{
 			if(IsPlayerConnected(extraid))
 			{
+				new country[64];
+				GetPlayerCountry(extraid, country, sizeof(country));
 				AdvanceTutorial(extraid);
 				g_mysql_AccountLoginCheck(extraid);
-				format(szMiscArray, sizeof(szMiscArray), "WARNING: %s (ID: %d) has registered from %s", GetPlayerNameEx(extraid), extraid, GetPlayerCountry(extraid));
+				format(szMiscArray, sizeof(szMiscArray), "WARNING: %s (ID: %d) has registered from %s", GetPlayerNameEx(extraid), extraid, country);
 				ABroadCast(COLOR_LIGHTRED, szMiscArray, 2);
 				TotalRegister++;
 			}
@@ -2154,6 +2159,10 @@ stock g_mysql_SaveAccount(playerid)
     SavePlayerInteger(query, GetPlayerSQLId(playerid), "DonateRank", PlayerInfo[playerid][pDonateRank]);
     SavePlayerInteger(query, GetPlayerSQLId(playerid), "Respect", PlayerInfo[playerid][pExp]);
     SavePlayerInteger(query, GetPlayerSQLId(playerid), "Money", GetPlayerCash(playerid));
+
+	SavePlayerInteger(query, GetPlayerSQLId(playerid), "Refund", PlayerInfo[playerid][pRefund]);
+	SavePlayerInteger(query, GetPlayerSQLId(playerid), "RefundAttempts", PlayerInfo[playerid][pRefundAttempts]);
+	SavePlayerString(query, GetPlayerSQLId(playerid), "RefundName", PlayerInfo[playerid][pRefundAccount]);
 
     SavePlayerInteger(query, GetPlayerSQLId(playerid), "Bank", PlayerInfo[playerid][pAccount]);
 	if(PlayerInfo[playerid][pHealth] > 150) PlayerInfo[playerid][pHealth] = 150;
