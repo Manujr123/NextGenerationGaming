@@ -155,12 +155,13 @@ public OnRefundApproved(playerid)
     cache_get_row_count(rows);
     if(rows)
     {
-        new tmpLevel, tmpHours, tmpCash, tmpBalance, 
+        new tmpLevel, tmpHours, tmpCash, tmpBalance, tmpRespect, 
         tmpDetSkill, tmpSexSkill, tmpBoxSkill, tmpLawSkill, tmpMechSkill, tmpTruckSkill, tmpArmsSkill, tmpSmugglerSkill, tmpFishSkill, tmpPhoneNr;
         cache_get_value_name_int(0,  "Level", tmpLevel);
         cache_get_value_name_int(0,  "ConnectedTime", tmpHours);
         cache_get_value_name_int(0,  "Money", tmpCash);
         cache_get_value_name_int(0,  "Bank", tmpBalance);
+        cache_get_value_name_int(0,  "Respect", tmpRespect);
         cache_get_value_name_int(0,  "DetSkill", tmpDetSkill);
         cache_get_value_name_int(0,  "SexSkill", tmpSexSkill);
         cache_get_value_name_int(0,  "BoxSkill", tmpBoxSkill);
@@ -190,6 +191,7 @@ public OnRefundApproved(playerid)
             PlayerInfo[giveplayerid][pDrugSmuggler] += tmpSmugglerSkill;
             PlayerInfo[giveplayerid][pArmsSkill] += tmpArmsSkill;
             PlayerInfo[giveplayerid][pFishingSkill] += tmpFishSkill;
+            PlayerInfo[giveplayerid][pExp] += tmpRespect;
             PlayerInfo[giveplayerid][pPnumber] = tmpPhoneNr;
             PlayerInfo[giveplayerid][pRefund] = 3;
             SendClientMessageEx(playerid, COLOR_GRAD2, "Refund successfully approved and issued.");
@@ -198,9 +200,10 @@ public OnRefundApproved(playerid)
         else //user offline, issue refund via database
         {
             szMiscArray[0] = 0;
-            format(szMiscArray, sizeof(szMiscArray), "UPDATE `accounts` SET `Level` += '%d', `ConnectedTime` += '%d', `Bank` += '%d', `DetSkill` += '%d', `SexSkill` += '%d', `BoxSkill` += '%d', \
-            `LawSkill` += '%d', `MechSkill` += '%d', `TruckSkill` += '%d', `DrugSmuggler` += '%d', `ArmsSkill` += '%d', `FishSkill` += '%d', `PhoneNr` = '%d', `Refund` = '2' WHERE `Username` = '%s'", 
-            tmpLevel-1, tmpHours, tmpCash + tmpBalance, tmpDetSkill, tmpSexSkill, tmpBoxSkill, tmpLawSkill, tmpMechSkill, tmpTruckSkill, tmpSmugglerSkill, tmpArmsSkill, tmpFishSkill, tmpPhoneNr, usrBuffer);
+            format(szMiscArray, sizeof(szMiscArray), 
+            "UPDATE `accounts` SET `Level` += '%d', `ConnectedTime` += '%d', `Bank` += '%d', `DetSkill` += '%d', `SexSkill` += '%d', `BoxSkill` += '%d', \
+            `LawSkill` += '%d', `MechSkill` += '%d', `TruckSkill` += '%d', `DrugSmuggler` += '%d', `ArmsSkill` += '%d', `FishSkill` += '%d', `PhoneNr` = '%d', `Respect` = '%d', `Refund` = '2' WHERE `Username` = '%s'", 
+            tmpLevel-1, tmpHours, tmpCash + tmpBalance, tmpDetSkill, tmpSexSkill, tmpBoxSkill, tmpLawSkill, tmpMechSkill, tmpTruckSkill, tmpSmugglerSkill, tmpArmsSkill, tmpFishSkill, tmpPhoneNr, tmpRespect, usrBuffer);
             mysql_tquery(MainPipeline, szMiscArray, "OnIssueRefund", "d", playerid);
         }
     }
@@ -298,7 +301,7 @@ public OnRefundLookup(playerid)
     printf("%d", rows);
     if(rows)
     {
-        new redeemed, szQuery[96];
+        new redeemed, szQuery[128];
         cache_get_value_name_int(0, "Redeemed", redeemed);
         if(redeemed == 1) return SendClientMessageEx(playerid, COLOR_GRAD2, "This account has already been issued as a refund, if this is your account contact a member of tech/security.");
         new usrBuffer[MAX_PLAYER_NAME];

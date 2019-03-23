@@ -1281,6 +1281,8 @@ public OnPlayerConnect(playerid)
     gPrevButtonTextDrawId[playerid] = PlayerText:INVALID_TEXT_DRAW;
     gCancelButtonTextDrawId[playerid] = PlayerText:INVALID_TEXT_DRAW;
 
+
+	warpWarnings[playerid] = 0;
     SpoofKill[playerid] = 0;
 	KillTime[playerid] = 0;
 	gItemAt[playerid] = 0;

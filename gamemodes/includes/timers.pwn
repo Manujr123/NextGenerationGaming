@@ -976,6 +976,49 @@ task hungerGames[1000]()
 	return true;
 }
 
+task PlayerAntiWarp[20]() {
+	foreach(new i: Player)
+	{
+		if(gPlayerLogged{i} == 1)
+		{
+			new Float:pos[3];
+			if(!IsPlayerInAnyVehicle(i))
+			{
+				GetPlayerVelocity(i, pos[0], pos[1], pos[2]);
+				if(pos[1] == -50.000000 && pos[2] == 0.100000)
+				{
+					warpWarnings[i]++;
+					if(warpWarnings[i] == 3)
+					{
+						if(PlayerInfo[i][pAdmin] < 2) 
+						{
+							CreateBan(INVALID_PLAYER_ID, PlayerInfo[i][pId], i, PlayerInfo[i][pIP], "Warp Hacking", 180);
+							return 1;
+						}
+					}
+				}
+			}
+			else
+			{
+				new vehicleid = GetPlayerVehicleID(i);
+				GetVehicleVelocity(vehicleid, pos[0], pos[1], pos[2]);
+				if(pos[1] == -50.000000 && pos[2] == 0.100000)
+				{
+					warpWarnings[i]++;
+					if(warpWarnings[i] >= 3)
+					{
+						if(PlayerInfo[i][pAdmin] < 2) 
+						{
+							CreateBan(INVALID_PLAYER_ID, PlayerInfo[i][pId], i, PlayerInfo[i][pIP], "Warp Hacking", 180);
+							return 1;
+						}
+					}
+				}
+			}
+		}
+	}
+	return 1;
+}
 
 /* Player Tasks - (Optimized from tasks + foreach loop) - Jingles */
 

@@ -2785,3 +2785,5 @@ new
 
 new
 	bool:BuddyInvite = true;
+
+new warpWarnings[MAX_PLAYERS];
