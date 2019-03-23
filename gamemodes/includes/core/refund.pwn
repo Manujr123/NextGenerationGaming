@@ -244,8 +244,8 @@ public OnRefundApproved(playerid)
             if(gPlayerLogged{giveplayerid} == 0) return SendClientMessageEx(playerid, COLOR_GRAD2, "Player isn't logged in yet, please try again in a moment.");
             PlayerInfo[giveplayerid][pLevel] += tmpLevel-1; // -1 to account for the level 1 they'll have by default
             PlayerInfo[giveplayerid][pConnectHours] += tmpHours;
-            GivePlayerCashEx(playerid, TYPE_ONHAND, tmpCash);
-            GivePlayerCashEx(playerid, TYPE_BANK, tmpBalance);
+            GivePlayerCashEx(giveplayerid, TYPE_ONHAND, tmpCash);
+            GivePlayerCashEx(giveplayerid, TYPE_BANK, tmpBalance);
             PlayerInfo[giveplayerid][pDetSkill] += tmpDetSkill;
             PlayerInfo[giveplayerid][pSexSkill] += tmpSexSkill;
             PlayerInfo[giveplayerid][pBoxSkill] += tmpBoxSkill;
