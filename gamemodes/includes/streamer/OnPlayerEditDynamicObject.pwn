@@ -341,6 +341,7 @@ public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y,
 				new i = GetPVarInt(playerid, PVAR_GANGTAGEDITING);
 				if(IsValidDynamicObject(arrGangTags[i][gt_iObjectID])) DestroyDynamicObject(arrGangTags[i][gt_iObjectID]);
 				arrGangTags[i][gt_iObjectID] = CreateDynamicObject(GANGTAGS_OBJECTID, x, y, z, rx, ry, rz);
+				DeletePVar(playerid, PVAR_GANGTAGEDITING);
 				GangTag_AdmSave(playerid, i);
 				return 1;
 			}
