@@ -172,8 +172,8 @@ public GangTag_OnCreate(iPlayerID, i, Float:X, Float:Y, Float:Z)
 		format(szMiscArray, sizeof(szMiscArray), "You have successfully created a gang tag point (ID %d)", i);
 		SendClientMessage(iPlayerID, COLOR_YELLOW, szMiscArray);
 		
-		SetPVarInt(playerid, PVAR_GANGTAGEDITING, i);
-		EditDynamicObject(playerid, arrGangTags[i][gt_iObjectID]);
+		SetPVarInt(iPlayerID, PVAR_GANGTAGEDITING, i);
+		EditDynamicObject(iPlayerID, arrGangTags[i][gt_iObjectID]);
 	}
 	SendClientMessage(iPlayerID, COLOR_GRAD1, "Something went wrong.");
 	return 1;
