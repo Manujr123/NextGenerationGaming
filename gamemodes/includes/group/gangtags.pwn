@@ -130,11 +130,11 @@ public GangTag_OnLoad()
 		szResult[MAX_GANGTAGS_LEN],
 		fontid,
 		color,
-		Float:fX;
-		Float:fY;
-		Float:fZ;
-		Float:frX;
-		Float:frY;
+		Float:fX,
+		Float:fY,
+		Float:fZ,
+		Float:frX,
+		Float:frY,
 		Float:frZ;
 	while(idx < iRows)
 	{
