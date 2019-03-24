@@ -117,7 +117,7 @@ public GangTag_OnSave(iPlayerID, i, text[])
 
 GangTag_Load()
 {
-	mysql_tquery(MainPipeline, "SELECT *FROM `gangtags` where 1", "GangTag_OnLoad", "");
+	mysql_tquery(MainPipeline, "SELECT * FROM `gangtags`", "GangTag_OnLoad", "");
 }
 
 forward GangTag_OnLoad();
@@ -128,20 +128,26 @@ public GangTag_OnLoad()
 	if(!iRows) return print("[Gang Tags] There are no gang tags in the database.");
 	new idx,
 		szResult[MAX_GANGTAGS_LEN],
-		value,
-		Float:fValue;
+		fontid,
+		color,
+		Float:fX;
+		Float:fY;
+		Float:fZ;
+		Float:frX;
+		Float:frY;
+		Float:frZ;
 	while(idx < iRows)
 	{
 		cache_get_value_name(idx, "text", szResult);
-		GangTag_AdmProcess(idx, cache_get_value_name_float(idx, "x", fValue),
-			cache_get_value_name_float(idx, "y", fValue),
-			cache_get_value_name_float(idx, "z", fValue),
-			cache_get_value_name_float(idx, "rx", fValue),
-			cache_get_value_name_float(idx, "ry", fValue),
-			cache_get_value_name_float(idx, "rz", fValue),
+		GangTag_AdmProcess(idx, cache_get_value_name_float(idx, "x", fX),
+			cache_get_value_name_float(idx, "y", fY),
+			cache_get_value_name_float(idx, "z", fZ),
+			cache_get_value_name_float(idx, "rx", frX),
+			cache_get_value_name_float(idx, "ry", frY),
+			cache_get_value_name_float(idx, "rz", frZ),
 			szResult,
-			cache_get_value_name_int(idx, "fontid", value),
-			cache_get_value_name_int(idx, "color", value));
+			cache_get_value_name_int(idx, "fontid", fontid),
+			cache_get_value_name_int(idx, "color", color));
 		idx++;
 	}
 	printf("[Gang Tags] Loaded %d gang tags.", idx);
