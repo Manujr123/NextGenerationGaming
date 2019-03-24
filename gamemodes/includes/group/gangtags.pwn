@@ -139,15 +139,16 @@ public GangTag_OnLoad()
 	while(idx < iRows)
 	{
 		cache_get_value_name(idx, "text", szResult);
-		GangTag_AdmProcess(idx, cache_get_value_name_float(idx, "x", fX),
-			cache_get_value_name_float(idx, "y", fY),
-			cache_get_value_name_float(idx, "z", fZ),
-			cache_get_value_name_float(idx, "rx", frX),
-			cache_get_value_name_float(idx, "ry", frY),
-			cache_get_value_name_float(idx, "rz", frZ),
-			szResult,
-			cache_get_value_name_int(idx, "fontid", fontid),
-			cache_get_value_name_int(idx, "color", color));
+		cache_get_value_name_float(idx, "x", fX);
+		cache_get_value_name_float(idx, "y", fY);
+		cache_get_value_name_float(idx, "z", fZ);
+		cache_get_value_name_float(idx, "rx", frX);
+		cache_get_value_name_float(idx, "ry", frY);
+		cache_get_value_name_float(idx, "rz", frZ);
+		cache_get_value_name_int(idx, "fontid", fontid);
+		cache_get_value_name_int(idx, "color", color);
+			
+		GangTag_AdmProcess(idx, fX, fY, fZ, frX, frY, frZ,szResult, fontid, color);
 		idx++;
 	}
 	printf("[Gang Tags] Loaded %d gang tags.", idx);
