@@ -308,7 +308,7 @@ CMD:gangtaghelp(playerid, params[])
 {
 	SendClientMessage(playerid, COLOR_GREEN, "______________________________");
 	SendClientMessage(playerid, COLOR_GRAD1, "Gang Tags | Commands");
-	if(PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pASM] >= 1 || PlayerInfo[playerid][pGangModerator] > 0) SendClientMessage(playerid, COLOR_LIGHTRED, "[ADM] /createtagpoint | /edittagpoint | /deletetagpoint | /rehashgangtags");
+	if(PlayerInfo[playerid][pAdmin] >= 4 || PlayerInfo[playerid][pASM] >= 1 || PlayerInfo[playerid][pGangModerator] > 0) SendClientMessage(playerid, COLOR_LIGHTRED, "[ADM] /createtagpoint | /gototagpoint | /edittagpoint | /deletetagpoint | /rehashgangtags");
 	SendClientMessage(playerid, COLOR_GRAD1, "/tag | /cleantag");
 	SendClientMessage(playerid, COLOR_GREEN, "______________________________");
 	return 1;
@@ -396,6 +396,21 @@ CMD:createtagpoint(playerid)
 		GangTag_Create(playerid);
 	}
 	else SendClientMessage(playerid, COLOR_GRAD1, "You are not authorized to use this command.");
+	return 1;
+}
+
+CMD:gototagpoint(playerid, params[])
+{
+	if(PlayerInfo[playerid][pAdmin] >= 1337 || PlayerInfo[playerid][pGangModerator] == 2)
+	{
+		new i;
+		if(sscanf(params, "d", i)) return SendClientMessage(playerid, COLOR_GRAD1, "Usage: /gototagpoint [ID]");
+		new Float:pos[3];
+		GetDynamicObjectPos(arrGangTags[i][gt_iObjectID], pos[0], pos[1], pos[2]);
+		
+		SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+	}
+	else return SendClientMessage(playerid, COLOR_GRAD1, "You are not authorized to use this command.");
 	return 1;
 }
 
