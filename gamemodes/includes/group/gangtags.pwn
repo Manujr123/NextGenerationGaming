@@ -1,25 +1,14 @@
-/* Under initiategamemode:
-GangTag_Load();
-*/
-
-/*
-	Gangtag System by Jingles
-*/
-
 #include <YSI\y_hooks>
 
-/* 
-Personally feel this is too much.
-hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
 	if(GetPVarType(playerid, PVAR_GANGTAGTEXT)) DeletePVar(playerid, PVAR_GANGTAGTEXT);
 	return 1;
 }
-*/
 
-hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
-	if(GetPVarType(playerid, PVAR_GANGTAGTEXT)) DeletePVar(playerid, PVAR_GANGTAGTEXT);
-	return 1;
+hook OnPlayerDeath(playerid)
+{
+	DeletePVar(playerid, PVAR_GANGTAGTEXT);
 }
 
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
