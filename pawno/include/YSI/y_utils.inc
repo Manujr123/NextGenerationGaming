@@ -327,7 +327,7 @@ stock chrfindp(needle, haystack[], start = 0)
 	this should have none-few collisions).
 	
 	I modified it slightly from the original code pasted by aru, to code
-	closer to the code http://www.burtleburtle.net/bob/hash/doobs.html and
+	closer to the code http://www.burtleburtle.com/bob/hash/doobs.html and
 	to work with PAWN (and shaved 0.2�s off the time for one call :D).
 	
 	Uber reduced version (just for fun):

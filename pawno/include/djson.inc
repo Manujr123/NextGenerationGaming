@@ -1835,14 +1835,14 @@ djson_GameModeInit() {
 
 
 	// we'll create something strange now, to check if the auto-path-creation works
-	if (!djSet("djson_test.json","player/about/web/site","http://dracoblue.net")) printf(" x Error creating player/about/web/site");
+	if (!djSet("djson_test.json","player/about/web/site","http://dracoblue.com")) printf(" x Error creating player/about/web/site");
 		else printf(" o Created player/about/web/site");
 
 	if (!djIsSet("djson_test.json","player/about/web")) printf(" x Error player/about/web should be set");
 		else printf(" o Check player/about/web should be set, yet: correct!");
 
 	format(tmp,DJSON_MAX_STRING,dj("djson_test.json","player/about/web/site"));
-	if (strcmp(tmp,"http://dracoblue.net")!=0 && strlen(tmp)==0) printf(" x Error reading: player/about/web/site, was: %s",tmp);
+	if (strcmp(tmp,"http://dracoblue.com")!=0 && strlen(tmp)==0) printf(" x Error reading: player/about/web/site, was: %s",tmp);
 		else printf(" o Read: player/about/web/site, is: %s",tmp);
 
 
@@ -1926,7 +1926,7 @@ djson_GameModeInit() {
 	print("	   \"player\":{");
 	print("	     \"about\":{");
 	print("	       \"web\":{");
-	print("	       \"site\":\"http://dracoblue.net\"");
+	print("	       \"site\":\"http://dracoblue.com\"");
 	print("	       }");
 	print("	     },");
 	print("	     \"id\":1,");
@@ -1949,7 +1949,7 @@ djson_GameModeInit() {
 	fhnd = fopen("djson_test.json",io_read);
 	fread(fhnd,tmp,DJSON_MAX_STRING);
 	fclose(fhnd);
-	new what_we_want[] = "{\"player\":{\"about\":{\"web\":{\"site\":\"http://dracoblue.net\"}},\"id\":1,\"name\":\"Draco\",\"pos\":{\"x\":15.0,\"y\":20}},\"vehicle\":{\"ids\":[\"12\",\"2\",\"123\"]}}";
+	new what_we_want[] = "{\"player\":{\"about\":{\"web\":{\"site\":\"http://dracoblue.com\"}},\"id\":1,\"name\":\"Draco\",\"pos\":{\"x\":15.0,\"y\":20}},\"vehicle\":{\"ids\":[\"12\",\"2\",\"123\"]}}";
 	new what_we_want_pos = 0;
 	new was_correct = true;
 	while (what_we_want_pos<strlen(what_we_want)) {
