@@ -219,7 +219,7 @@ public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y,
 			GateInfo[gateid][gRotX] = rx;
 			GateInfo[gateid][gRotY] = ry;
 			GateInfo[gateid][gRotZ] = rz;
-			CreateGate(gateid);
+			CreateEditedGate(gateid);
 			SaveGate(gateid);
 			format(szMiscArray, sizeof(szMiscArray), "You have finished editing the open position of Gate ID: %d", gateid);
 			SendClientMessage(playerid, COLOR_WHITE, szMiscArray);
@@ -238,7 +238,7 @@ public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y,
 			GateInfo[gateid][gRotXM] = rx;
 			GateInfo[gateid][gRotYM] = ry;
 			GateInfo[gateid][gRotZM] = rz;
-			CreateGate(gateid);
+			CreateEditedGate(gateid);
 			SaveGate(gateid);
 			format(szMiscArray, sizeof(szMiscArray), "You have finished editing the closed position of Gate ID: %d", gateid);
 			SendClientMessage(playerid, COLOR_WHITE, szMiscArray);
