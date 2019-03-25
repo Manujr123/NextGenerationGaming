@@ -170,10 +170,11 @@ public GangTag_OnCreate(iPlayerID, i, Float:X, Float:Y, Float:Z)
 	{
 		GangTag_AdmProcess(i, X, Y, Z, 0.0, 0.0, 0.0, "Sample Text", 0, arrGroupData[PlayerInfo[iPlayerID][pMember]][g_hDutyColour]);
 		format(szMiscArray, sizeof(szMiscArray), "You have successfully created a gang tag point (ID %d)", i);
-		SendClientMessage(iPlayerID, COLOR_YELLOW, szMiscArray);
 		
 		SetPVarInt(iPlayerID, PVAR_GANGTAGEDITING, i);
 		EditDynamicObject(iPlayerID, arrGangTags[i][gt_iObjectID]);
+		
+		return SendClientMessage(iPlayerID, COLOR_YELLOW, szMiscArray); //Added to exit out of the function, to prevent the "Something went wrong." message always being sent.
 	}
 	SendClientMessage(iPlayerID, COLOR_GRAD1, "Something went wrong.");
 	return 1;
