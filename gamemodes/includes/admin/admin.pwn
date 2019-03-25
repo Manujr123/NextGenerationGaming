@@ -3069,25 +3069,23 @@ CMD:togspec(playerid, params[])
 	return 1;
 }
 
-/*
 CMD:togtp(playerid, params[])
 {
 	if(PlayerInfo[playerid][pAdmin] >= 1337)
 	{
 	    if(GetPVarType(playerid, "EATeleportable"))
 	    {
-	        SendClientMessage(playerid, COLOR_WHITE, "You can not be teleported to anymore");
+	        SendClientMessage(playerid, COLOR_WHITE, "You can not be teleported to anymore.");
 	        DeletePVar(playerid, "EATeleportable");
 	    }
 	    else
 	    {
-	        SendClientMessage(playerid, COLOR_WHITE, "You can now be teleported to again");
+	        SendClientMessage(playerid, COLOR_WHITE, "You can now be teleported to again.");
 	        SetPVarInt(playerid, "EATeleportable", 1);
 	    }
 	}
 	return 1;
 }
-*/
 
 CMD:spec(playerid, params[])
 {
@@ -4508,7 +4506,7 @@ CMD:gotoid(playerid, params[])
 				SendClientMessageEx(playerid, COLOR_GRAD2, "You can not do this while spectating.");
 				return 1;
 			}
-			//if(PlayerInfo[giveplayerid][pAdmin] >= 1337 && !GetPVarType(giveplayerid, "EATeleportable")) return SendClientMessageEx(playerid, COLOR_WHITE, "You cannot teleport to them");
+			if(PlayerInfo[giveplayerid][pAdmin] >= 1337 && !GetPVarType(giveplayerid, "EATeleportable")) return SendClientMessageEx(playerid, COLOR_WHITE, "Error: You can not teleport to this player.");
 			GetPlayerPos(giveplayerid, plocx, plocy, plocz);
 			SetPlayerVirtualWorld(playerid, PlayerInfo[giveplayerid][pVW]);
 			Streamer_UpdateEx(playerid, plocx, plocy, plocz);
@@ -4573,8 +4571,8 @@ CMD:sendtoid(playerid, params[])
 			    format(string, sizeof(string), "%s (ID: %d) is currently in an active Paintball game.\n\nDo you want to force this player out?", GetPlayerNameEx(giveplayerid), giveplayerid);
 			    return ShowPlayerDialogEx(playerid, PBFORCE, DIALOG_STYLE_MSGBOX, "Paintball", string, "Yes", "No");
 			}
-			//if(PlayerInfo[giveplayerid][pAdmin] == 99999 && !GetPVarType(giveplayerid, "EATeleportable")) return SendClientMessageEx(playerid, COLOR_WHITE, "You cannot teleport them");
-			//if(PlayerInfo[targetplayerid][pAdmin] == 99999 && !GetPVarType(targetplayerid, "EATeleportable")) return SendClientMessageEx(playerid, COLOR_WHITE, "You cannot teleport to them");
+			if(PlayerInfo[giveplayerid][pAdmin] == 99999 && !GetPVarType(giveplayerid, "EATeleportable")) return SendClientMessageEx(playerid, COLOR_WHITE, "Error: You can not teleport this player.");
+			if(PlayerInfo[targetplayerid][pAdmin] == 99999 && !GetPVarType(targetplayerid, "EATeleportable")) return SendClientMessageEx(playerid, COLOR_WHITE, "Error: You can not teleport to this player.");
 			GetPlayerPos(targetplayerid, plocx, plocy, plocz);
 			SetPlayerVirtualWorld(giveplayerid, PlayerInfo[targetplayerid][pVW]);
 			Streamer_UpdateEx(giveplayerid, plocx, plocy, plocz);

@@ -655,6 +655,12 @@ public OnPlayerLoad(playerid)
 			//mysql_format(MainPipeline, query, sizeof(query), "SELECT b.shift, b.needs_%s, COUNT(DISTINCT s.id) as ShiftCount FROM cp_shift_blocks b LEFT JOIN cp_shifts s ON b.shift_id = s.shift_id AND s.date = '%d-%02d-%02d' AND s.status >= 2 AND s.type = 1 WHERE b.time_start = '%02d:00:00' GROUP BY b.shift, b.needs_%s", GetWeekday(), year, month, day, tmphour, GetWeekday());
 			//mysql_tquery(MainPipeline, query, "GetShiftInfo", "is", playerid, string);
 			format(string, sizeof(string), "SERVER: %s has logged in as a %s{FFFFFF}.", GetPlayerNameEx(playerid), GetStaffRank(playerid));
+			
+			if(PlayerInfo[playerid][pAdmin] >= 1337)
+			{
+				SetPVarInt(playerid, "EATeleportable", 1);
+				SendClientMessage(playerid, COLOR_WHITE, "SERVER: You have been set as {00FF00}available {FFFFFF}to be teleported to, use /togtp to prevent this.");
+			}
 		}
 
 		foreach(new i: Player)
