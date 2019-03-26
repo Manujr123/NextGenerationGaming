@@ -976,7 +976,7 @@ task hungerGames[1000]()
 	return true;
 }
 
-task PlayerAntiWarp[20]() {
+task PlayerAntiWarp[50]() {
 	foreach(new i: Player)
 	{
 		if(gPlayerLogged{i} == 1)
@@ -986,7 +986,8 @@ task PlayerAntiWarp[20]() {
 			{
 				GetPlayerVelocity(i, pos[0], pos[1], pos[2]);
 				//SendClientMessageEx(i, COLOR_GRAD2, "%f %f %f", pos[0], pos[1], pos[2]);
-				if(pos[1] == -50.000000 && pos[2] == 0.100000)
+				//pos[2] == 0.100000
+				if(pos[1] <= -45.000000 && (0.09 < pos[2] <= 0.11))
 				{
 					warpWarnings[i]++;
 					if(warpWarnings[i] == 3)
@@ -1004,7 +1005,7 @@ task PlayerAntiWarp[20]() {
 				new vehicleid = GetPlayerVehicleID(i);
 				GetVehicleVelocity(vehicleid, pos[0], pos[1], pos[2]);
 				//SendClientMessageEx(i, COLOR_GRAD2, "%f %f %f", pos[0], pos[1], pos[2]);
-				if(pos[1] == -50.000000 && pos[2] == 0.100000)
+				if(pos[1] <= -45.000000 && (0.09 < pos[2] <= 0.11))
 				{
 					warpWarnings[i]++;
 					if(warpWarnings[i] >= 3)
