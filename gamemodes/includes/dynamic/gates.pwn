@@ -674,6 +674,7 @@ CMD:gedit(playerid, params[])
 		}
         else if(strcmp(x_job, "tome", true) == 0)
 		{
+			GetPlayerPos(playerid,GateInfo[gateid][gPosX],GateInfo[gateid][gPosY], GateInfo[gateid][gPosZ]);
 		    GetPlayerPos(playerid,GateInfo[gateid][gPosXM],GateInfo[gateid][gPosYM], GateInfo[gateid][gPosZM]);
 		    GateInfo[gateid][gVW] = GetPlayerVirtualWorld(playerid);
 		    GateInfo[gateid][gInt] = GetPlayerInterior(playerid);
