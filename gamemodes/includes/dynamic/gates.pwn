@@ -296,7 +296,7 @@ CMD:gotogate(playerid, params[])
 			return SendClientMessageEx(playerid, COLOR_GREY, string);
 		}
 
-		SetPlayerPos(playerid,GateInfo[gatenum][gPosX],GateInfo[gatenum][gPosY],GateInfo[gatenum][gPosZ] + 1);
+		SetPlayerPos(playerid,GateInfo[gatenum][gPosXM],GateInfo[gatenum][gPosYM],GateInfo[gatenum][gPosZM] + 1);
 		GameTextForPlayer(playerid, "~w~Teleporting", 5000, 1);
 		SetPlayerInterior(playerid, GateInfo[gatenum][gInt]);
 		PlayerInfo[playerid][pInt] = GateInfo[gatenum][gInt];
@@ -674,10 +674,10 @@ CMD:gedit(playerid, params[])
 		}
         else if(strcmp(x_job, "tome", true) == 0)
 		{
-		    GetPlayerPos(playerid,GateInfo[gateid][gPosX],GateInfo[gateid][gPosY], GateInfo[gateid][gPosZ]);
+		    GetPlayerPos(playerid,GateInfo[gateid][gPosXM],GateInfo[gateid][gPosYM], GateInfo[gateid][gPosZM]);
 		    GateInfo[gateid][gVW] = GetPlayerVirtualWorld(playerid);
 		    GateInfo[gateid][gInt] = GetPlayerInterior(playerid);
-			format(string, sizeof(string), "Gate %d Pos moved to %f %f %f, VW: %d INT: %d", gateid, GateInfo[gateid][gPosX], GateInfo[gateid][gPosY], GateInfo[gateid][gPosZ], GateInfo[gateid][gVW], GateInfo[gateid][gInt]);
+			format(string, sizeof(string), "Gate %d Pos moved to %f %f %f, VW: %d INT: %d", gateid, GateInfo[gateid][gPosXM], GateInfo[gateid][gPosYM], GateInfo[gateid][gPosZM], GateInfo[gateid][gVW], GateInfo[gateid][gInt]);
 		    SendClientMessageEx(playerid, COLOR_WHITE, string);
 		    if(GateInfo[gateid][gModel] == 0)
 			{
@@ -693,8 +693,8 @@ CMD:gedit(playerid, params[])
 		}
 		else if(strcmp(x_job, "tomem", true) == 0)
 		{
-		    GetPlayerPos(playerid,GateInfo[gateid][gPosXM],GateInfo[gateid][gPosYM], GateInfo[gateid][gPosZM]);
-			format(string, sizeof(string), "Gate %d PosM moved to %f %f %f", gateid, GateInfo[gateid][gPosXM], GateInfo[gateid][gPosYM], GateInfo[gateid][gPosZM]);
+		    GetPlayerPos(playerid,GateInfo[gateid][gPosX],GateInfo[gateid][gPosY], GateInfo[gateid][gPosZ]);
+			format(string, sizeof(string), "Gate %d PosM moved to %f %f %f", gateid, GateInfo[gateid][gPosX], GateInfo[gateid][gPosY], GateInfo[gateid][gPosZ]);
 		    SendClientMessageEx(playerid, COLOR_WHITE, string);
 			SaveGate(gateid);
 
@@ -916,10 +916,10 @@ CMD:gmove(playerid, params[])
 			fee = fee / 100 * 85;
 		}
 	}
-	GetPlayerPos(playerid,GateInfo[gateid][gPosX],GateInfo[gateid][gPosY], GateInfo[gateid][gPosZ]);
+	GetPlayerPos(playerid,GateInfo[gateid][gPosXM],GateInfo[gateid][gPosYM], GateInfo[gateid][gPosZM]);
 	GateInfo[gateid][gVW] = GetPlayerVirtualWorld(playerid);
 	GateInfo[gateid][gInt] = GetPlayerInterior(playerid);
-	format(string, sizeof(string), "Gate %d Pos moved to %f %f %f, VW: %d INT: %d", gateid, GateInfo[gateid][gPosX], GateInfo[gateid][gPosY], GateInfo[gateid][gPosZ], GateInfo[gateid][gVW], GateInfo[gateid][gInt]);
+	format(string, sizeof(string), "Gate %d Pos moved to %f %f %f, VW: %d INT: %d", gateid, GateInfo[gateid][gPosXM], GateInfo[gateid][gPosYM], GateInfo[gateid][gPosZM], GateInfo[gateid][gVW], GateInfo[gateid][gInt]);
 	SendClientMessageEx(playerid, COLOR_WHITE, string);
 	if(GateInfo[gateid][gModel] == 0)
 	{
@@ -965,7 +965,7 @@ CreateGate(gateid)
 {
 	if(IsValidDynamicObject(GateInfo[gateid][gGATE])) DestroyDynamicObject(GateInfo[gateid][gGATE]);
 	GateInfo[gateid][gGATE] = -1;
-	if(GateInfo[gateid][gPosX] == 0.0) return 1;
+	//if(GateInfo[gateid][gPosXM] == 0.0) return 1;
 	switch(GateInfo[gateid][gRenderHQ])
 	{
 		case 1: GateInfo[gateid][gGATE] = CreateDynamicObject(GateInfo[gateid][gModel], GateInfo[gateid][gPosXM], GateInfo[gateid][gPosYM], GateInfo[gateid][gPosZM], GateInfo[gateid][gRotXM], GateInfo[gateid][gRotYM], GateInfo[gateid][gRotZM], GateInfo[gateid][gVW], GateInfo[gateid][gInt], -1, 100.0);
@@ -981,7 +981,7 @@ CreateEditedGate(gateid)
 {
 	if(IsValidDynamicObject(GateInfo[gateid][gGATE])) DestroyDynamicObject(GateInfo[gateid][gGATE]);
 	GateInfo[gateid][gGATE] = -1;
-	if(GateInfo[gateid][gPosX] == 0.0) return 1;
+	//if(GateInfo[gateid][gPosX] == 0.0) return 1;
 	
 	new editor = GetGVarInt("szGateEditorID");
 	
