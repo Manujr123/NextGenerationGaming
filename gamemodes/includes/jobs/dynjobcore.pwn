@@ -202,8 +202,8 @@ Job_GetJob(playerid, i)
     	return SendClientMessageEx(playerid, COLOR_GRAD1, "You already have this job.");
     }
 	if(PlayerInfo[playerid][pJob] == 0) format(szMiscArray, sizeof(szMiscArray), "Would you like to proceed a career as a {FFFF00}%s{FFFFFF}?", GetJobName(JobData[i][jType]));
-	else if(0 < PlayerInfo[playerid][pDonateRank] < 4) format(szMiscArray, sizeof(szMiscArray), "Would you like to proceed a career as a {FFFF00}%s{FFFFFF}? (VIP Job)", GetJobName(JobData[i][jType]));
-	else if(PlayerInfo[playerid][pDonateRank] > 3) format(szMiscArray, sizeof(szMiscArray), "Would you like to proceed a career as a {FFFF00}%s{FFFFFF}? (Platinum VIP Job)", GetJobName(JobData[i][jType]));
+	else if(0 < PlayerInfo[playerid][pDonateRank] < 3) format(szMiscArray, sizeof(szMiscArray), "Would you like to proceed a career as a {FFFF00}%s{FFFFFF}? (VIP Job)", GetJobName(JobData[i][jType]));
+	else if(PlayerInfo[playerid][pDonateRank] > 2) format(szMiscArray, sizeof(szMiscArray), "Would you like to proceed a career as a {FFFF00}%s{FFFFFF}? (Gold/Platinum VIP Job)", GetJobName(JobData[i][jType]));
 	else if(PlayerInfo[playerid][pFamed] > 0) format(szMiscArray, sizeof(szMiscArray), "Would you like to proceed a career as a {FFFF00}%s{FFFFFF}? (OS/Famed Job)", GetJobName(JobData[i][jType]));
 	else if(PlayerInfo[playerid][pJob] > 0 && PlayerInfo[playerid][pDonateRank] == 0 && PlayerInfo[playerid][pFamed] == 0) return SendClientMessageEx(playerid, COLOR_GRAD1, "You already have a job, use '/quitjob' from your old job in order to obtain a new one.");
 	
