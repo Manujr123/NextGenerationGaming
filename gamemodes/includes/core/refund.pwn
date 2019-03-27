@@ -273,6 +273,13 @@ public OnRefundApproved(playerid)
 
             PlayerInfo[giveplayerid][pPnumber] = tmpPhoneNr;
             PlayerInfo[giveplayerid][pRefund] = 3;
+
+            szMiscArray[0] = 0;
+            format(szMiscArray, sizeof(szMiscArray), 
+            "UPDATE `accounts` SET `Refund` = '3' \
+            WHERE `Username` = '%s'", usrBuffer);
+            mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
+            
             SendClientMessageEx(playerid, COLOR_GRAD2, "Refund successfully approved and issued.");
             SendClientMessageEx(giveplayerid, COLOR_PINK, "Your refund has been issued, please confirm everything is correct on /stats!");
         }
@@ -283,8 +290,9 @@ public OnRefundApproved(playerid)
             "UPDATE `accounts` SET `Level` = `Level` + '%d', `ConnectedTime` = `ConnectedTime` + '%d', \
              `Bank` = `Bank` + '%d', `DetSkill` = `DetSkill` + '%d', `SexSkill` = `SexSkill` + '%d', `BoxSkill` = `BoxSkill` + '%d', \
             `LawSkill` = `LawSkill` + '%d', `MechSkill` = `MechSkill` + '%d', `TruckSkill` = `TruckSkill` + '%d', `DrugSmuggler` = `DrugSmuggler` + '%d', \
-            `ArmsSkill` = `ArmsSkill` + '%d', `FishingSkill` = `FishingSkill` + '%d', `PhoneNr` = '%d', `Respect` = '%d', \
-            `Pot` = '%d', `Crack = '%d', `Meth` = '%d', `Ecstasy` = '%d', `Heroin` = '%d', `UpgradePoints` = '%d', `Refund` = '2' \
+            `ArmsSkill` = `ArmsSkill` + '%d', `FishingSkill` = `FishingSkill` + '%d', `PhoneNr` = '%d', `Respect` = `Respect` + '%d', \
+            `Pot` = `Pot` + '%d', `Crack` = `Crack` + '%d', `Meth` = `Meth` + '%d', `Ecstasy` = `Ecstasy` + '%d', `Heroin` = `Heroin` + '%d', \
+            `UpgradePoints` = '%d', `Refund` = '2' \
             WHERE `Username` = '%s'", 
             tmpLevel-1, tmpHours, tmpCash + tmpBalance, 
             tmpDetSkill, tmpSexSkill, tmpBoxSkill, tmpLawSkill, tmpMechSkill, tmpTruckSkill, tmpSmugglerSkill, tmpArmsSkill, tmpFishSkill,
