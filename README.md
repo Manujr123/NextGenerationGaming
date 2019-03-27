@@ -2,6 +2,15 @@
 # Next-Generation-Gaming-Legacy
 
 How to initiate the SAMP CTL package and download all dependencies
+```
+// download the latest stable SA-MP server files for your OS
+sampctl server download 
+// downloads all binaries and plugins, and if needed a server.cfg file
+sampctl server ensure 
+// Ensures dependencies are up to date from pawn.json
+sampctl package ensure 
+sampctl server run
+```
 
 Git Map
 
