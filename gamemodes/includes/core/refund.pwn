@@ -274,14 +274,13 @@ public OnRefundApproved(playerid)
             PlayerInfo[giveplayerid][pPnumber] = tmpPhoneNr;
             PlayerInfo[giveplayerid][pRefund] = 3;
 
+            SendClientMessageEx(giveplayerid, COLOR_PINK, "Your refund has been issued, please confirm everything is correct on /stats!");
+            
             szMiscArray[0] = 0;
             format(szMiscArray, sizeof(szMiscArray), 
             "UPDATE `accounts` SET `Refund` = '3' \
             WHERE `Username` = '%s'", usrBuffer);
-            mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
-            
-            SendClientMessageEx(playerid, COLOR_GRAD2, "Refund successfully approved and issued.");
-            SendClientMessageEx(giveplayerid, COLOR_PINK, "Your refund has been issued, please confirm everything is correct on /stats!");
+            mysql_tquery(MainPipeline, szMiscArray, "OnIssueRefund", "d", playerid);            
         }
         else //user offline, issue refund via database
         {
