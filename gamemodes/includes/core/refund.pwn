@@ -220,7 +220,7 @@ public OnRefundApproved(playerid)
     {
         new tmpLevel, tmpHours, tmpCash, tmpBalance, tmpRespect, 
         tmpDetSkill, tmpSexSkill, tmpBoxSkill, tmpLawSkill, tmpMechSkill, tmpTruckSkill, tmpArmsSkill, tmpSmugglerSkill, tmpFishSkill, tmpPhoneNr,
-        tmpPot, tmpCrack, tmpMeth, tmpXtc, tmpHeroin;
+        tmpPot, tmpCrack, tmpMeth, tmpXtc, tmpHeroin, tmpUpgrade;
         cache_get_value_name_int(0,  "Level", tmpLevel);
         cache_get_value_name_int(0,  "ConnectedTime", tmpHours);
         cache_get_value_name_int(0,  "Money", tmpCash);
@@ -241,6 +241,7 @@ public OnRefundApproved(playerid)
         cache_get_value_name_int(0,  "Meth", tmpMeth);
         cache_get_value_name_int(0,  "Ecstasy", tmpXtc);
         cache_get_value_name_int(0,  "Heroin", tmpHeroin);
+        cache_get_value_name_int(0,  "UpgradePoints", tmpUpgrade);
 
         new giveplayerid, usrBuffer[MAX_PLAYER_NAME];
         GetPVarString(playerid, "Admin_RefundUsername", usrBuffer, MAX_PLAYER_NAME);
@@ -262,6 +263,7 @@ public OnRefundApproved(playerid)
             PlayerInfo[giveplayerid][pArmsSkill] += tmpArmsSkill;
             PlayerInfo[giveplayerid][pFishingSkill] += tmpFishSkill;
             PlayerInfo[giveplayerid][pExp] += tmpRespect;
+            PlayerInfo[giveplayerid][gPupgrade] += tmpUpgrade;
 
             PlayerInfo[giveplayerid][pDrugs][0] += tmpPot;
             PlayerInfo[giveplayerid][pDrugs][1] += tmpCrack;
@@ -282,11 +284,11 @@ public OnRefundApproved(playerid)
              `Bank` = `Bank` + '%d', `DetSkill` = `DetSkill` + '%d', `SexSkill` = `SexSkill` + '%d', `BoxSkill` = `BoxSkill` + '%d', \
             `LawSkill` = `LawSkill` + '%d', `MechSkill` = `MechSkill` + '%d', `TruckSkill` = `TruckSkill` + '%d', `DrugSmuggler` = `DrugSmuggler` + '%d', \
             `ArmsSkill` = `ArmsSkill` + '%d', `FishingSkill` = `FishingSkill` + '%d', `PhoneNr` = '%d', `Respect` = '%d', \
-            `Pot` = '%d', `Crack = '%d', `Meth` = '%d', `Ecstasy` = '%d', `Heroin` = '%d', `Refund` = '2' \
+            `Pot` = '%d', `Crack = '%d', `Meth` = '%d', `Ecstasy` = '%d', `Heroin` = '%d', `UpgradePoints` = '%d', `Refund` = '2' \
             WHERE `Username` = '%s'", 
             tmpLevel-1, tmpHours, tmpCash + tmpBalance, 
             tmpDetSkill, tmpSexSkill, tmpBoxSkill, tmpLawSkill, tmpMechSkill, tmpTruckSkill, tmpSmugglerSkill, tmpArmsSkill, tmpFishSkill,
-            tmpPhoneNr, tmpRespect, tmpPot, tmpCrack, tmpMeth, tmpXtc, tmpHeroin usrBuffer);
+            tmpPhoneNr, tmpRespect, tmpPot, tmpCrack, tmpMeth, tmpXtc, tmpHeroin, tmpUpgrade, usrBuffer);
             mysql_tquery(MainPipeline, szMiscArray, "OnIssueRefund", "d", playerid);
         }
     }
