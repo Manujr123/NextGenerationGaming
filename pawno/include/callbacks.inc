@@ -213,7 +213,7 @@ enum e_VEHICLE_GARAGES {
 };
 
 static
-	s_aVendingMachines[84][e_VENDING_MACHINES] = {
+	s_aVendingMachines[86][e_VENDING_MACHINES] = {
 		{VENDING_TYPE_SPRUNK,	1153.7322,-1461.0480,15.7969},
 		{VENDING_TYPE_CANDY,	-1455.2928,2592.6465,55.8359}, // candy
 		{VENDING_TYPE_SPRUNK,	1929.7653,-1772.2271,13.5469}, // sprunk
@@ -297,8 +297,8 @@ static
 		{VENDING_TYPE_SPRUNK,	495.97,   -24.32, 1000.73}, // Sprunk - Nightclub
 		{VENDING_TYPE_CANDY,	500.56,    -1.37, 1000.73}, // Vending - Nightclub
 		{VENDING_TYPE_SPRUNK,	501.83,    -1.43, 1000.73}, // Sprunk - Nightclub
-		{VENDING_TYPE_SPRUNK,	2576.70, -1284.43, 1061.09} // Sprunk - Big Smoke Int
-		{VENDING_TYPE_SPRUNK,	2393.07, 2660.45, 8001.15} // Sprunk - All Saints Int
+		{VENDING_TYPE_SPRUNK,	2576.70, -1284.43, 1061.09}, // Sprunk - Big Smoke Int
+		{VENDING_TYPE_SPRUNK,	2393.07, 2660.45, 8001.15}, // Sprunk - All Saints Int
 		{VENDING_TYPE_CANDY,	2393.07, 2659.23, 8001.15} // Candy - All Saints Int
 	},
 
