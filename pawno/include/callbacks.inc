@@ -298,6 +298,8 @@ static
 		{VENDING_TYPE_CANDY,	500.56,    -1.37, 1000.73}, // Vending - Nightclub
 		{VENDING_TYPE_SPRUNK,	501.83,    -1.43, 1000.73}, // Sprunk - Nightclub
 		{VENDING_TYPE_SPRUNK,	2576.70, -1284.43, 1061.09} // Sprunk - Big Smoke Int
+		{VENDING_TYPE_SPRUNK,	2393.07, 2660.45, 8001.15} // Sprunk - All Saints Int
+		{VENDING_TYPE_CANDY,	2393.07, 2659.23, 8001.15} // Candy - All Saints Int
 	},
 
 	s_aVehicleGarages[][e_VEHICLE_GARAGES] = {

@@ -570,9 +570,9 @@ CMD:hijackcargo(playerid, params[])
 				    SendClientMessageEx(playerid, COLOR_WHITE, "This Truck is empty, it does not contain any goods!");
 				    return 1;
 				}
-				if(IsPlayerInRangeOfPoint(playerid, 65, -1572.767822, 81.137527, 3.554687))
+				if(IsPlayerInRangeOfPoint(playerid, 100.0, 2572.9626, -2223.1616, 13.3422))
 				{
-				    SendClientMessageEx(playerid, COLOR_WHITE, "You can not hijack when that close to the San Fierro Docks!");
+				    SendClientMessageEx(playerid, COLOR_WHITE, "You can not hijack when that close to the Los Santos Docks!");
 					return 1;
 				}
 				if(!IsABoat(vehicleid))
@@ -645,19 +645,19 @@ CMD:loadshipment(playerid, params[])
 				}
 	            if(!IsABoat(vehicleid))
 	            {
-		            SetPlayerCheckpoint(playerid,-1572.767822, 81.137527, 3.554687, 4);
-		            GameTextForPlayer(playerid, "~w~Waypoint set ~r~San Fierro Docks", 5000, 1);
-		            SendClientMessageEx(playerid, COLOR_LIGHTBLUE, "* Pick up some goods to transport with your Truck at San Fierro Docks (see checkpoint on radar).");
+		            SetPlayerCheckpoint(playerid, 2572.9626, -2223.1616, 13.3422, 4);
+		            GameTextForPlayer(playerid, "~w~Waypoint set ~r~Los Santos Docks", 5000, 1);
+		            SendClientMessageEx(playerid, COLOR_LIGHTBLUE, "* Pick up some goods to transport with your Truck at Los Santos Docks (see checkpoint on radar).");
 				}
 				else
 				{
-					if(PlayerInfo[playerid][pTruckSkill] >= 200)
-					{
-						SetPlayerCheckpoint(playerid,2098.6543,-104.3568,-0.4820, 4);
-						GameTextForPlayer(playerid, "~w~Waypoint set ~r~Palamino Docks", 5000, 1);
-						SendClientMessageEx(playerid, COLOR_LIGHTBLUE, "* Pick up some goods to transport with your Boat at Palamino Docks (see checkpoint on radar).");
-					}
-					else return SendClientMessageEx(playerid, COLOR_WHITE, "Water shipments are restricted to Level 4+ Shipment Contracter.");
+					//if(PlayerInfo[playerid][pTruckSkill] >= 200)
+					//{
+					SetPlayerCheckpoint(playerid, 2435.1252, -2267.8210, -0.4000, 4);
+					GameTextForPlayer(playerid, "~w~Waypoint set ~r~Los Santos Docks", 5000, 1);
+					SendClientMessageEx(playerid, COLOR_LIGHTBLUE, "* Pick up some goods to transport with your Boat at Los Santos Docks (see checkpoint on radar).");
+					//}
+					//else return SendClientMessageEx(playerid, COLOR_WHITE, "Water shipments are restricted to Level 4+ Shipment Contracter.");
 				}
 				gPlayerCheckpointStatus[playerid] = CHECKPOINT_LOADTRUCK;
 	        }
