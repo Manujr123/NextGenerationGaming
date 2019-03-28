@@ -4,47 +4,34 @@ hook OnGameModeInit() {
 
 	print("[Streamer] Loading Dynamic Static Vehicles...");
 
-	TruckerVehicles[0] = AddStaticVehicleEx(414,-1572.34008789,129.09317017,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[1] = AddStaticVehicleEx(414,-1575.85583496,125.90543365,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[2] = AddStaticVehicleEx(414,-1578.88806152,122.54198456,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[3] = AddStaticVehicleEx(414,-1581.52319336,119.51720428,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[4] = AddStaticVehicleEx(456,-1584.36132812,116.68750000,3.69948244,225.00000000,-1,-1,300); //Yankes
-	TruckerVehicles[5] = AddStaticVehicleEx(456,-1569.55114746,131.97119141,3.69948244,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[6] = AddStaticVehicleEx(456,-1587.84814453,113.03244019,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[7] = AddStaticVehicleEx(456,-1591.30224609,109.38220215,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[8] = AddStaticVehicleEx(440,-1595.57812500,105.83326721,3.79948235,225.00000000,-1,-1,300); //Rumpo
-	TruckerVehicles[9] = AddStaticVehicleEx(440,-1599.55334473,102.00447845,3.79948235,225.00000000,-1,-1,300); //Rumpo
-	TruckerVehicles[10] = AddStaticVehicleEx(413,-1603.49829102,98.16529083,3.79948235,225.00000000,-1,-1,300); //Pony
-	TruckerVehicles[11] = AddStaticVehicleEx(413,-1606.95983887,94.76251984,3.79948235,225.00000000,-1,-1,300); //Pony
-	TruckerVehicles[12] = AddStaticVehicleEx(482,-1610.01025391,91.14582062,3.79948235,225.00000000,-1,-1,300); //Burrito
-	TruckerVehicles[13] = AddStaticVehicleEx(482,-1614.05834961,87.06182861,3.79948235,225.00000000,-1,-1,300); //Burrito
-	TruckerVehicles[14] = AddStaticVehicleEx(482,-1617.96765137,83.13320160,3.79948235,225.00000000,-1,-1,300); //Burrito
-	TruckerVehicles[15] = AddStaticVehicleEx(443,-1621.37426758,79.81375122,3.79948235,225.00000000,-1,-1,300); //Packer
-	TruckerVehicles[16] = AddStaticVehicleEx(443,-1625.06359863,75.71626282,3.69948244,225.00000000,-1,-1,300); //Packer
-	TruckerVehicles[17] = AddStaticVehicleEx(514,-1628.41735840,72.35322571,3.69948244,225.00000000,-1,-1,300); //Tank truck
-	TruckerVehicles[18] = AddStaticVehicleEx(514,-1631.25317383,69.12777710,3.69948244,225.00000000,-1,-1,300); //Tank truck
-
-	/*
-	TruckerVehicles[0] = AddStaticVehicleEx(414,-1572.34008789,129.09317017,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[1] = AddStaticVehicleEx(414,-1575.85583496,125.90543365,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[2] = AddStaticVehicleEx(414,-1578.88806152,122.54198456,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[3] = AddStaticVehicleEx(414,-1581.52319336,119.51720428,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[4] = AddStaticVehicleEx(414,-1584.36132812,116.68750000,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[5] = AddStaticVehicleEx(414,-1569.55114746,131.97119141,3.69948244,225.00000000,-1,-1,300); //Mule
-	TruckerVehicles[6] = AddStaticVehicleEx(456,-1587.84814453,113.03244019,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[7] = AddStaticVehicleEx(456,-1591.30224609,109.38220215,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[8] = AddStaticVehicleEx(456,-1595.57812500,105.83326721,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[9] = AddStaticVehicleEx(456,-1599.55334473,102.00447845,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[10] = AddStaticVehicleEx(456,-1603.49829102,98.16529083,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[11] = AddStaticVehicleEx(456,-1606.95983887,94.76251984,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[12] = AddStaticVehicleEx(456,-1610.01025391,91.14582062,3.79948235,225.00000000,-1,-1,300); //Yankee
-	TruckerVehicles[13] = AddStaticVehicleEx(443,-1614.05834961,87.06182861,3.79948235,225.00000000,-1,-1,300); //Packer
-	TruckerVehicles[14] = AddStaticVehicleEx(443,-1617.96765137,83.13320160,3.79948235,225.00000000,-1,-1,300); //Packer
-	TruckerVehicles[15] = AddStaticVehicleEx(443,-1621.37426758,79.81375122,3.79948235,225.00000000,-1,-1,300); //Packer
-	TruckerVehicles[16] = AddStaticVehicleEx(514,-1625.06359863,75.71626282,3.69948244,225.00000000,-1,-1,300); //Tank truck
-	TruckerVehicles[17] = AddStaticVehicleEx(514,-1628.41735840,72.35322571,3.69948244,225.00000000,-1,-1,300); //Tank truck
-	TruckerVehicles[18] = AddStaticVehicleEx(514,-1631.25317383,69.12777710,3.69948244,225.00000000,-1,-1,300); //Tank truck
-	*/
+	//Shipment Vehicles
+	TruckerVehicles[0] = AddStaticVehicleEx(414,2596.2043,-2213.7646,13.6406,180.0000,-1,-1,300); // mule1
+	TruckerVehicles[1] = AddStaticVehicleEx(414,2599.5955,-2213.7766,13.6406,180.0000,-1,-1,300); // mule2
+	TruckerVehicles[2] = AddStaticVehicleEx(414,2602.9255,-2213.7588,13.6364,180.0000,-1,-1,300); // mule3
+	TruckerVehicles[3] = AddStaticVehicleEx(414,2606.3540,-2213.7612,13.6353,180.0000,-1,-1,300); // mule4
+	TruckerVehicles[4] = AddStaticVehicleEx(456,2601.9871,-2241.5303,13.7135,0.0000,-1,-1,300); // yankee1
+	TruckerVehicles[5] = AddStaticVehicleEx(456,2605.9016,-2241.5107,13.7207,0.0000,-1,-1,300); // yankee2
+	TruckerVehicles[6] = AddStaticVehicleEx(456,2609.7720,-2241.5332,13.7170,0.0000,-1,-1,300); // yankee3
+	TruckerVehicles[7] = AddStaticVehicleEx(456,2613.6501,-2241.5859,13.7156,0.0000,-1,-1,300); // yankee4
+	TruckerVehicles[8] = AddStaticVehicleEx(440,2596.7534,-2240.8516,13.6456,0.0000,-1,-1,300); // rumpo1
+	TruckerVehicles[9] = AddStaticVehicleEx(440,2593.5981,-2240.7231,13.6589,0.0000,-1,-1,300); // rumpo2
+	TruckerVehicles[10] = AddStaticVehicleEx(413,2590.3972,-2240.8782,13.6267,0.0000,-1,-1,300); // pony1
+	TruckerVehicles[11] = AddStaticVehicleEx(413,2587.3525,-2240.9431,13.6345,0.0000,-1,-1,300); // pony2
+	TruckerVehicles[12] = AddStaticVehicleEx(482,2609.6497,-2213.9756,13.6663,180.0000,-1,-1,300); // burrito1
+	TruckerVehicles[13] = AddStaticVehicleEx(482,2612.6580,-2214.0969,13.6635,180.0000,-1,-1,300); // burrito2
+	TruckerVehicles[14] = AddStaticVehicleEx(482,2615.7678,-2214.0422,13.6642,180.0000,-1,-1,300); // burrito3
+	TruckerVehicles[15] = AddStaticVehicleEx(482,2618.9319,-2213.9543,13.6630,180.0000,-1,-1,300); // burrito4
+	TruckerVehicles[16] = AddStaticVehicleEx(443,2581.9980,-2239.6316,14.1766,0.0000,-1,-1,300); // packer2
+	TruckerVehicles[17] = AddStaticVehicleEx(443,2577.5850,-2239.6763,14.1776,0.0000,-1,-1,300); // packer1
+	TruckerVehicles[18] = AddStaticVehicleEx(514,2572.8584,-2241.4219,14.1317,0.0000,-1,-1,300); // tanker1
+	TruckerVehicles[19] = AddStaticVehicleEx(514,2568.8115,-2241.4131,14.1313,0.0000,-1,-1,300); // tanker2
+	TruckerVehicles[20] = AddStaticVehicleEx(452,2449.3938,-2254.8503,-0.3499,180.0000,-1,-1,300); // speeder7
+	TruckerVehicles[21] = AddStaticVehicleEx(452,2454.8982,-2255.1169,-0.5745,180.0000,-1,-1,300); // speeder6
+	TruckerVehicles[22] = AddStaticVehicleEx(452,2460.1023,-2255.3694,-0.2573,180.0000,-1,-1,300); // speeder5
+	TruckerVehicles[23] = AddStaticVehicleEx(452,2465.2192,-2254.7239,-0.6703,180.0000,-1,-1,300); // speeder4
+	TruckerVehicles[24] = AddStaticVehicleEx(452,2470.3125,-2254.4929,-0.4305,180.0000,-1,-1,300); // speeder3
+	TruckerVehicles[25] = AddStaticVehicleEx(452,2475.3015,-2254.5535,-0.3805,180.0000,-1,-1,300); // speeder2
+	TruckerVehicles[26] = AddStaticVehicleEx(452,2480.0503,-2253.9111,-0.3448,180.0000,-1,-1,300); // speeder1
 
 	PizzaVehicles[0] = AddStaticVehicleEx(448, 2106.4319, -1784.7222, 12.8745, 0.00000000 ,3,6,300); //Pizzaboy
 	PizzaVehicles[1] = AddStaticVehicleEx(448, 2107.4319, -1784.7222, 12.8745, 0.00000000 ,3,6,300); //Pizzaboy
@@ -138,26 +125,6 @@ hook OnGameModeInit() {
 	VIPVehicles[47] = AddStaticVehicleEx(560,-4358.66015625,888.96386719,986.18530273,180.00000000,-1,-1,180); //Sultan
 	VIPVehicles[48] = AddStaticVehicleEx(560,-4354.67675781,888.44500732,986.18530273,180.00000000,-1,-1,180); //Sultan
 	VIPVehicles[49] = AddStaticVehicleEx(560,-4362.83789062,889.30908203,986.18530273,180.00000000,-1,-1,180); //Sultan
-
-	/* Palomino Creek Docks */
-	TruckerVehicles[19] = AddStaticVehicleEx(452,2185.99658203,-149.95848083,0.00000000,276.54052734,-1,-1,300); //Speeder
-	TruckerVehicles[20] = AddStaticVehicleEx(452,2186.97680664,-158.20143127,0.00000000,276.53686523,-1,-1,300); //Speeder
-	TruckerVehicles[21] = AddStaticVehicleEx(452,2187.71826172,-166.46507263,0.00000000,276.34887695,-1,-1,300); //Speeder
-	TruckerVehicles[22] = AddStaticVehicleEx(452,2192.13793945,-200.85733032,0.00000000,276.53259277,-1,-1,300); //Speeder
-	TruckerVehicles[23] = AddStaticVehicleEx(446,2193.27734375,-208.95735168,0.00000000,276.53137207,-1,-1,300); //Speeder
-	TruckerVehicles[24] = AddStaticVehicleEx(452,2194.16015625,-217.30232239,0.00000000,276.53137207,-1,-1,300); //Speeder
-	TruckerVehicles[25] = AddStaticVehicleEx(446,2194.73437500,-225.24971008,0.00000000,276.53137207,-1,-1,300); //Speeder
-	TruckerVehicles[26] = AddStaticVehicleEx(452,2195.46508789,-233.01260376,0.00000000,276.53137207,-1,-1,300); //Speeder
-	TruckerVehicles[27] = AddStaticVehicleEx(452,2196.51562500,-240.20898438,0.00000000,276.53137207,-1,-1,300); //Speeder
-	TruckerVehicles[28] = AddStaticVehicleEx(452,2248.83911133,-236.78352356,0.00000000,274.83947754,-1,-1,300); //Speeder
-	TruckerVehicles[29] = AddStaticVehicleEx(452,2248.34790039,-228.59799194,0.00000000,274.83947754,-1,-1,300); //Speeder
-	TruckerVehicles[30] = AddStaticVehicleEx(446,2247.91552734,-219.05198669,0.00000000,274.83947754,-1,-1,300); //Speeder
-	TruckerVehicles[31] = AddStaticVehicleEx(452,2247.09057617,-210.72824097,0.00000000,274.83947754,-1,-1,300); //Speeder
-	TruckerVehicles[32] = AddStaticVehicleEx(452,2245.94946289,-202.20306396,0.00000000,274.08752441,-1,-1,300); //Speeder
-	TruckerVehicles[33] = AddStaticVehicleEx(452,2245.44799805,-194.00953674,0.00000000,273.41845703,-1,-1,300); //Speeder
-	TruckerVehicles[34] = AddStaticVehicleEx(452,2244.83129883,-185.67364502,0.00000000,273.89953613,-1,-1,300); //Speeder
-	TruckerVehicles[35] = AddStaticVehicleEx(453,2244.21508789,-177.24726868,0.00000000,274.83947754,-1,-1,300); //Speeder
-	TruckerVehicles[36] = AddStaticVehicleEx(453,2243.78955078,-168.67892456,0.00000000,274.83947754,-1,-1,300); //Speeder
 	
 	//Sultan
 	FamedVehicles[0] = AddStaticVehicleEx(560,2515.6797,2381.6501,3.9175,90.5219,-1,-1,180);

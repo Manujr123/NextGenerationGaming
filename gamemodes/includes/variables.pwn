@@ -786,7 +786,7 @@ new ShotPlayer[MAX_PLAYERS][MAX_PLAYERS];
 new LastShot[MAX_PLAYERS];
 new unbanip[MAX_PLAYERS][16];
 new GarbageVehicles[8];
-new TruckerVehicles[37];
+new TruckerVehicles[27];
 new PizzaVehicles[23];
 new VIPVehicles[50];
 new FamedVehicles[39];
