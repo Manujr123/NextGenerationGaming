@@ -3262,15 +3262,15 @@ public OnPlayerEnterCheckpoint(playerid)
 		gPlayerCheckpointStatus[playerid] = CHECKPOINT_RETURNTRUCK;
 		if(!IsABoat(vehicleid))
 		{
-			SetPlayerCheckpoint(playerid, -1548.087524, 123.590423, 3.554687, 5);
-			GameTextForPlayer(playerid, "~w~Waypoint set ~r~San Fierro Docks", 5000, 1);
-			SendClientMessageEx(playerid, COLOR_WHITE, "HINT: Return to the San Fierro Docks (see checkpoint on radar).");
+			SetPlayerCheckpoint(playerid, 2617.0654, -2226.8867, 13.3794, 5);
+			GameTextForPlayer(playerid, "~w~Waypoint set ~r~Los Santos Docks", 5000, 1);
+			SendClientMessageEx(playerid, COLOR_WHITE, "HINT: Return to the Los Santos Docks (see checkpoint on radar).");
 		}
 		else
 		{
-			SetPlayerCheckpoint(playerid, 2098.6543,-104.3568,-0.4820, 5);
-			GameTextForPlayer(playerid, "~w~Waypoint set ~r~Palamino Docks", 5000, 1);
-			SendClientMessageEx(playerid, COLOR_WHITE, "HINT: Return to the Palamino Docks (see checkpoint on radar).");
+			SetPlayerCheckpoint(playerid, 2492.8691, -2271.9946, -0.4376, 5);
+			GameTextForPlayer(playerid, "~w~Waypoint set ~r~Los Santos Docks", 5000, 1);
+			SendClientMessageEx(playerid, COLOR_WHITE, "HINT: Return to the Los Santos Docks (see checkpoint on radar).");
 		}
 
 		SetPVarInt(playerid, "tpTruckRunTimer", 30);
@@ -3305,7 +3305,7 @@ public OnPlayerEnterCheckpoint(playerid)
 		}
 
 		new string[128];
-		format(string, sizeof(string), "* You have delivered %s to %s. Return the truck to the San Fierro Docks to collect your pay.", GetInventoryType(business), Businesses[business][bName]);
+		format(string, sizeof(string), "* You have delivered %s to %s. Return the truck to the Los Santos Docks to collect your pay.", GetInventoryType(business), Businesses[business][bName]);
 		SendClientMessageEx(playerid, COLOR_LIGHTBLUE, string);
 
 		Businesses[business][bOrderState] = 3;
@@ -3339,9 +3339,9 @@ public OnPlayerEnterCheckpoint(playerid)
 		DisablePlayerCheckpoint(playerid);
 
 		gPlayerCheckpointStatus[playerid] = CHECKPOINT_RETURNTRUCK;
-		SetPlayerCheckpoint(playerid, -1548.087524, 123.590423, 3.554687, 5);
-		GameTextForPlayer(playerid, "~w~Waypoint set ~r~San Fierro Docks", 5000, 1);
-		SendClientMessageEx(playerid, COLOR_WHITE, "HINT: Return to the San Fierro Docks (see checkpoint on radar).");
+		SetPlayerCheckpoint(playerid, 2617.0654, -2226.8867, 13.3794, 5);
+		GameTextForPlayer(playerid, "~w~Waypoint set ~r~Los Santos Docks", 5000, 1);
+		SendClientMessageEx(playerid, COLOR_WHITE, "HINT: Return to the Los Santos Docks (see checkpoint on radar).");
 
 		//SetPVarInt(playerid, "tpTruckRunTimer", 30);
 		//SetTimerEx("OtherTimerEx", 1000, false, "ii", playerid, TYPE_TPTRUCKRUNTIMER);
@@ -3358,9 +3358,9 @@ public OnPlayerEnterCheckpoint(playerid)
     		// format(string, sizeof(string), "%s (ID %d) is possibly teleport pizzarunning.", GetPlayerNameEx(playerid), playerid);
 	    	// Log("logs/hack.log", string);
 		}
-		format(string, sizeof(string), "You have delivered the pizza to the destination! You have made $%d.", (GetPVarInt(playerid, "pizzaTimer") * 70));
+		format(string, sizeof(string), "You have delivered the pizza to the destination! You have made $%d.", (GetPVarInt(playerid, "pizzaTimer") * 90));
 		Misc_Save();
-		GivePlayerCash(playerid, floatround((GetPVarInt(playerid, "pizzaTimer") * 70), floatround_round));
+		GivePlayerCash(playerid, floatround((GetPVarInt(playerid, "pizzaTimer") * 90), floatround_round));
 		SendClientMessageEx(playerid, COLOR_WHITE, string);
 		DeletePVar(playerid, "Pizza");
 		DeletePVar(playerid, "pizzaTimer");
@@ -3438,7 +3438,7 @@ public OnPlayerEnterCheckpoint(playerid)
 			}
 			case CHECKPOINT_LOADTRUCK:
 			{
-			    if(IsPlayerInRangeOfPoint(playerid, 6, -1572.767822, 81.137527, 3.554687) || IsPlayerInRangeOfPoint(playerid, 6, 2098.6543,-104.3568,-0.4820))
+			    if(IsPlayerInRangeOfPoint(playerid, 6, 2572.9626, -2223.1616, 13.3422) || IsPlayerInRangeOfPoint(playerid, 6, 2435.1252, -2267.8210, -0.4000)) //Land/boat loading point respectively
 			    {
 				    new vehicleid = GetPlayerVehicleID(playerid);
 	   				if(IsATruckerCar(vehicleid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)

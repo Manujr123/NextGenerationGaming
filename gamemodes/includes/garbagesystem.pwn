@@ -65,7 +65,7 @@ hook OnPlayerEnterCheckpoint(playerid)
 			}
 			else if(GetPVarInt(playerid, "pGarbageStage") >= 5)
 			{
-			    new value = 10000+random(10000);
+			    new value = 7500+random(7500);
 			    
 		    	SetVehicleToRespawn(GetPlayerVehicleID(playerid));
 		    	
