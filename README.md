@@ -2,19 +2,20 @@
 # Next-Generation-Gaming-Legacy
 
 **Manual Dependencies**
+
 | Plugin            | Version           | Link  |
-| -------------     |:-------------:    |:-----|
-| ZCMD              | v0.3.1            | [Here](https://pastebin.com/raw/SbJc7iXa) |
-| Crashdetector     | v4.16             | [Here](https://github.com/Zeex/samp-plugin-crashdetect/releases/tag/v4.16) |
-| Discord Connector | v0.2.3            | [Here](https://github.com/maddinat0r/samp-discord-connector/releases/tag/v0.2.3) |
-| GVar              | v1.3              | [Here](https://github.com/samp-incognito/samp-gvar-plugin/releases/tag/v1.3)|
-| MySQL             | R39-6             | [Here](https://github.com/pBlueG/SA-MP-MySQL/releases/tag/R39-6) |
-| Native Checker    | v1.0              | [Here](https://forum.sa-mp.com/showthread.php?t=249226) |
-| PAWN Raknet       | v1.2.0            | [Here](https://github.com/urShadow/Pawn.RakNet/releases/tag/1.2.0) |
-| SA-MP Compat      | v1.0.1            | [Here](https://github.com/AGraber/samp-compat/releases/tag/1.0.1) |
-| SSCANF            | v2.8.2            | [Here](https://github.com/maddinat0r/sscanf/releases/tag/v2.8.2) |
-| Streamer          | v2.8.2            | [Here](https://github.com/samp-incognito/samp-streamer-plugin/releases/tag/v2.8.2) |
-| Whirlpool         | v1.0              | [Here](https://github.com/Southclaws/samp-whirlpool/releases)|
+| :-------------    |:----:   |----:|
+|ZCMD              | v0.3.1            | [Here](https://pastebin.com/raw/SbJc7iXa) |
+|Crashdetector     | v4.16             | [Here](https://github.com/Zeex/samp-plugin-crashdetect/releases/tag/v4.16) |
+|Discord Connector | v0.2.3            | [Here](https://github.com/maddinat0r/samp-discord-connector/releases/tag/v0.2.3) |
+|GVar              | v1.3              | [Here](https://github.com/samp-incognito/samp-gvar-plugin/releases/tag/v1.3)|
+|MySQL             | R39-6             | [Here](https://github.com/pBlueG/SA-MP-MySQL/releases/tag/R39-6) |
+|Native Checker    | v1.0              | [Here](https://forum.sa-mp.com/showthread.php?t=249226) |
+|PAWN Raknet       | v1.2.0            | [Here](https://github.com/urShadow/Pawn.RakNet/releases/tag/1.2.0) |
+|SA-MP Compat      | v1.0.1            | [Here](https://github.com/AGraber/samp-compat/releases/tag/1.0.1) |
+|SSCANF            | v2.8.2            | [Here](https://github.com/maddinat0r/sscanf/releases/tag/v2.8.2) |
+|Streamer          | v2.8.2            | [Here](https://github.com/samp-incognito/samp-streamer-plugin/releases/tag/v2.8.2) |
+|Whirlpool         | v1.0              | [Here](https://github.com/Southclaws/samp-whirlpool/releases) |
 
 ---
 **SA-MP CTL**
