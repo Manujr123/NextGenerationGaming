@@ -16,6 +16,7 @@
 |SSCANF            | v2.8.2            | [Here](https://github.com/maddinat0r/sscanf/releases/tag/v2.8.2) |
 |Streamer          | v2.8.2            | [Here](https://github.com/samp-incognito/samp-streamer-plugin/releases/tag/v2.8.2) |
 |Whirlpool         | v1.0              | [Here](https://github.com/Southclaws/samp-whirlpool/releases) |
+|BCrypt            | v2.23             | [Here](https://github.com/lassir/bcrypt-samp) |
 
 ---
 **SA-MP CTL**
