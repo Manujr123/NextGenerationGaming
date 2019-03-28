@@ -16,6 +16,8 @@ public OnFilterScriptInit()
 	    if(GetPlayerVirtualWorld(i) != 0 || GetPlayerInterior(i) != 0) TogglePlayerControllable(i, false);
 	}
 
+
+    //LRE - ROY GUCCI COBRA
     CreateDynamicObject(19375, 1743.53406, -1320.01746, 1051.47754,   0.00000, 90.00000, 0.00000);
     CreateDynamicObject(19375, 1743.53687, -1310.44275, 1051.47754,   0.00000, 90.00000, 0.00000);
     CreateDynamicObject(19375, 1743.52905, -1300.83301, 1051.47754,   0.00000, 90.00000, 0.00000);
@@ -252,6 +254,52 @@ public OnFilterScriptInit()
     CreateDynamicObject(19786, 1723.45544, -1324.62817, 1053.28748,   0.00000, 0.00000, 90.00000);
     CreateDynamicObject(19397, 1733.04944, -1320.80786, 1053.05835,   0.00000, 0.00000, 0.00000);
 
+
+    //MarK#0080's gang (ERA i think?)
+    CreateDynamicObject(18850, -54.92303, -251.49138, 21.07873,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(12950, -11.07188, -237.99612, 15.93600,   0.00000, 0.00000, 360.00000);
+    CreateDynamicObject(12950, -30.11780, -233.41560, 6.00880,   0.00000, 0.00000, 270.59869);
+    CreateDynamicObject(12950, -23.64770, -233.41560, 11.06320,   0.00000, 0.00000, 270.59869);
+    CreateDynamicObject(12950, -17.07299, -233.41560, 15.93605,   0.00000, 0.00000, 270.59869);
+    CreateDynamicObject(5822, -31.61133, -267.36279, 24.89886,   0.00000, 0.00000, 186.79941);
+    CreateDynamicObject(3885, -13.34968, -264.21249, 19.93828,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(3885, -13.39404, -239.51558, 19.95523,   0.00000, 0.00000, 144.07603);
+    CreateDynamicObject(16093, -79.51030, -364.17859, 0.31000,   0.00000, 0.00000, 270.24930);
+    CreateDynamicObject(16093, 7.88161, -273.98541, 5.42288,   0.00000, 0.00000, 270.00000);
+    CreateDynamicObject(19905, -16.41700, -372.75815, 4.40480,   0.00000, 0.00000, 180.00000);
+    CreateDynamicObject(3578, -8.28350, -371.64999, 3.83920,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(3578, -16.62690, -371.63004, 3.83920,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(14486, -24.13300, -369.51639, 5.96079,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(3279, -73.22894, -333.83688, 5.20164,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(8210, -75.54956, -299.13611, 8.24730,   0.00000, 0.00000, 270.00000);
+    CreateDynamicObject(8150, 17.24470, -332.66379, 7.49430,   0.00000, 0.00000, 270.00000);
+    CreateDynamicObject(8150, 17.24470, -281.73859, 7.49430,   0.00000, 0.00000, 270.00000);
+    CreateDynamicObject(8210, -48.23760, -395.34909, 7.49430,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(8210, -10.39380, -395.34909, 7.49430,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(8210, -9.93369, -216.33522, 7.49430,   0.00000, 0.00000, 174.35837);
+    CreateDynamicObject(8210, -46.77836, -212.79684, 7.49430,   0.00000, 0.00000, 174.79567);
+    CreateDynamicObject(8210, -74.23317, -237.73505, 7.49430,   0.00000, 0.00000, 269.35233);
+    CreateDynamicObject(3279, -73.15816, -384.50021, 5.38962,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(3279, 11.81723, -389.41296, 5.40459,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(19782, -12.54080, -380.02710, 6.59740,   90.00000, 0.00000, 180.00000);
+    CreateDynamicObject(2616, -12.06530, -380.00632, 6.68610,   0.00000, 0.00000, 180.00000);
+    CreateDynamicObject(19785, -12.13120, -380.02710, 6.59740,   90.00000, 0.00000, 0.00000);
+    CreateDynamicObject(19784, -11.75400, -380.02710, 6.59740,   90.00000, 0.00000, 0.00000);
+    CreateDynamicObject(19784, -11.29030, -380.02710, 6.87900,   90.00000, 0.00000, 0.00000);
+    CreateDynamicObject(19784, -11.29030, -380.02710, 6.59740,   90.00000, 0.00000, 0.00000);
+    CreateDynamicObject(1728, -62.29229, -303.58353, 4.42144,   0.00000, 0.00000, 28.61922);
+    CreateDynamicObject(1728, -58.36430, -303.36923, 4.42144,   0.00000, 0.00000, 310.36359);
+    CreateDynamicObject(19632, -59.57274, -305.35617, 4.41969,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(19632, -60.08197, -305.36084, 4.41969,   0.00000, 0.00000, 0.00000);
+    CreateDynamicObject(13591, -61.73710, -338.89990, 4.63430,   0.00000, 0.00000, 284.29449);
+    CreateDynamicObject(8674, -75.76785, -336.48044, 6.23591,   0.00000, 0.00000, 90.00000);
+    CreateDynamicObject(8674, -75.76790, -340.10471, 6.23590,   0.00000, 0.00000, 90.00000);
+    CreateDynamicObject(8674, -75.86140, -365.56989, 6.69590,   0.00000, 0.00000, 90.00000);
+    CreateDynamicObject(8674, -75.86139, -372.58865, 6.69590,   0.00000, 0.00000, 90.00000);
+    CreateDynamicObject(8674, -75.85245, -390.62119, 6.26728,   0.00000, 0.00000, 90.00000);
+    CreateDynamicObject(8674, -75.83563, -387.16086, 6.26728,   0.00000, 0.00000, 90.00000);
+    CreateDynamicObject(12950, -28.56027, -381.15588, 5.80570,   0.00000, 0.00000, 90.00000);
+
     for(new i, Float: fPlayerPos[3]; i < MAX_PLAYERS; i++)
     {
         if(GetPlayerVirtualWorld(i) != 0 || GetPlayerInterior(i) != 0)
@@ -277,7 +325,21 @@ stock RemoveBuildingsFromPlayer(playerid)
 {
 	if(GetPVarInt(playerid, "BuildingRemoved") == 0)
 	{
-
+        //MarK#0080's gang (ERA i think?)
+        RemoveBuildingForPlayer(playerid, 13195, 36.8281, -256.2266, 0.4688, 0.25);
+        RemoveBuildingForPlayer(playerid, 3377, -149.9141, -324.3438, 1.5781, 0.25);
+        RemoveBuildingForPlayer(playerid, 773, -0.8672, -387.1875, 4.4297, 0.25);
+        RemoveBuildingForPlayer(playerid, 1278, -74.5469, -366.1641, 18.4688, 0.25);
+        RemoveBuildingForPlayer(playerid, 1290, -68.2891, -361.6797, 10.3828, 0.25);
+        RemoveBuildingForPlayer(playerid, 773, -70.8359, -338.9688, 4.4297, 0.25);
+        RemoveBuildingForPlayer(playerid, 12932, -117.9609, -337.4531, 3.6172, 0.25);
+        RemoveBuildingForPlayer(playerid, 3378, -149.9141, -324.3438, 1.5781, 0.25);
+        RemoveBuildingForPlayer(playerid, 1408, -69.8906, -331.4609, 5.9688, 0.25);
+        RemoveBuildingForPlayer(playerid, 1408, -67.0859, -334.2422, 5.9688, 0.25);
+        RemoveBuildingForPlayer(playerid, 12933, -29.0313, -302.1250, 6.6719, 0.25);
+        RemoveBuildingForPlayer(playerid, 1408, 4.4453, -277.3906, 6.0000, 0.25);
+        RemoveBuildingForPlayer(playerid, 1408, 4.4375, -271.8359, 6.0000, 0.25);
+        RemoveBuildingForPlayer(playerid, 12861, 36.8281, -256.2266, 0.4688, 0.25);
 		SetPVarInt(playerid, "BuildingRemoved", 1);
 	}
 	return true;
