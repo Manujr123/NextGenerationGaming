@@ -385,19 +385,6 @@ public OnRefundFinish(playerid)
     return 1;
 }
 
-CMD:refunds(playerid, params[])
-{
-    if(PlayerInfo[playerid][pAdmin] >= 4)
-    {
-        new szQuery[96];
-        format(szQuery, sizeof(szQuery), 
-        "SELECT `Username`, `IP`, `RefundName` FROM `accounts` WHERE `Refund` = 1"); 
-        mysql_tquery(MainPipeline, szQuery, "OnRefundSearch", "d", playerid);
-    }
-    else return SendClientMessageEx(playerid, COLOR_GREY, "You are not authorised to use this command");
-    return 1;
-}
-
 forward OnRefundSearch(playerid);
 public OnRefundSearch(playerid)
 {
@@ -414,3 +401,61 @@ public OnRefundSearch(playerid)
     ShowPlayerDialogEx(playerid, DIALOG_REFUNDPROCESS_5, DIALOG_STYLE_TABLIST_HEADERS, "Active Refund Requests", szMiscArray, "Confirm", "Cancel");
     return 1;
 }
+
+
+CMD:refunds(playerid, params[])
+{
+    if(PlayerInfo[playerid][pAdmin] >= 4)
+    {
+        new szQuery[96];
+        format(szQuery, sizeof(szQuery), 
+        "SELECT `Username`, `IP`, `RefundName` FROM `accounts` WHERE `Refund` = 1"); 
+        mysql_tquery(MainPipeline, szQuery, "OnRefundSearch", "d", playerid);
+    }
+    else return SendClientMessageEx(playerid, COLOR_GREY, "You are not authorised to use this command");
+    return 1;
+}
+
+CMD:unrefundblock(playerid, params[])
+{
+    if(PlayerInfo[playerid][pAdmin] >= 4)
+    {
+        new giveplayerid;
+        if(sscanf(params, "u", giveplayerid)) return SendClientMessageEx(playerid, COLOR_GRAD2, "USAGE: /unrefundblock (playerid");
+        if(IsPlayerConnected(giveplayerid))
+        {
+            PlayerInfo[giveplayerid][pRefundAttempts] = 0;
+            SendClientMessageEx(playerid, COLOR_PINK, "You have reset %s's refund attempts.", GetPlayerNameEx(giveplayerid));
+            SendClientMessageEx(giveplayerid, COLOR_PINK, "Your refund attempts have been reset by administrator %s.", GetPlayerNameEx(playerid));
+            szMiscArray[0] = 0;
+            format(szMiscArray, sizeof szMiscArray, "{AA3333}AdmWarning{FFFF00}: %s has reset %s's refund attempts.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+		    ABroadCast(COLOR_YELLOW, szMiscArray, 4);
+        }
+        else return SendClientMessageEx(playerid, COLOR_GREY, "Player is not connected.");
+    }
+    else return SendClientMessageEx(playerid, COLOR_GREY, "You are not authorised to use this command");
+    return 1;
+}
+
+CMD:refundblock(playerid, params[])
+{
+    if(PlayerInfo[playerid][pAdmin] >= 4)
+    {
+        new giveplayerid;
+        if(sscanf(params, "u", giveplayerid)) return SendClientMessageEx(playerid, COLOR_GRAD2, "USAGE: /refundblock (playerid");
+        if(IsPlayerConnected(giveplayerid))
+        {
+            PlayerInfo[giveplayerid][pRefundAttempts] = 5;
+            SendClientMessageEx(playerid, COLOR_PINK, "You have revoked %s's ability to refund.", GetPlayerNameEx(giveplayerid));
+            SendClientMessageEx(giveplayerid, COLOR_PINK, "Your refund ability has been revoked by administrator %s.", GetPlayerNameEx(playerid));
+            szMiscArray[0] = 0;
+            format(szMiscArray, sizeof szMiscArray, "{AA3333}AdmWarning{FFFF00}: %s has revoked %s's ability to refund.", GetPlayerNameEx(playerid), GetPlayerNameEx(giveplayerid));
+		    ABroadCast(COLOR_YELLOW, szMiscArray, 4);
+        }
+        else return SendClientMessageEx(playerid, COLOR_GREY, "Player is not connected.");
+    }
+    else return SendClientMessageEx(playerid, COLOR_GREY, "You are not authorised to use this command");
+    return 1;
+}
+
+
