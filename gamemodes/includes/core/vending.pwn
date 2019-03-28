@@ -46,8 +46,8 @@ public OnPlayerUseVending(playerid, type) {
     new Float:healtha;
     GetHealth(playerid, healtha);
     if(gettime() - LastShot[playerid] < 60) return SendClientMessageEx(playerid, COLOR_GRAD2, "You have been injured within the last 60 seconds, you cannot use the vending machine");
-  	if((PlayerInfo[playerid][pConnectHours] > 5 && GetPlayerCash(playerid) < 750)) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need at least $100 to buy %s!", (type == 1) ? ("a Sprunk") : ("some Candy")), ClearAnimationsEx(playerid);
-    if((PlayerInfo[playerid][pConnectHours] < 5 && GetPlayerCash(playerid) < 150)) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need at least $50 to buy %s!", (type == 1) ? ("a Sprunk") : ("some Candy")), ClearAnimationsEx(playerid);
+  	if((PlayerInfo[playerid][pConnectHours] > 5 && GetPlayerCash(playerid) < 100)) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need at least $100 to buy %s!", (type == 1) ? ("a Sprunk") : ("some Candy")), ClearAnimationsEx(playerid);
+    if((PlayerInfo[playerid][pConnectHours] < 5 && GetPlayerCash(playerid) < 50)) return SendClientMessageEx(playerid, COLOR_GRAD1, "You need at least $50 to buy %s!", (type == 1) ? ("a Sprunk") : ("some Candy")), ClearAnimationsEx(playerid);
   	if((healtha > 99.0)) return SendClientMessageEx(playerid, COLOR_GRAD2, "Your health is already at 100.");
 //    if((healtha + 35.0) > 100.0) SetHealth(playerid, 100);
 //    else SetHealth(playerid, healtha+35);
