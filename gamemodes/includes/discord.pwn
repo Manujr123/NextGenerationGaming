@@ -132,7 +132,7 @@ public DCC_OnChannelMessage(DCC_Channel:channel, DCC_User:author, const message[
 			}
 		}
 		printf("[DCC] OnChannelMessage (Channel %s): Author %s sent message: %s", channel_name, name, message);
-		if(!strcmp(channel_name, "admin-chat", true) && strcmp(name, "SA-MP", true)) 
+		if(!strcmp(channel_name, "admin-chat", true) && strcmp(name, "Yes Man", true)) 
 		{
 			format(szMessage, sizeof(szMessage), "* [Discord] Administrator %s: %s", name, message);
 			StripColorEmbedding(szMessage);
@@ -144,7 +144,7 @@ public DCC_OnChannelMessage(DCC_Channel:channel, DCC_User:author, const message[
 					}
 				}
 		}
-		if(!strcmp(channel_name, "head-admin-chat", true) && strcmp(name, "SA-MP", true)) 
+		if(!strcmp(channel_name, "head-admin-chat", true) && strcmp(name, "Yes Man", true)) 
 		{
 			format(szMessage, sizeof(szMessage), "* [Discord] Administrator %s: %s", name, message);
 			StripColorEmbedding(szMessage);

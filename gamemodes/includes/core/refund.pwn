@@ -346,7 +346,7 @@ public OnOldAccountLookup(playerid)
         "Username\tIP\tRefund Username\tRefund IP\n%s\t%s (%s, %s)\t%s\t%s (%s, %s)", 
         tmpUsername, tmpIP, tmpCity1, tmpCountry1, tmpRefundUsername, tmpRefundIP, tmpCity2, tmpCountry2);
 
-        ShowPlayerDialog(playerid, DIALOG_REFUNDPROCESS_6, DIALOG_STYLE_TABLIST_HEADERS, "Refund - Review", szMiscArray, "Accept", "Deny");
+        ShowPlayerDialogEx(playerid, DIALOG_REFUNDPROCESS_6, DIALOG_STYLE_TABLIST_HEADERS, "Refund - Review", szMiscArray, "Accept", "Deny");
     }
     else return SendClientMessageEx(playerid, COLOR_GRAD2, "Account not found, unknown error.");
     return 1;
