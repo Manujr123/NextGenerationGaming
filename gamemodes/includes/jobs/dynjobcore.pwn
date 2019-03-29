@@ -75,27 +75,22 @@ forward OnLoadJobPoints();
 public OnLoadJobPoints()
 {
 	szMiscArray[0] = 0;
-	new i, rows, sqlid;
+	new i, rows;
 	cache_get_row_count(rows);
 
 	while(i < rows)
 	{
 		cache_get_value_name_int(i, "id", JobData[i][jId]);
-		if(i < MAX_JOBPOINTS) {
-			cache_get_value_name_int(i, "type", JobData[i][jType]);
-			cache_get_value_name_float(i, "posx", JobData[i][jPos][0]);
-			cache_get_value_name_float(i, "posy", JobData[i][jPos][1]);
-			cache_get_value_name_float(i, "posz", JobData[i][jPos][2]);
-			cache_get_value_name_int(i, "vw", JobData[i][jVw]);
-			cache_get_value_name_int(i, "int", JobData[i][jInt]);
-			cache_get_value_name_int(i, "marker", JobData[i][jMarkerID]);
-			cache_get_value_name_int(i, "level", JobData[i][jLevel]);
-			UpdateJobPoint(i);
-			++JobCount;
-		} else {
-			mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "DELETE FROM `jobs` WHERE `id` = %d", sqlid);
-			mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
-		}
+		cache_get_value_name_int(i, "type", JobData[i][jType]);
+		cache_get_value_name_float(i, "posx", JobData[i][jPos][0]);
+		cache_get_value_name_float(i, "posy", JobData[i][jPos][1]);
+		cache_get_value_name_float(i, "posz", JobData[i][jPos][2]);
+		cache_get_value_name_int(i, "vw", JobData[i][jVw]);
+		cache_get_value_name_int(i, "int", JobData[i][jInt]);
+		cache_get_value_name_int(i, "marker", JobData[i][jMarkerID]);
+		cache_get_value_name_int(i, "level", JobData[i][jLevel]);
+		UpdateJobPoint(i);
+		++JobCount;
 		i++;
 	}
 	if(JobCount > 0) printf("[Dynamic Job Points] %d dynamic job points has been loaded.", i);
@@ -104,18 +99,29 @@ public OnLoadJobPoints()
 }
 
 stock SaveJobPoint(i) {
-	new query[2048];
+	szMiscArray[0] = 0;
 
-	format(query, 2048, "UPDATE `jobs` SET ");
-	SaveInteger(query, "jobs", i+1, "type", JobData[i][jType]);
-	SaveFloat(query, "jobs", i+1, "posx", JobData[i][jPos][0]);
-	SaveFloat(query, "jobs", i+1, "posy", JobData[i][jPos][1]);
-	SaveFloat(query, "jobs", i+1, "posz", JobData[i][jPos][2]);
-	SaveInteger(query, "jobs", i+1, "vw", JobData[i][jVw]);
-	SaveInteger(query, "jobs", i+1, "int", JobData[i][jInt]);
-	SaveInteger(query, "jobs", i+1, "marker", JobData[i][jMarkerID]);
-	SaveInteger(query, "jobs", i+1, "level", JobData[i][jLevel]);
-	SQLUpdateFinish(query, "jobs", i+1);
+	format(szMiscArray, sizeof(szMiscArray),
+	"UPDATE `jobs` SET `type` = '%d', \
+	`posx` = '%f', `posy` = '%f', `posz` = '%f', \
+	`vw` = '%d', `int` = '%d', `marker` = '%d', `level` = '%d' WHERE `id` = '%d'", 
+	JobData[i][jType], JobData[i][jPos][0], JobData[i][jPos][1], JobData[i][jPos][2],
+	JobData[i][jVw], JobData[i][jInt], JobData[i][jMarkerID], JobData[i][jLevel], JobData[i][jId]); //if the mysql id is loaded in OnLoadJobPoints why would we save i and not the id we fuckin assigned SMH JINGLES OR WHOEVER MADE IT
+	mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
+
+	/*
+	format(szMiscArray, 2048, "UPDATE `jobs` SET ");
+	SaveInteger(szMiscArray, "jobs", i+1, "type", JobData[i][jType]);
+	SaveFloat(szMiscArray, "jobs", i+1, "posx", JobData[i][jPos][0]);
+	SaveFloat(szMiscArray, "jobs", i+1, "posy", JobData[i][jPos][1]);
+	SaveFloat(szMiscArray, "jobs", i+1, "posz", JobData[i][jPos][2]);
+	SaveInteger(szMiscArray, "jobs", i+1, "vw", JobData[i][jVw]);
+	SaveInteger(szMiscArray, "jobs", i+1, "int", JobData[i][jInt]);
+	SaveInteger(szMiscArray, "jobs", i+1, "marker", JobData[i][jMarkerID]);
+	SaveInteger(szMiscArray, "jobs", i+1, "level", JobData[i][jLevel]);
+	SQLUpdateFinish(szMiscArray, "jobs", i+1);
+	*/
+	return 1;
 }
 
 forward UpdateJobPoint(id);
@@ -324,7 +330,7 @@ Dialog:job_name_confirm(playerid, response, listitem, inputtext[]) {
 		format(szMiscArray, sizeof(szMiscArray), "%s has edited Job ID %d's name from %s to %s", GetPlayerNameEx(playerid), id, GetJobName(id), inputtext);
 		Log("logs/jobedit.log", szMiscArray);
 		SendClientMessageEx(playerid, COLOR_YELLOW, "You have changed job id: %d's name from %s to %s.", id, GetJobName(id), inputtext);
-		mysql_escape_string(inputtext, JobName[id]);
+		format(JobName[id], 32, "%s", inputtext);
 		mysql_format(MainPipeline, szMiscArray, sizeof(szMiscArray), "UPDATE `jobs_types` SET `name` = '%e' WHERE `id` = %d", JobName[id], id);
 		mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
 		for(new j; j < MAX_JOBPOINTS; j++) {
@@ -342,7 +348,7 @@ stock ListJobPoints(playerid) {
 	szMiscArray[0] = 0;
 	new i = 0;
 	while(i < MAX_JOBPOINTS) {
-		if(strcmp(JobName[JobData[i][jType]], "-----", true) != 0)
+		if(strcmp(JobName[JobData[i][jType]], "----", true) != 0)
 		{
 			format(szMiscArray, sizeof(szMiscArray), "%s\n(%i) %s{FFFFFF}", szMiscArray, i, JobName[JobData[i][jType]]);
 		}
