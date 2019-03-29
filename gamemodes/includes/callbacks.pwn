@@ -3455,7 +3455,7 @@ public OnPlayerEnterCheckpoint(playerid)
 			}
 			case CHECKPOINT_RETURNTRUCK:
 			{
-			    if(!IsPlayerInRangeOfPoint(playerid, 6, -1548.087524, 123.590423, 3.554687) && !IsPlayerInRangeOfPoint(playerid, 6, 2098.6543,-104.3568,-0.4820))
+			    if(!IsPlayerInRangeOfPoint(playerid, 6, 2617.0654, -2226.8867, 13.3794) && !IsPlayerInRangeOfPoint(playerid, 6, 2492.8691, -2271.9946, -0.6376))
 			    {// In the case the person finds a way to exploit the checkpoint to different location
                     CancelTruckDelivery(playerid);
                     SendClientMessageEx(playerid, COLOR_REALRED, "ERROR: Wrong checkpoint entered. Truck delivery canceled completely.");
@@ -3498,11 +3498,11 @@ public OnPlayerEnterCheckpoint(playerid)
 				new Float:distancepay;
 				if(IsABoat(vehicleid))
 				{
-				    distancepay = floatmul(GetDistanceBetweenPoints(2098.6543,-104.3568,-0.4820, BoatDropoffs[route][PosX], BoatDropoffs[route][PosY], BoatDropoffs[route][PosZ]), 1.5);
+				    distancepay = floatmul(GetDistanceBetweenPoints(2435.1252, -2267.8210, -0.4000, BoatDropoffs[route][PosX], BoatDropoffs[route][PosY], BoatDropoffs[route][PosZ]), 1.5);
 				}
 				else
 				{
-				    distancepay = floatmul(GetDistanceBetweenPoints(-1572.767822, 81.137527, 3.554687, TruckerDropoffs[route][PosX], TruckerDropoffs[route][PosY], TruckerDropoffs[route][PosZ]), 1.5);
+				    distancepay = floatmul(GetDistanceBetweenPoints(2572.9626, -2223.1616, 13.3422, TruckerDropoffs[route][PosX], TruckerDropoffs[route][PosY], TruckerDropoffs[route][PosZ]), 1.5);
 				}
 				payment += floatround(distancepay);
 				if(TruckDeliveringTo[vehicleid] != INVALID_BUSINESS_ID) {
