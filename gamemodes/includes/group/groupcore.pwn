@@ -1255,7 +1255,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					format(szTitle, sizeof szTitle, "Edit Group Radio Color {%s}(%s)", Group_NumToDialogHex(arrGroupData[iGroupID][g_hDutyColour]), arrGroupData[iGroupID][g_szGroupName]);
 					ShowPlayerDialogEx(playerid, DIALOG_GROUP_RADIOCOL, DIALOG_STYLE_INPUT, szTitle, "Enter a colour in hexadecimal format (for example, BCA3FF). This colour will be used for the group's in-character radio chat.", "Confirm", "Cancel");
 				}
-				case 6 .. 9, 11, 13, 15 .. 22: {
+				case 6 .. 9, 13, 15 .. 22: {
 
 					new
 						szDialog[((32 + 5) * MAX_GROUP_RANKS) + 24];
@@ -1283,6 +1283,19 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					strmid(szTitle, inputtext, 0, strfind(inputtext, ":", true));
 					format(szTitle, sizeof szTitle, "Edit Group %s", szTitle);
 					ShowPlayerDialogEx(playerid, DIALOG_GROUP_FINDACC, DIALOG_STYLE_LIST, szTitle, szDialog, "Select", "Cancel");
+				}
+				case 11: {
+					new
+						szDialog[((32 + 5) * MAX_GROUP_RANKS) + 24];
+
+					for(new i = 0; i != MAX_GROUP_RANKS; ++i)
+						format(szDialog, sizeof szDialog, "%s\n(%i) %s", szDialog, i, ((arrGroupRanks[iGroupID][i][0]) ? (arrGroupRanks[iGroupID][i]) : ("{BBBBBB}(undefined){FFFFFF}")));
+
+					strcat(szDialog, "\nRevoke from Group");
+
+					strmid(szTitle, inputtext, 0, strfind(inputtext, ":", true));
+					format(szTitle, sizeof szTitle, "Edit Group %s", szTitle);
+					ShowPlayerDialogEx(playerid, DIALOG_GROUP_GOVACC, DIALOG_STYLE_LIST, szTitle, szDialog, "Select", "Cancel");
 				}
 				case 12: {
 					
