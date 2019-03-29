@@ -139,14 +139,12 @@ CMD:getpizza(playerid, params[]) {
 	}
 	else if(IsPlayerInRangeOfPoint(playerid, 5.0, 2103.6714,-1785.5222,12.9849)) // Idlewood
 	{
-		new rand = random(MAX_HOUSES - 1), i;
+		new rand = random(MAX_HOUSES - 1);
+
 		while(!(HouseInfo[rand][hOwned] && HouseInfo[rand][hExteriorZ] <= 100 && HouseInfo[rand][hExteriorX] > 101.0000 && HouseInfo[rand][hExteriorX] < 2893.0000 && HouseInfo[rand][hExteriorY] < -599.0000 && HouseInfo[rand][hExteriorY] > -2169.0000 && HouseInfo[rand][hExtIW] == 0 && HouseInfo[rand][hExtVW] == 0))
 		{
-			if(++rand >= MAX_HOUSES)
-			{
-				rand = 0;
-			}
-			if (i++ > MAX_HOUSES) return 1;
+			//IF IT'S NOT WHAT WE WANT WE CHOOSE ANOTHER RANDOM ONE NOT WHATEVER THE FUCK IT WAS DOING BEFORE
+			rand = random(MAX_HOUSES - 1);
 		}
 
 		new
