@@ -153,7 +153,7 @@ CMD:getpizza(playerid, params[]) {
 
 		SetPVarInt(playerid, "tpPizzaTimer", iDist / 80);
 		SetPVarInt(playerid, "pizzaTotal", iDist / 10);
-		SetPVarInt(playerid, "pizzaTimer", iDist / 10);
+		SetPVarInt(playerid, "pizzaTimer", iDist / 10 + 15);
 		SetPVarInt(playerid, "Pizza", rand);
 		SetPVarInt(playerid, "PizzaCoolDown", gettime()+60);
 
