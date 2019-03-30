@@ -160,7 +160,7 @@ CMD:getpizza(playerid, params[]) {
 		SetTimerEx("OtherTimerEx", 1000, false, "ii", playerid, TYPE_TPPIZZARUNTIMER);
 		SetTimerEx("OtherTimerEx", 1000, false, "ii", playerid, TYPE_PIZZATIMER);
 
-		format(szMessage, sizeof(szMessage), "You have picked up a pizza for %s. You have %d seconds to deliver it!", StripUnderscore(HouseInfo[rand][hOwnerName]), iDist / 10);
+		format(szMessage, sizeof(szMessage), "You have picked up a pizza for %s. You have %d seconds to deliver it!", StripUnderscore(HouseInfo[rand][hOwnerName]), iDist / 10 + 15);
 		SendClientMessageEx(playerid, COLOR_WHITE, szMessage);
 
 		SetPlayerCheckpoint(playerid, HouseInfo[rand][hExteriorX], HouseInfo[rand][hExteriorY], HouseInfo[rand][hExteriorZ], 5);
