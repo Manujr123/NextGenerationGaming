@@ -175,24 +175,27 @@ Dialog:weapon_deposit(playerid, response, listitem, inputtext[]) {
 }
 
 stock SaveLockerRanks(i) {
-	new query[2048], wep[12];
-	format(query, 2048, "UPDATE `locker_restrict` SET ");
+	new wep[12];
+	szMiscArray[0] = 0;
+	format(szMiscArray, sizeof(szMiscArray), "UPDATE `locker_restrict` SET ");
 	for(new w = 0; w < 16; w++) {
 		format(wep, sizeof(wep), "%d", w+1);
-		SaveInteger(query, "locker_restrict", i+1, wep, LockerWep[i][lwRank][w]);
+		SaveInteger(szMiscArray, "locker_restrict", i+1, wep, LockerWep[i][lwRank][w]);
 	}
-	SQLUpdateFinish(query, "locker_restrict", i+1);
+	SQLUpdateFinish(szMiscArray, "locker_restrict", i+1);
 	return 1;
 }
 
 stock SaveWeapons(i) {
-	new query[2048], wep[12];
-	format(query, 2048, "UPDATE `gweaponsnew` SET ");
+	new wep[12];
+	szMiscArray[0] = 0;
+	format(szMiscArray, sizeof(szMiscArray), "UPDATE `gweaponsnew` SET ");
 	for(new w = 0; w < 46; w++) {
 		format(wep, sizeof(wep), "%d", w+1);
-		SaveInteger(query, "gweaponsnew", i+1, wep, LockerWep[i][lwWep][w]);
+		SaveInteger(szMiscArray, "gweaponsnew", i+1, wep, LockerWep[i][lwWep][w]);
 	}
-	SQLUpdateFinish(query, "gweaponsnew", i+1);
+	format(szMiscArray, sizeof(szMiscArray), "%s WHERE `Group_ID` = '%d'", szMiscArray, i+1);
+	mysql_tquery(MainPipeline, szMiscArray, "OnQueryFinish", "i", SENDDATA_THREAD);
 	return 1;
 }
 
