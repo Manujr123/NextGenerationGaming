@@ -3669,7 +3669,6 @@ CMD:setstat(playerid, params[])
 			SendClientMessageEx(playerid, COLOR_GRAD2, "|56 Car Jack Skill |57 Lock Pick Vehicle Count |58 Lock Pick Vehicle Time |59 Tool Box |60 Crowbar");
 			return 1;
 		}
-		if(PlayerInfo[giveplayerid][pLevel] == 1 && PlayerInfo[giveplayerid][pAdmin] < 2) return SendClientMessageEx(playerid, COLOR_RED, "You can't use /setstat on level 1's");
 		if(IsPlayerConnected(giveplayerid))
 		{
 			switch (statcode)
@@ -4823,7 +4822,6 @@ CMD:givemoney(playerid, params[])
 	{
 		new string[128], giveplayerid, money;
 		if(sscanf(params, "ud", giveplayerid, money)) return SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /givemoney [player] [money]");
-		if(PlayerInfo[giveplayerid][pLevel] == 1 && PlayerInfo[giveplayerid][pAdmin] < 2) return SendClientMessageEx(playerid, COLOR_RED, "You can't use /givemoney on level 1's");
 		if(money < 1) return SendClientMessageEx(playerid, COLOR_GRAD1, "You cannot give less than $1!");
 		if(IsPlayerConnected(giveplayerid))
 		{

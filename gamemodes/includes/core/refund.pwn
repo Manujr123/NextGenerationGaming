@@ -442,7 +442,7 @@ CMD:refundblock(playerid, params[])
     if(PlayerInfo[playerid][pAdmin] >= 4)
     {
         new giveplayerid;
-        if(sscanf(params, "u", giveplayerid)) return SendClientMessageEx(playerid, COLOR_GRAD2, "USAGE: /refundblock (playerid");
+        if(sscanf(params, "u", giveplayerid)) return SendClientMessageEx(playerid, COLOR_GRAD2, "USAGE: /refundblock (playerid)");
         if(IsPlayerConnected(giveplayerid))
         {
             PlayerInfo[giveplayerid][pRefundAttempts] = 5;
