@@ -5,11 +5,13 @@ CMD:goto(playerid, params[])
 		new location[25], vw, int;
 		if(sscanf(params, "s[25]D(0)D(0)", location, vw, int))
 		{
-			SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /goto [location] [(optional) virtual world] [(optional) interior]");
-			SendClientMessageEx(playerid, COLOR_GRAD1, "Locations 1: LS,SF,LV,RC,ElQue,Bayside,LSVIP,SFVIP,LVVIP,Famed,MHC,stadium1");
-			SendClientMessageEx(playerid, COLOR_GRAD2, "Locations 2: stadium2,stadium3,stadium4,int1,mark,mark2,sfairport,dillimore,cave,doc,bank,mall,allsaints");
-			SendClientMessageEx(playerid, COLOR_GRAD3, "Locations 3: countygen,cracklab,gym,rodeo,flint,idlewood,fbi,island,demorgan,doc,icprison,oocprison");
-			SendClientMessageEx(playerid, COLOR_GRAD4, "Locations 4: garagesm,garagemed,garagelg,garagexlg,glenpark,palomino,nggshop, fc, unity, (l)os(c)olinas, SFDocks");
+			SendClientMessageEx(playerid, COLOR_GRAD1, "Los Santos: LS | LSVIP | Famed | Stadium1 | doc | bank | mall | allsaints | countrygen | fbi");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Los Santos: cracklab | gym | rodeo | idlewood | glenpark | nggshop | unity | LC (los colanias)");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "San Fierro: SF | SFVIP | stadium2 | sfairport | SFDocks");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Las Vanturas: LV | LVVIP | MHC | stadium3 | stadium4 | demorgan | fc | ElQue | Bayside");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Counties: RC | dillimore | cave | flint | palomino");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Other: int1 | mark | mark2 | island | icprison | oocprison");
+            SendClientMessageEx(playerid, COLOR_GRAD4, "Garages: garagesm | garagemed | garagelg | garagexlg");
 			return 1;
 		}
 		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
@@ -617,11 +619,13 @@ CMD:goto(playerid, params[])
 		}
 		else
 		{
-			SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /goto [location] [(optional) virtual world] [(optional) interior]");
-			SendClientMessageEx(playerid, COLOR_GRAD1, "Locations 1: LS,SF,LV,RC,ElQue,Bayside,LSVIP,SFVIP,LVVIP,Famed,MHC,stadium1");
-			SendClientMessageEx(playerid, COLOR_GRAD2, "Locations 2: stadium2,stadium3,stadium4,int1,mark,mark2,sfairport,dillimore,cave,doc,bank,mall,allsaints");
-			SendClientMessageEx(playerid, COLOR_GRAD3, "Locations 3: countygen,cracklab,gym,rodeo,flint,idlewood,fbi,island,demorgan,doc,icprison,oocprison");
-			return SendClientMessageEx(playerid, COLOR_GRAD4, "Locations 4: garagesm,garagemed,garagelg,garagexlg,glenpark,palomino,nggshop, fc, unity, (l)os(c)olinas");
+			SendClientMessageEx(playerid, COLOR_GRAD1, "Los Santos: LS | LSVIP | Famed | Stadium1 | doc | bank | mall | allsaints | countrygen | fbi");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Los Santos: cracklab | gym | rodeo | idlewood | glenpark | nggshop | unity | LC (los colanias)");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "San Fierro: SF | SFVIP | stadium2 | sfairport | SFDocks");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Las Vanturas: LV | LVVIP | MHC | stadium3 | stadium4 | demorgan | fc | ElQue | Bayside");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Counties: RC | dillimore | cave | flint | palomino");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Other: int1 | mark | mark2 | island | icprison | oocprison");
+			return SendClientMessageEx(playerid, COLOR_GRAD4, "Garages: garagesm | garagemed | garagelg | garagexlg");
 		}
 		SetPlayerVirtualWorld(playerid, vw);
 		SetPlayerInterior(playerid, int);
@@ -644,11 +648,12 @@ CMD:sendto(playerid, params[])
 		new string[128], location[32], giveplayerid;
 		if(sscanf(params, "s[32]u", location, giveplayerid))
 		{
-			SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /sendto [location] [player]");
-			SendClientMessageEx(playerid, COLOR_GRAD1, "Locations 1: LS,SF,LV,RC,ElQue,Bayside,LSVIP,SFVIP,LVVIP,MHC,Famed,stadium1");
-			SendClientMessageEx(playerid, COLOR_GRAD2, "Locations 2: stadium2,stadium3,stadium4,int1,mark,mark2,sfairport,dillimore,cave,doc,bank,mall,allsaints");
-			SendClientMessageEx(playerid, COLOR_GRAD3, "Locations 3: countygen,cracklab,gym,rodeo,flint,idlewood,fbi,island,demorgan,doc,icprison,oocprison");
-			SendClientMessageEx(playerid, COLOR_GRAD3, "Locations 4: glenpark, palomino, nggshop, fc, unity, LC (loscolinas), SFDocks");
+			SendClientMessageEx(playerid, COLOR_GRAD1, "Los Santos: LS | LSVIP | Famed | Stadium1 | doc | bank | mall | allsaints | countrygen | fbi");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Los Santos: cracklab | gym | rodeo | idlewood | glenpark | nggshop | unity | LC (los colanias)");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "San Fierro: SF | SFVIP | stadium2 | sfairport | SFDocks");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Las Vanturas: LV | LVVIP | MHC | stadium3 | stadium4 | demorgan | fc | ElQue | Bayside");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Counties: RC | dillimore | cave | flint | palomino");
+            SendClientMessageEx(playerid, COLOR_GRAD1, "Other: int1 | mark | mark2 | island | icprison | oocprison");
 			return 1;
 		}
 		if (!IsPlayerConnected(giveplayerid))
