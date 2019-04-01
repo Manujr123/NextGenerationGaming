@@ -1008,7 +1008,7 @@ task PlayerAntiWarp[50]() {
 				if(pos[1] <= -45.000000 && (0.09 < pos[2] <= 0.11))
 				{
 					warpWarnings[i]++;
-					if(warpWarnings[i] >= 3)
+					if(warpWarnings[i] == 3)
 					{
 						if(PlayerInfo[i][pAdmin] < 2) 
 						{
