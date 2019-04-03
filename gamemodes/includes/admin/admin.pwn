@@ -3661,11 +3661,11 @@ CMD:setstat(playerid, params[])
 		{
 			SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /setstat [player] [statcode] [amount]");
 			SendClientMessageEx(playerid, COLOR_GRAD4, "|1 Level |2 ArmorUpgrade |3 UpgradePoints |4 Model |5 BankAccount |6 PhoneNumber |7 RespectPoints |8 House1 |9 House2 |10 House3");
-			SendClientMessageEx(playerid, COLOR_GRAD2, "|11 Not Used |12 Det |13 Lawyer |14 Fixer |17 Drug |18 Sex |19 Box |20 Arms |21 Materials |22 Pot |23 Crack");
-			SendClientMessageEx(playerid, COLOR_GRAD2, "|24 Fishing |25 Job |26 Rank |27 Packages |28 Crates |29 Smuggler |30 Insurance |31 Warnings |32 Screwdriver");
-			SendClientMessageEx(playerid, COLOR_GRAD1, "|33 Age |34 Gender |35 NMute |36 AdMute |37 Faction |38 Restricted Weapon Time |39 Gang Warns |40 RMute |41 Reward Hours");
+			SendClientMessageEx(playerid, COLOR_GRAD2, "|11 Shipment Contractor |12 Detective |13 Lawyer |14 Mechanic |18 Whore |19 Boxer |20 Arms Dealer |21 Materials |22 Pot");
+			SendClientMessageEx(playerid, COLOR_GRAD2, "|23 Crack |24 Fishing |25 Job |26 Rank |27 Packages |28 Crates |29 Drug Smuggler |30 Insurance |31 Warnings |32 Screwdriver");
+			SendClientMessageEx(playerid, COLOR_GRAD1, "|33 Age |34 Gender |35 NMute |36 AdMute |37 Group |38 Restricted Weapon Time |39 Gang Warns |40 RMute |41 Reward Hours");
 			SendClientMessageEx(playerid, COLOR_GRAD1, "|42 Playing Hours |43 Gold Box Tokens |44 Computer Drawings |45 Papers |46 Business |47 BusinessRank | 48 Spraycan");
-			SendClientMessageEx(playerid, COLOR_GRAD1, "|49 Heroin |50 RawOpium |51 Syringes |52 Hunger |53 Fitness |54 Event Tokens |55 Modkit");
+			SendClientMessageEx(playerid, COLOR_GRAD1, "|49 Heroin |50 RawOpium |51 Syringes |52 Hunger |53 Fitness |54 Event Tokens |55 Rim Kit");
 			SendClientMessageEx(playerid, COLOR_GRAD2, "|56 Car Jack Skill |57 Lock Pick Vehicle Count |58 Lock Pick Vehicle Time |59 Tool Box |60 Crowbar");
 			return 1;
 		}
@@ -3740,7 +3740,8 @@ CMD:setstat(playerid, params[])
 				}
 				case 11:
 				{
-					return SendClientMessageEx(playerid, COLOR_WHITE, "Family system has been merged to group system!");
+					PlayerInfo[giveplayerid][pTruckSkill] = amount;
+					format(string, sizeof(string), "   %s's(%d) Shipment Contractor Skill has been set to %d.", GetPlayerNameEx(giveplayerid), GetPlayerSQLId(giveplayerid), amount);
 				}
 				case 12:
 				{
@@ -3859,7 +3860,7 @@ CMD:setstat(playerid, params[])
 				case 37:
 				{
 					PlayerInfo[giveplayerid][pMember] = amount;
-					format(string, sizeof(string), "   %s's(%d) Faction has been set to %d.", GetPlayerNameEx(giveplayerid), GetPlayerSQLId(giveplayerid), amount);
+					format(string, sizeof(string), "   %s's(%d) Group has been set to %d.", GetPlayerNameEx(giveplayerid), GetPlayerSQLId(giveplayerid), amount);
 				}
 				case 38:
 				{

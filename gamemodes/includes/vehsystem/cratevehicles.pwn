@@ -788,6 +788,21 @@ stock DeleteCrateVehicle(playerid, veh) {
 	return 1;
 }
 
+CMD:cvhelp(playerid, params[])
+{
+	if(PlayerInfo[playerid][pAdmin] > 3 || PlayerInfo[playerid][pASM] > 0 || PlayerInfo[playerid][pFactionModerator] > 0)
+	{
+		SendClientMessageEx(playerid, COLOR_GREY, "USAGE: /cvcreate /cvstorage /cvedit /cvpark /cvcheck /cvstatus /cvrespawn");
+		SendClientMessageEx(playerid, COLOR_GREY, "NOTE: Don't forget to /cvpark!");
+		return 1;
+	}
+	else
+	{
+		SendClientMessageEx(playerid, COLOR_GREY, "You are not authorized to use this command!");
+	}
+	return 1;
+}
+
 CMD:cvedit(playerid, params[]) {
 	if(PlayerInfo[playerid][pAdmin] > 3 || PlayerInfo[playerid][pASM] > 0 || PlayerInfo[playerid][pFactionModerator] > 0) {
 		szMiscArray[0] = 0;

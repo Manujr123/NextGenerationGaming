@@ -336,8 +336,8 @@ public LoadTruck(playerid)
 		else if (Businesses[business][bType] == BUSINESS_TYPE_GASSTATION)
 		{
 		  	new Float:x, Float:y, Float:z, Float:ang;
-		  	SetVehiclePos(vehicleid, -1570.9833,96.7547,4.1442);
-		  	SetVehicleZAngle(vehicleid, 136.18);
+		  	SetVehiclePos(vehicleid, 2568.4832, -2226.6345, 13.3634);
+		  	SetVehicleZAngle(vehicleid, 90.0000);
 		    GetPlayerPos(playerid, x, y, z);
 		    GetVehicleZAngle(vehicleid, ang);
 		    new iTrailer = CreateVehicle(584, x, y, z+1, ang, -1, -1, 1000);
@@ -373,7 +373,7 @@ public LoadTruck(playerid)
 stock DisplayOrders(playerid)
 {
 	new szDialog[2048];
-	/*for (new i, j; i < MAX_BUSINESSES; i++)
+	for (new i, j; i < MAX_BUSINESSES; i++)
 	{
 	    if (Businesses[i][bOrderState] == 1)
 	    {
@@ -383,7 +383,7 @@ stock DisplayOrders(playerid)
 				ListItemTrackId[playerid][j++] = i;
 			}
 		}
-	}*/
+	}
 
 	if (!szDialog[0] || IsABoat(GetPlayerVehicleID(playerid)))
 	{
@@ -393,6 +393,7 @@ stock DisplayOrders(playerid)
 		DeletePVar(playerid, "IsFrozen"); */
 		
 		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 456 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 414 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 413 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 440 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 482 || IsABoat(GetPlayerVehicleID(playerid)))
+		//if(IsATruckerCar(GetPlayerVehicleID(playerid)) || IsABoat(GetPlayerVehicleID(playerid)))
 		{
 			ShowPlayerDialogEx(playerid,DIALOG_LOADTRUCKOLD,DIALOG_STYLE_LIST,"What do you want to transport?","{00F70C}Legal goods {FFFFFF}(no risk but also no bonuses)\n{FF0606}Illegal goods {FFFFFF}(risk of getting caught but a bonus)","Select","Cancel");
 		}

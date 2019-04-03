@@ -1384,6 +1384,7 @@ CMD:eatfood(playerid, params[])
 	return 1;
 }
 
+/*
 CMD:extendsentence(playerid, params[])
 {
 	if(!IsADocGuard(playerid)) return SendClientMessageEx(playerid, COLOR_GREY, "You must be a DOC Guard to use this command.");
@@ -1452,6 +1453,7 @@ CMD:reducesentence(playerid, params[])
 
 	return 1;
 }
+*/
 
 CMD:isolateinmate(playerid, params[])
 {

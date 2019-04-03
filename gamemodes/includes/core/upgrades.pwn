@@ -39,8 +39,6 @@ CMD:resetupgrades(playerid, params[]) {
 	if(gPlayerLogged{playerid} == 0) {
 		SendClientMessageEx(playerid, COLOR_GRAD1, "You're not logged in.");
 	}
-	else if (GetPlayerCash(playerid) < 100000) {
-		SendClientMessageEx(playerid, COLOR_GRAD1, "You need $100,000 to reset your upgrade points.");
 	}
 	else if (PlayerInfo[playerid][pLevel] < 2) {
 		SendClientMessageEx(playerid, COLOR_GRAD1, "You must be at least level 2.");
@@ -66,7 +64,6 @@ CMD:resetupgrades(playerid, params[]) {
 			PlayerVehicleInfo[playerid][d][pvWepUpgrade] = 0;
 		}
 
-		GivePlayerCash(playerid,-100000);
 		PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
 
 		new	szMessage[73];
@@ -249,7 +246,6 @@ LevelCheck(playerid)
 	return 1;
 }
 
-/*
 CMD:upgrade(playerid, params[])
 {
 	if(isnull(params))
@@ -257,7 +253,7 @@ CMD:upgrade(playerid, params[])
 		new string[64];
 		format(string, sizeof(string), "USAGE: /upgrade [upgradename] (you have %d upgrade points).",PlayerInfo[playerid][gPupgrade]);
 		SendClientMessageEx(playerid, COLOR_GREEN,"_______________________________________");
-		SendClientMessageEx(playerid, COLOR_WHITE,"*** UPGRADES ***");
+		SendClientMessageEx(playerid, COLOR_WHITE,"*** UPGRADES (you may use /resetupgrades to reset them) ***");
 		SendClientMessageEx(playerid, COLOR_GRAD2,string);
 		SendClientMessageEx(playerid, COLOR_GRAD5, "armor gunlocker gunlocker2 gunlocker3 cargunlocker");
 		SendClientMessageEx(playerid, COLOR_GREEN,"_______________________________________");
@@ -654,4 +650,4 @@ CMD:upgrade(playerid, params[])
 		return 1;
 	}
 	return 1;
-}*/
+}
